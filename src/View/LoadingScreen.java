@@ -6,20 +6,23 @@ import java.awt.*;
 public class LoadingScreen extends JFrame {
     private JLabel loading;
     private JLabel background;
-    private int counter;
     public LoadingScreen(){
+        /*
+            Set Loading Text
+         */
         loading = new JLabel("Loading");
         loading.setFont(new Font("Garamond", Font.BOLD, 100));
         loading.setForeground(Color.white);
-
-//        JPanel panel = new JPanel();
-//        panel.setLayout(new FlowLayout());
-//        panel.add(loading);
+        loading.setBounds(Toolkit.getDefaultToolkit().getScreenSize().width/2-200, Toolkit.getDefaultToolkit().getScreenSize().height/2-150 ,500,300);
+        /*
+            Set Background
+         */
         ImageIcon imageIcon = new ImageIcon("src/images/blue_red_wallpaper.jpg"); // load the image to a imageIcon
         background = new JLabel(imageIcon, JLabel.CENTER);
         this.setContentPane(background);
-//        this.setLayout(new FlowLayout());
-        loading.setBounds(Toolkit.getDefaultToolkit().getScreenSize().width/2-200, Toolkit.getDefaultToolkit().getScreenSize().height/2-150 ,500,300);
+        /*
+            Set Frame properties
+         */
         this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         this.setMaximumSize(Toolkit.getDefaultToolkit().getScreenSize());
         this.setSize(this.getMaximumSize().width, this.getMaximumSize().height);
@@ -27,14 +30,14 @@ public class LoadingScreen extends JFrame {
         this.setLocation(0, 0);
         this.setExtendedState(JFrame.MAXIMIZED_BOTH);
         this.setUndecorated(true);
-//        this.add(panel);
         this.add(loading);
-//        panel.setBounds(200,200,500,500);
         this.pack();
     }
-    public void count(){
-        String fullstops;
 
+    /**
+     * Increase Add fullstops at the end for an effect of action
+     */
+    public void count(){
         loading.setText(loading.getText() + ".");
     }
 }

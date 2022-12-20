@@ -37,17 +37,16 @@ public class View extends JFrame {
     public View(Board board) {
         msw = new ModSelectionWindow();
         loading = new LoadingScreen();
-        loading.setVisible(true);
         Thread T = new Thread_extended_class(msw);
         T.start();
         try {
+            loading.setVisible(true);
             T.join();
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
         mode = msw.getMode();
 
-        controller = new Controller(mode);
         for(int i=0;i<6;i++){
             try {
                 Thread.sleep(500);
@@ -55,10 +54,10 @@ public class View extends JFrame {
                 throw new RuntimeException(e);
             }
             loading.count();
-            loading.setVisible(true);
         }
         loading.setVisible(false);
         loading.dispose();
+        controller = new Controller(mode);
 
 //        fieldScreen = new Field(controller.getBoard());
 
