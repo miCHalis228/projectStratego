@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Diagram>
+  <ID>JAVA</ID>
+  <OriginalElement>C:/Users/user/IdeaProjects/StrategoPhase1/src</OriginalElement>
+  <nodes>
+    <node x="398.25" y="-161.0">Model.Coordinates.Coordinates</node>
+    <node x="-161.0" y="75.78403755868533">Model.Exceptions.PathNotFoundException</node>
+    <node x="72.5" y="316.0">Model.Pieces.MovablePiece</node>
+    <node x="1544.8528951486699" y="-107.89514866979664">Model.Exceptions.BoardNotInitialized</node>
+    <node x="1409.580594679186" y="487.0">View.Field</node>
+    <node x="-161.0" y="636.0">Model.Pieces.Slayer</node>
+    <node x="-161.0" y="-49.0">Model.Exceptions.DeadPieceException</node>
+    <node x="986.359937402191" y="-107.89514866979664">Model.Player.Player</node>
+    <node x="1404.080594679186" y="777.546165884194">View.ModSelectionWindow</node>
+    <node x="348.0" y="636.0">Model.Pieces.Dwarf</node>
+    <node x="255.5" y="55.0">Model.Pieces.Piece</node>
+    <node x="986.359937402191" y="777.546165884194">View.View</node>
+    <node x="988.359937402191" y="265.0">Controller.Controller</node>
+    <node x="1240.9702660406886" y="532.0">View.Stats</node>
+    <node x="370.5" y="372.0">Model.Pieces.ImmovablePiece</node>
+    <node x="507.5" y="99.5">Model.Spot.Spot</node>
+    <node x="-161.0" y="-161.0">Model.Exceptions.InvalidCoordinatesException</node>
+    <node x="95.0" y="636.0">Model.Pieces.Scout</node>
+    <node x="1255.9718309859156" y="-107.89514866979664">Model.Board.Board</node>
+    <node x="53.5" y="532.0">Model.Pieces.SpecialMovablePiece</node>
+  </nodes>
+  <notes />
+  <edges>
+    <edge source="Model.Pieces.SpecialMovablePiece" target="Model.Pieces.MovablePiece" relationship="GENERALIZATION">
+      <point x="0.0" y="-27.0" />
+      <point x="0.0" y="83.0" />
+    </edge>
+    <edge source="Model.Player.Player" target="Model.Pieces.ImmovablePiece" relationship="CREATE">
+      <point x="-104.0" y="-0.1048513302033598" />
+      <point x="923.859937402191" y="-2.5" />
+      <point x="923.859937402191" y="399.0" />
+      <point x="161.0" y="-0.0" />
+    </edge>
+    <edge source="Controller.Controller" target="Model.Player.Player" relationship="CREATE">
+      <point x="15.000062597808892" y="-160.5" />
+      <point x="15.000062597808892" y="105.5" />
+    </edge>
+    <edge source="Model.Player.Player" target="Model.Pieces.MovablePiece" relationship="CREATE">
+      <point x="-104.0" y="32.39514866979664" />
+      <point x="938.859937402191" y="30.0" />
+      <point x="938.859937402191" y="443.5" />
+      <point x="139.0" y="44.5" />
+    </edge>
+    <edge source="View.View" target="View.ModSelectionWindow" relationship="CREATE">
+      <point x="90.5" y="14.999834115806038" />
+      <point x="-96.0" y="14.999834115806038" />
+    </edge>
+    <edge source="Model.Player.Player" target="Model.Coordinates.Coordinates" relationship="CREATE">
+      <point x="-104.0" y="-75.60485133020336" />
+      <point x="80.0" y="-0.0" />
+    </edge>
+    <edge source="Controller.Controller" target="Model.Board.Board" relationship="TO_ONE">
+      <point x="102.0" y="-15.0" />
+      <point x="1337.4718309859156" y="410.5" />
+      <point x="-0.0" y="38.5" />
+    </edge>
+    <edge source="View.View" target="View.Stats" relationship="TO_MANY">
+      <point x="-0.0" y="38.5" />
+      <point x="1076.859937402191" y="872.046165884194" />
+      <point x="1613.580594679186" y="872.046165884194" />
+      <point x="1613.580594679186" y="425.5" />
+      <point x="1300.9702660406886" y="425.5" />
+      <point x="-0.0" y="-27.0" />
+    </edge>
+    <edge source="View.View" target="Model.Player.Player" relationship="TO_ONE">
+      <point x="90.50006259780889" y="-1.6588419396157406E-4" />
+      <point x="1217.0" y="816.046" />
+      <point x="1217.0" y="-2.395" />
+      <point x="104.00006259780889" y="1.4866979664018842E-4" />
+    </edge>
+    <edge source="View.View" target="Controller.Controller" relationship="CREATE">
+      <point x="-45.0" y="-38.5" />
+      <point x="-58.5" y="160.5" />
+    </edge>
+    <edge source="View.Stats" target="Model.Player.Player" relationship="TO_ONE">
+      <point x="-60.00026604068853" y="-0.0" />
+      <point x="1217.0" y="559.0" />
+      <point x="1217.0" y="-2.395" />
+      <point x="104.00006259780889" y="1.4866979664018842E-4" />
+    </edge>
+    <edge source="Model.Pieces.Scout" target="Model.Pieces.SpecialMovablePiece" relationship="GENERALIZATION">
+      <point x="0.0" y="-38.5" />
+      <point x="0.0" y="27.0" />
+    </edge>
+    <edge source="Controller.Controller" target="Model.Board.Board" relationship="CREATE">
+      <point x="102.0" y="-30.0" />
+      <point x="1322.4718309859156" y="395.5" />
+      <point x="-15.0" y="38.5" />
+    </edge>
+    <edge source="Controller.Controller" target="Model.Player.Player" relationship="TO_ONE">
+      <point x="102.00006259780889" y="-0.0" />
+      <point x="1217.0" y="425.5" />
+      <point x="1217.0" y="-2.395" />
+      <point x="104.00006259780889" y="1.4866979664018842E-4" />
+    </edge>
+    <edge source="Model.Pieces.MovablePiece" target="Model.Exceptions.InvalidCoordinatesException" relationship="CREATE">
+      <point x="-15.0" y="-83.0" />
+      <point x="196.5" y="-134.0" />
+      <point x="116.0" y="-0.0" />
+    </edge>
+    <edge source="Model.Board.Board" target="Model.Spot.Spot" relationship="TO_MANY">
+      <point x="-15.0" y="-38.5" />
+      <point x="1322.4718309859156" y="-125.39514866979664" />
+      <point x="615.0" y="-125.39514866979664" />
+      <point x="30.0" y="-61.0" />
+    </edge>
+    <edge source="Model.Pieces.Dwarf" target="Model.Pieces.SpecialMovablePiece" relationship="GENERALIZATION">
+      <point x="0.0" y="-38.5" />
+      <point x="466.0" y="611.0" />
+      <point x="211.5" y="611.0" />
+      <point x="0.0" y="27.0" />
+    </edge>
+    <edge source="Model.Spot.Spot" target="Model.Coordinates.Coordinates" relationship="GENERALIZATION">
+      <point x="0.0" y="-61.0" />
+      <point x="585.0" y="30.0" />
+      <point x="478.25" y="30.0" />
+      <point x="0.0" y="83.0" />
+    </edge>
+    <edge source="View.View" target="View.Stats" relationship="CREATE">
+      <point x="-30.0" y="-38.5" />
+      <point x="1046.859937402191" y="611.0" />
+      <point x="1300.9702660406886" y="611.0" />
+      <point x="-0.0" y="27.0" />
+    </edge>
+    <edge source="Model.Pieces.Piece" target="Model.Coordinates.Coordinates" relationship="GENERALIZATION">
+      <point x="0.0" y="-105.5" />
+      <point x="371.5" y="30.0" />
+      <point x="478.25" y="30.0" />
+      <point x="0.0" y="83.0" />
+    </edge>
+    <edge source="View.View" target="View.Field" relationship="TO_ONE">
+      <point x="-0.0" y="-38.5" />
+      <point x="1076.859937402191" y="675.5" />
+      <point x="1500.080594679186" y="675.5" />
+      <point x="-0.0" y="49.5" />
+    </edge>
+    <edge source="View.View" target="Controller.Controller" relationship="TO_ONE">
+      <point x="-60.0" y="-38.5" />
+      <point x="-73.5" y="160.5" />
+    </edge>
+    <edge source="Model.Player.Player" target="Model.Pieces.Piece" relationship="TO_MANY">
+      <point x="6.259780889195099E-5" y="105.50014866979664" />
+      <point x="1090.36" y="243.0" />
+      <point x="864.0" y="243.0" />
+      <point x="864.0" y="82.0" />
+      <point x="116.0" y="-78.5" />
+    </edge>
+    <edge source="View.View" target="View.Field" relationship="CREATE">
+      <point x="-15.0" y="-38.5" />
+      <point x="1061.859937402191" y="645.5" />
+      <point x="1485.080594679186" y="645.5" />
+      <point x="-15.0" y="49.5" />
+    </edge>
+    <edge source="Model.Pieces.MovablePiece" target="Model.Pieces.Piece" relationship="GENERALIZATION">
+      <point x="0.0" y="-83.0" />
+      <point x="211.5" y="291.0" />
+      <point x="371.5" y="291.0" />
+      <point x="0.0" y="105.5" />
+    </edge>
+    <edge source="Model.Pieces.ImmovablePiece" target="Model.Pieces.Piece" relationship="GENERALIZATION">
+      <point x="0.0" y="-27.0" />
+      <point x="531.5" y="291.0" />
+      <point x="371.5" y="291.0" />
+      <point x="0.0" y="105.5" />
+    </edge>
+    <edge source="Model.Pieces.Slayer" target="Model.Pieces.SpecialMovablePiece" relationship="GENERALIZATION">
+      <point x="0.0" y="-38.5" />
+      <point x="-43.0" y="611.0" />
+      <point x="211.5" y="611.0" />
+      <point x="0.0" y="27.0" />
+    </edge>
+    <edge source="Model.Spot.Spot" target="Model.Pieces.Piece" relationship="TO_ONE">
+      <point x="-0.0" y="61.0" />
+      <point x="585.0" y="243.0" />
+      <point x="864.0" y="243.0" />
+      <point x="864.0" y="82.0" />
+      <point x="116.0" y="-78.5" />
+    </edge>
+    <edge source="View.View" target="View.ModSelectionWindow" relationship="TO_ONE">
+      <point x="90.5" y="29.99983411580604" />
+      <point x="-96.0" y="29.99983411580604" />
+    </edge>
+    <edge source="Model.Board.Board" target="Model.Spot.Spot" relationship="CREATE">
+      <point x="-0.0" y="-38.5" />
+      <point x="1337.4718309859156" y="-178.5" />
+      <point x="600.0" y="-178.5" />
+      <point x="15.0" y="-61.0" />
+    </edge>
+    <edge source="Model.Player.Player" target="Model.Pieces.SpecialMovablePiece" relationship="CREATE">
+      <point x="-104.0" y="84.39514866979664" />
+      <point x="953.859937402191" y="82.0" />
+      <point x="953.859937402191" y="559.0" />
+      <point x="158.0" y="-0.0" />
+    </edge>
+  </edges>
+  <settings layout="Hierarchic" zoom="0.5839915745129015" showDependencies="true" x="778.4999999999999" y="353.50000000000006" />
+  <SelectedNodes />
+  <Categories>
+    <Category>Constructors</Category>
+    <Category>Fields</Category>
+    <Category>Inner Classes</Category>
+    <Category>Methods</Category>
+    <Category>Properties</Category>
+  </Categories>
+  <SCOPE>All</SCOPE>
+  <VISIBILITY>private</VISIBILITY>
+</Diagram>
+
