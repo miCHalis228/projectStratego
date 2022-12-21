@@ -59,14 +59,18 @@ public class Controller {
         frame.setVisible(true);
 
         while(!playerBlue.isDefeated() && !playerRed.isDefeated()){
+            hidePlayer();
             try {
-                Thread.sleep(50);
+                Thread.sleep(90);
                 if(board.getMoveMade()){
                     if(board.getAttackMade()){
                         updateLists();
                         board.setAttackMade(false);
                     }
-
+                    /**
+                     * make second panel
+                     * change between the two
+                     */
                     board.setMoveMade(false);
                     f.repaint();
                     f.setVisible(true);
