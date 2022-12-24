@@ -14,10 +14,12 @@ import java.awt.*;
 public class Controller {
 
     private int round = 0;
-    private boolean turnBlue = true;
+    private static boolean turnRed;
     private Player playerBlue;
     private Player playerRed;
 
+    private JPanel hiddenBlue;
+    private JPanel hiddenRed;
     private Board board;
 
     /**
@@ -30,13 +32,12 @@ public class Controller {
         playerBlue.randomizePositions();
         playerRed = new Player("Red",mode);
         playerRed.randomizePositions();
-        turnBlue=true;
+        turnRed=true;
 
         try {
             board.initializeBoard();
             board.placePlayer(playerBlue);
             board.placePlayer(playerRed);
-//            board.printBoard();
         } catch (BoardNotInitializedException e) {
             throw new RuntimeException(e);
         }
@@ -44,6 +45,7 @@ public class Controller {
         Field f = new Field(board);
 
         JFrame frame = new JFrame();
+        frame.setLayout(new CardLayout());
         ImageIcon imageIcon = new ImageIcon("C:\\Users\\user\\IdeaProjects\\StrategoPhase2\\src\\images\\dragon_background_cropped169.jpg"); // load the image to a imageIcon
         Image image = imageIcon.getImage().getScaledInstance((int)Toolkit.getDefaultToolkit().getScreenSize().width,(int)Toolkit.getDefaultToolkit().getScreenSize().height, Image.SCALE_SMOOTH);
         JLabel background = new JLabel(new ImageIcon(image), JLabel.CENTER);
@@ -54,30 +56,37 @@ public class Controller {
         frame.setUndecorated(true);
         frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        frame.add(f);
+        hiddenBlue = f.getHiddenBlue();
+        hiddenRed = f.getHiddenRed();
+        frame.add(hiddenRed);
+        frame.add(hiddenBlue);
         frame.pack();
+        hiddenRed.setVisible(true);
+        hiddenBlue.setVisible(false);
         frame.setVisible(true);
+        hidePlayer();
 
         while(!playerBlue.isDefeated() && !playerRed.isDefeated()){
-            hidePlayer();
             try {
                 Thread.sleep(90);
                 if(board.getMoveMade()){
                     if(board.getAttackMade()){
                         updateLists();
-                        board.setAttackMade(false);
                     }
                     /**
                      * make second panel
                      * change between the two
                      */
-                    board.setMoveMade(false);
-                    f.repaint();
-                    f.setVisible(true);
                     nextTurn();
-                    if(!turnBlue)
+                    if(!turnRed) {
                         nextRound();
-                    nextTurn();
+                    }
+                    board.updateBoard(playerBlue,playerRed);
+                    Thread.sleep(1000);
+                    hidePlayer();
+                    f.swapFields(turnRed);
+                    board.setAttackMade(false);
+                    board.setMoveMade(false);
                 }
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
@@ -97,8 +106,8 @@ public class Controller {
      *
      * @return this round's turn
      */
-    public boolean isTurnBlue() {
-        return turnBlue;
+    public boolean isturnRed() {
+        return turnRed;
     }
 
     /**
@@ -106,7 +115,7 @@ public class Controller {
      * <b>post-condition</b> From Blue to Red to Blue...
      */
     public void nextTurn() {
-        this.turnBlue = !this.turnBlue;
+        this.turnRed = !this.turnRed;
     }
 
     /**
@@ -155,6 +164,13 @@ public class Controller {
     }
 
     public void hidePlayer(){
+        if(!turnRed){
+            playerBlue.unflipCards();
+            playerRed.flipCards();
+        } else {
+            playerBlue.flipCards();
+            playerRed.unflipCards();
+        }
 
     }
 }

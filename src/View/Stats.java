@@ -5,7 +5,7 @@ import Model.Player.Player;
 import javax.swing.*;
 import java.awt.*;
 
-public class Stats extends JFrame {
+public class Stats extends JPanel {
     private Player m_player;
     private JCheckBox l_mod1;
     private JCheckBox l_mod2;
@@ -32,6 +32,8 @@ public class Stats extends JFrame {
      */
     public Stats(Player player, int mode){
         this.m_player=player;
+        this.l_mod1 = new JCheckBox();
+        this.l_mod2 = new JCheckBox();
         this.add(activeMods(mode));
     }
 
@@ -63,6 +65,8 @@ public class Stats extends JFrame {
         }
 
         JPanel am = new JPanel(new GridLayout(2,1));
+        am.add(l_mod1);
+        am.add(l_mod2);
         am.setBounds(0,0,500,250);
     return am;
     }
@@ -158,4 +162,14 @@ public class Stats extends JFrame {
         return null;
     }
 
+    public static void main(String[] args) {
+        JFrame frame = new JFrame();
+        Stats s = new Stats(new Player("Blue"),0);
+        frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        frame.add(s);
+        frame.pack();
+        frame.setVisible(true);
+
+
+    }
 }

@@ -69,7 +69,8 @@ public class Board {
             for (int col = 0; col < 10; col++) {
                 spots[row][col].setButton();
                 if (!spots[row][col].isLake()) {
-                    spots[row][col].getButton().addActionListener(new selectedPawn(this));
+                    spots[row][col].getButtonBlue().addActionListener(new selectedPawn(this));
+                    spots[row][col].getButtonRed().addActionListener(new selectedPawn(this));
                 }
             }
     }
@@ -92,13 +93,18 @@ public class Board {
             piece = iterator.next();
             if (!piece.isDead()) {
                 spots[piece.getY()][piece.getX()].setPiece(piece);
-                spots[piece.getY()][piece.getX()].setButton();
+                spots[piece.getY()][piece.getX()].setHiddenImage(p.getM_HiddenImage());
+//                spots[piece.getY()][piece.getX()].setButton();
             } else {
                 spots[piece.getY()][piece.getX()].setPiece(null);
-                spots[piece.getY()][piece.getX()].setButton();
+//                spots[piece.getY()][piece.getX()].setButton();
 
             }
         }
+        for (int row = 0; row < 8; row++)
+            for (int col = 0; col < 10; col++) {
+                spots[row][col].setButton();
+            }
 
     }
 
@@ -120,14 +126,11 @@ public class Board {
             try {
                 ((MovablePiece) lastPressedPiece.getPiece()).attack(targetSpot.getPiece());
                 if (lastPressedPiece.getPiece().isDead() && targetSpot.getPiece().isDead()) {
-                    System.out.println("both deeated");
                     lastPressedPiece.setPiece(null);
                     targetSpot.setPiece(null);
                 } else if (lastPressedPiece.getPiece().isDead()) {
-                    System.out.println("died");
                     lastPressedPiece.setPiece(null);
                 } else if(targetSpot.getPiece().isDead()){
-                    System.out.println("enemy defeated");
                     ((MovablePiece) lastPressedPiece.getPiece()).move(temp);
                     targetSpot.setPiece(lastPressedPiece.getPiece());
                     lastPressedPiece.setPiece(null);
@@ -196,6 +199,29 @@ public class Board {
         this.attackMade = attackMade;
     }
 
+    public void hidePlayer(Player toHide, Player toShow) {
+        Iterator<Piece> iterator = toHide.getPieces().iterator();
+        Piece piece;
+
+        while (iterator.hasNext()) {
+            piece = iterator.next();
+            if (!piece.isDead()){
+                spots[piece.getY()][piece.getX()].hide();
+//                spots[piece.getY()][piece.getX()].getButton().set;
+
+            }
+        }
+        iterator = toShow.getPieces().iterator();
+
+        while (iterator.hasNext()) {
+            piece = iterator.next();
+            if (!piece.isDead()){
+                spots[piece.getY()][piece.getX()].show();
+
+            }
+        }
+    }
+
     public class selectedPawn implements ActionListener {
         Board m_board;
 
@@ -205,23 +231,28 @@ public class Board {
 
         @Override
         public void actionPerformed(ActionEvent e) {
+            boolean turnBlue;
             Iterator<Coordinates> iteratorCoordinates;
             JButton source = (JButton) e.getSource();
             int row = 0, col = 0, index = 0;
+            if(moveMade==true)
+                return;
             while (true) {
-                row = index / 10;
-                col = index % 10;
-                if (spots[row][col].getButton() == source) {
-                    break;
-                }
                 if (index > 79) {
                     row = col = -1;
+                    return;
+                }
+                row = index / 10;
+                col = index % 10;
+                if (spots[row][col].getButtonRed() == source) {
+                    turnBlue=false;
+                    break;
+                }
+                if (spots[row][col].getButtonBlue() == source) {
+                    turnBlue=true;
                     break;
                 }
                 index++;
-            }
-            if (row == -1 && col == -1) {
-                return;
             }
 
 //            if (spots[row][col].getPiece()==null ||  spots[row][col].getPiece() instanceof ImmovablePiece) {
@@ -230,9 +261,12 @@ public class Board {
             }
             if (lastPressed[0] == -1 && lastPressed[1] == -1) {
                 if ((spots[row][col].getPiece() != null)) {
+                    if(spots[row][col].getPiece() != null && spots[row][col].getPiece().isFlipped()) {
+                        return;
+                    }
                     lastPressed[0] = row;
                     lastPressed[1] = col;
-                    if (spots[row][col].getPiece() != null) {
+                    if (spots[row][col].getPiece() != null){
                         lastPressedPiece = (spots[row][col]);
                         possibleCoordinates = (lastPressedPiece.getPiece().getPossibleMoves(m_board));
                     }
@@ -243,8 +277,13 @@ public class Board {
                     Coordinates temp;
                     while (iteratorCoordinates.hasNext()) {
                         temp = iteratorCoordinates.next();
-                        spots[temp.getY()][temp.getX()].getButton().setBorder(new LineBorder(Color.BLACK, 5));
-                        possibleButtons.add(spots[temp.getY()][temp.getX()].getButton());
+                        if(turnBlue){
+                            spots[temp.getY()][temp.getX()].getButtonBlue().setBorder(new LineBorder(Color.BLACK, 5));
+                            possibleButtons.add(spots[temp.getY()][temp.getX()].getButtonBlue());
+                        } else {
+                            spots[temp.getY()][temp.getX()].getButtonRed().setBorder(new LineBorder(Color.BLACK, 5));
+                            possibleButtons.add(spots[temp.getY()][temp.getX()].getButtonRed());
+                        }
                     }
                 }
             } else if (lastPressed[0] == row && lastPressed[1] == col) {
@@ -258,7 +297,11 @@ public class Board {
                 iteratorCoordinates = possibleCoordinates.iterator();
                 while (iteratorCoordinates.hasNext()) {
                     temp = iteratorCoordinates.next();
-                    spots[temp.getY()][temp.getX()].getButton().setBorder(BorderFactory.createBevelBorder(1));
+                    if(turnBlue){
+                        spots[temp.getY()][temp.getX()].getButtonBlue().setBorder(BorderFactory.createBevelBorder(1));
+                    } else {
+                        spots[temp.getY()][temp.getX()].getButtonRed().setBorder(BorderFactory.createBevelBorder(1));
+                    }
                 }
                 lastPressedPiece = null;
                 possibleCoordinates.clear();
@@ -267,7 +310,6 @@ public class Board {
                 Coordinates temp;
                 while (iteratorCoordinates.hasNext()) {
                     temp = iteratorCoordinates.next();
-                    System.out.println(temp);
                     if (temp.getX() == col && temp.getY() == row) {
                         try {
                             targetSpot = spots[row][col];

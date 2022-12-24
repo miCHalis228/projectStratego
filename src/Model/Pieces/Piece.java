@@ -3,6 +3,7 @@ package Model.Pieces;
 import Model.Board.Board;
 import Model.Coordinates.Coordinates;
 
+import javax.swing.*;
 import java.util.List;
 
 public abstract class Piece {
@@ -14,6 +15,10 @@ public abstract class Piece {
     private boolean isDead;
 
     private Coordinates coordinates;
+    private boolean flipped = false;
+
+    private ImageIcon pieceImage;
+    private ImageIcon hiddenImage;
 
     /**
      * Constructor of piece, initializing it alive (isDead=false)
@@ -100,6 +105,32 @@ public abstract class Piece {
     public boolean isBlue() {
         return isBlue;
     }
+
+    public boolean isFlipped() {
+        return flipped;
+    }
+
+    public void setFlipped(boolean flipped) {
+        this.flipped = flipped;
+    }
+
+    public void setHiddenImage(ImageIcon hiddenImage) {
+        this.hiddenImage = hiddenImage;
+    }
+
+    public ImageIcon getHiddenImage() {
+        return hiddenImage;
+    }
+
+    public void setPieceImage(ImageIcon pieceImage) {
+        this.pieceImage = pieceImage;
+    }
+
+    public ImageIcon getPieceImage() {
+        return pieceImage;
+    }
+
+
 
     public abstract List<Coordinates> getPossibleMoves(Board board);
 }

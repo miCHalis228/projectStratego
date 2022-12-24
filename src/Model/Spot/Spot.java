@@ -20,15 +20,23 @@ public class Spot {
     private Piece s_Piece;
     private boolean isLake;
     private boolean isPressed;
-    private JButton button;
+    private JButton buttonRed;
+    private JButton buttonBlue;
+
+    private JButton hiddenButton;
+    private ImageIcon hiddenImage;
+    private ImageIcon pieceImage;
     private static final int buttonWidth = 105;
     private static final int buttonHeight = 95;
 
     public Spot(Piece piece) {
         this.s_Piece = piece;
         isPressed=false;
-        button = new JButton();
+//        button = new JButton();
+        hiddenButton = new JButton();
 
+        buttonBlue = new JButton();
+        buttonRed = new JButton();
     }
 
     /**
@@ -46,6 +54,7 @@ public class Spot {
      */
     public void setPiece(Piece piece) {
         this.s_Piece = piece;
+        this.setButton();
     }
 
     /**
@@ -96,33 +105,83 @@ public class Spot {
     }
 
     private void setPieceButton() {
-        Image img = new ImageIcon(s_Piece.getImagePath()).getImage();
-        img = img.getScaledInstance(buttonWidth, buttonHeight, Image.SCALE_SMOOTH);
-        button.setIcon(new ImageIcon(img));
-        button.setSize(buttonWidth, buttonHeight);
-        button.setBorder(BorderFactory.createBevelBorder(1));
+        if(this.s_Piece.isBlue()){
+            Image img = new ImageIcon(s_Piece.getImagePath()).getImage();
+            img = img.getScaledInstance(buttonWidth, buttonHeight, Image.SCALE_SMOOTH);
+            pieceImage= new ImageIcon(img);
+            this.buttonBlue.setIcon(pieceImage);
+            this.buttonBlue.setSize(buttonWidth, buttonHeight);
+            this.buttonBlue.setBorder(BorderFactory.createBevelBorder(1));
+            setHiddenButton(this.buttonRed);
+        } else {
+            Image img = new ImageIcon(s_Piece.getImagePath()).getImage();
+            img = img.getScaledInstance(buttonWidth, buttonHeight, Image.SCALE_SMOOTH);
+            pieceImage= new ImageIcon(img);
+            this.buttonRed.setIcon(pieceImage);
+            this.buttonRed.setSize(buttonWidth, buttonHeight);
+            this.buttonRed.setBorder(BorderFactory.createBevelBorder(1));
+            setHiddenButton(this.buttonBlue);
+        }
+
+//        this.button.setIcon(pieceImage);
+//        this.button.setSize(buttonWidth, buttonHeight);
+//        this.button.setBorder(BorderFactory.createBevelBorder(1));
 //        if(buttonSpots[row][col].getActionListeners()==null)
     }
 
     private void setLakeButton() {
-        button.setBackground(Color.ORANGE);
-        button.setSize(buttonWidth, buttonHeight);
-        button.setEnabled(false);
+        this.buttonRed.setBackground(Color.ORANGE);
+        this.buttonRed.setSize(buttonWidth, buttonHeight);
+        this.buttonRed.setEnabled(false);
+        this.buttonBlue.setBackground(Color.ORANGE);
+        this.buttonBlue.setSize(buttonWidth, buttonHeight);
+        this.buttonBlue.setEnabled(false);
     }
 
-
-
     private void setNullButton() {
-        button.setIcon(null);
+        this.buttonRed.setIcon(null);
+        this.buttonRed.setSize(buttonWidth, buttonHeight);
+        this.buttonRed.setContentAreaFilled(false);
+        this.buttonRed.setBorder(BorderFactory.createBevelBorder(1));
+        this.buttonBlue.setIcon(null);
+        this.buttonBlue.setSize(buttonWidth, buttonHeight);
+        this.buttonBlue.setContentAreaFilled(false);
+        this.buttonBlue.setBorder(BorderFactory.createBevelBorder(1));
+    }
+
+    public void setHiddenImage(ImageIcon img) {
+//        Image img2 = new ImageIcon("C:\\Users\\user\\IdeaProjects\\StrategoPhase2\\src\\images\\RedPieces\\Hidden.png").getImage();
+//        img2 = img2.getScaledInstance(buttonWidth, buttonHeight, Image.SCALE_SMOOTH);
+//        pieceImage= new ImageIcon(img2);
+
+        this.hiddenImage=((img));
+
+
+    }
+
+    private void setHiddenButton(JButton button){
         button.setSize(buttonWidth, buttonHeight);
         button.setContentAreaFilled(false);
         button.setBorder(BorderFactory.createBevelBorder(1));
-
+        button.setIcon(hiddenImage);
     }
 
-    public JButton getButton() {
-        return button;
+
+    public JButton getHiddenButton() {
+        return this.hiddenButton;
     }
 
+//    public JButton getButton() {
+//        return this.button;
+//    }
+
+
+    public JButton getButtonBlue() {
+        return buttonBlue;
+    }
+
+    public JButton getButtonRed() {
+        return buttonRed;
+    }
 
 }

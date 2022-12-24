@@ -8,7 +8,10 @@ import Model.Player.Player;
 import javax.swing.*;
 import java.awt.*;
 
-public class Field extends JPanel {
+public class Field{
+
+    private JPanel hiddenBlue;
+    private JPanel hiddenRed;
 
     private JButton[][] gridButtons;
     private Board f_board;
@@ -20,24 +23,79 @@ public class Field extends JPanel {
      */
     public Field(Board board) {
         this.f_board=board;
+        hiddenBlue = new JPanel();
+        hiddenRed = new JPanel();
         initField();//TODO THINK MF
 
-
-
-        this.setLayout(new GridLayout(8,10 , 5 ,5 ));
-
-        for(int i=0;i<8;i++)
-            for(int j=0;j<10;j++){
-                this.add(board.getSpot(i,j).getButton());
-            }
-        this.setBounds(100,(Toolkit.getDefaultToolkit().getScreenSize().height-800)/2,10*105+40,8*95+40);
-        this.setOpaque(false);
     }
 
     public void initField(){
-
+        setHiddenBlue();
+        setHiddenRed();
     }
 
+    public void setHiddenBlue() {
+        hiddenBlue.setLayout(new GridLayout(8,10 , 5 ,5 ));
+
+        for(int i=0;i<8;i++)
+            for(int j=0;j<10;j++){
+                hiddenBlue.add(f_board.getSpot(i,j).getButtonBlue());
+
+//                if(!f_board.getSpot(i,j).isEmpty()){
+//                    if(f_board.getSpot(i,j).getPiece().isBlue()){
+//                        hiddenBlue.add(f_board.getSpot(i,j).getHiddenButton());
+//                    } else{
+//                        hiddenBlue.add(f_board.getSpot(i,j).getButton());
+//                    }
+//                } else {
+//                    System.out.println("hidden blue called empty");
+//                    hiddenBlue.add(f_board.getSpot(i,j).getButton());
+//                    System.out.println(f_board.getSpot(i,j).getButton().hashCode());
+//                }
+            }
+        hiddenBlue.setBounds(100,(Toolkit.getDefaultToolkit().getScreenSize().height-800)/2,10*105+40,8*95+40);
+        hiddenBlue.setOpaque(false);
+    }
+
+    public void setHiddenRed() {
+        hiddenRed.setLayout(new GridLayout(8,10 , 5 ,5 ));
+
+        for(int i=0;i<8;i++)
+            for(int j=0;j<10;j++){
+                hiddenRed.add(f_board.getSpot(i,j).getButtonRed());
+
+//                if(!f_board.getSpot(i,j).isEmpty()){
+//                    if(!f_board.getSpot(i,j).getPiece().isBlue()){
+//                        hiddenRed.add(f_board.getSpot(i,j).getHiddenButton());
+//                    } else{
+//                        hiddenRed.add(f_board.getSpot(i,j).getButton());
+//                    }
+//                } else {
+//                    hiddenRed.add(f_board.getSpot(i,j).getButton());
+//                    System.out.println(f_board.getSpot(i,j).getButton().hashCode());
+//
+//                }
+            }
+        hiddenRed.setBounds(100,(Toolkit.getDefaultToolkit().getScreenSize().height-800)/2,10*105+40,8*95+40);
+        hiddenRed.setOpaque(false);
+    }
+
+    public void swapFields(boolean turnBlue){
+        if(!turnBlue){
+            hiddenBlue.setVisible(true);
+            hiddenRed.setVisible(false);
+        } else {
+            hiddenBlue.setVisible(false);
+            hiddenRed.setVisible(true);
+        }
+    }
+
+    public JPanel getHiddenBlue(){
+        return this.hiddenBlue;
+    }
+    public JPanel getHiddenRed(){
+        return this.hiddenRed;
+    }
     public void setFieldMode(int mode){
 
     }
@@ -81,7 +139,9 @@ public class Field extends JPanel {
         frame.setUndecorated(true);
         frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        frame.add(f);
+        frame.add(f.getHiddenBlue());
+        frame.add(f.getHiddenRed());
+        f.swapFields(false);
         frame.pack();
         frame.setVisible(true);
 //        f.updateField();
@@ -101,7 +161,6 @@ public class Field extends JPanel {
             try {
                 do {
                     frame.updateField();
-                    System.out.println("hello");
                     Thread.sleep(500);
                 } while (true);
             } catch (Exception x) {

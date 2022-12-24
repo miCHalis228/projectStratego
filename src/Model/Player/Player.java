@@ -6,7 +6,10 @@ import Model.Pieces.MovablePiece;
 import Model.Pieces.Piece;
 import Model.Pieces.SpecialMovablePiece;
 
+import javax.swing.*;
+import java.awt.*;
 import java.util.*;
+import java.util.List;
 import java.util.stream.Collectors;
 
 public class Player {
@@ -16,7 +19,7 @@ public class Player {
     private String imagePath;
 
     private int m_mode;
-    private String m_HiddenImagePath;
+    private ImageIcon m_HiddenImage;
     private List<Piece> Pieces;
     private List<Piece> DeadPieces;
     private List<Piece> CapturedPieces;
@@ -41,7 +44,10 @@ public class Player {
         revival_counter = 2;
         DeadPieces = new ArrayList<Piece>();
         CapturedPieces = new ArrayList<Piece>();
-        this.m_HiddenImagePath = imagePath + "Hidden.png";
+
+        Image img = new ImageIcon(new StringBuilder().append(imagePath).append("\\Hidden.png").toString()).getImage();
+        img = img.getScaledInstance(105, 95, Image.SCALE_SMOOTH);
+        this.m_HiddenImage = new ImageIcon(img);
         initCards(m_mode);
     }
 
@@ -69,7 +75,10 @@ public class Player {
         revival_counter = 2;
         DeadPieces = new ArrayList<Piece>();
         CapturedPieces = new ArrayList<Piece>();
-        this.m_HiddenImagePath = imagePath + "Hidden.png";
+
+        Image img = new ImageIcon(imagePath + "\\Hidden.png").getImage();
+        img = img.getScaledInstance(105, 95, Image.SCALE_SMOOTH);
+        this.m_HiddenImage = new ImageIcon(img);
     }
 
     /**
@@ -104,6 +113,11 @@ public class Player {
                     Pieces.add(new MovablePiece(-1, -1, imagePath + "\\knight.png", 8, isBlue));
                 Pieces.add(new MovablePiece(-1, -1, imagePath + "\\mage.png", 9, isBlue));
                 Pieces.add(new MovablePiece(-1, -1, imagePath + "\\dragon.png", 10, isBlue));
+
+                Pieces.stream()
+                        .forEach(piece -> piece.setHiddenImage(m_HiddenImage));
+                Pieces.stream()
+                        .forEach(piece -> );
                 break;
             case 1:/*Code for 25 pieces*/
                 break;
@@ -135,8 +149,8 @@ public class Player {
      * <b>Accessor</b>: Returns the path for the players hidden image
      * @return image path for when it is not his turn
      */
-    public String getM_HiddenImagePath() {
-        return m_HiddenImagePath;
+    public ImageIcon getM_HiddenImage() {
+        return m_HiddenImage;
     }
 
     /**
@@ -171,6 +185,24 @@ public class Player {
 
     }
 
+    public void flipCards(){
+        Iterator<Piece> iterator = Pieces.iterator();
+        Piece p;
+        while (iterator.hasNext()) {
+            p = iterator.next();
+            p.setFlipped(true);
+        }
+    }
+
+    public void unflipCards(){
+        Iterator<Piece> iterator = Pieces.iterator();
+        Piece p;
+        while (iterator.hasNext()) {
+            p = iterator.next();
+            p.setFlipped(false);
+        }
+    }
+
     /**
      * <b>Accessor</b> Returns the imagePath for this players folder
      * @return the String containing the path for the images
@@ -183,7 +215,7 @@ public class Player {
         DeadPieces = Pieces.stream()
                 .filter(piece -> piece.isDead() == true)
                 .collect(Collectors.toList());
-        System.out.println("Dead Pieces" + DeadPieces);
+
     }
 
     public class UniqueRng implements Iterator<Integer> {

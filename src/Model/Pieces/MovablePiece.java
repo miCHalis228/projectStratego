@@ -88,7 +88,6 @@ public class MovablePiece extends Piece {
                 }
             }
         }
-        System.out.println(possibleCoordinates);
         return possibleCoordinates;
     }
 
@@ -113,13 +112,11 @@ public class MovablePiece extends Piece {
      * @throws DeadPieceException if this piece trying to attack or is attacked is dead
      */
     public void attack(Piece Enemy) throws DeadPieceException{
-        System.out.println("attack");
-         if(Enemy instanceof MovablePiece){
+         if(Enemy instanceof MovablePiece ){
             if(this.getRank()> Enemy.getRank()){
                 this.setCoordinates(Enemy.getCoordinates());
                 Enemy.setDead();
             } else if(this.getRank() == Enemy.getRank()){
-                System.out.println("draw");
                 Enemy.setDead();
                 this.setDead();
             } else {
