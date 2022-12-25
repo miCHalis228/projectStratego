@@ -4,11 +4,13 @@ import Model.Board.Board;
 import Model.Coordinates.Coordinates;
 
 import javax.swing.*;
+import java.awt.*;
 import java.util.List;
 
 public abstract class Piece {
     private int rank;
     private String imagePath;
+    private String hiddenImagePath;
 
     private boolean isBlue;
 
@@ -19,6 +21,8 @@ public abstract class Piece {
 
     private ImageIcon pieceImage;
     private ImageIcon hiddenImage;
+    private static final int buttonWidth = 105;
+    private static final int buttonHeight = 95;
 
     /**
      * Constructor of piece, initializing it alive (isDead=false)
@@ -36,6 +40,8 @@ public abstract class Piece {
         this.imagePath = imagePath;
         this.isBlue = isBlue;
         this.isDead = false;
+        this.setPieceImage();
+
     }
 
     public int getX(){
@@ -114,16 +120,20 @@ public abstract class Piece {
         this.flipped = flipped;
     }
 
-    public void setHiddenImage(ImageIcon hiddenImage) {
-        this.hiddenImage = hiddenImage;
+    public void setHiddenImage(String path) {
+        Image img = new ImageIcon(path).getImage();
+        img = img.getScaledInstance(buttonWidth, buttonHeight, Image.SCALE_SMOOTH);
+        this.hiddenImage = new ImageIcon(img);
     }
 
     public ImageIcon getHiddenImage() {
         return hiddenImage;
     }
 
-    public void setPieceImage(ImageIcon pieceImage) {
-        this.pieceImage = pieceImage;
+    public void setPieceImage() {
+        Image img = new ImageIcon(imagePath).getImage();
+        img = img.getScaledInstance(buttonWidth, buttonHeight, Image.SCALE_SMOOTH);
+        this.pieceImage = new ImageIcon(img);
     }
 
     public ImageIcon getPieceImage() {

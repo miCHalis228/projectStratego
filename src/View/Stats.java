@@ -1,30 +1,35 @@
 package View;
 
+
 import Model.Player.Player;
 
 import javax.swing.*;
 import java.awt.*;
 
 public class Stats extends JPanel {
+
     private Player m_player;
+
+    private JFrame frame;
+
+    private JPanel labelMods;
+    private JPanel labelStats;
+    private JPanel labelCaptures;
+    
+    private JPanel modPanel;
+    private JPanel statsPanel;
+    private JPanel capturesPanel;
+    
     private JCheckBox l_mod1;
     private JCheckBox l_mod2;
-    private boolean mod1;
-    private boolean mod2;
-    private int win_rate;
-    private int revives;
-    private int round;
-    private int capture1;
-    private int capture2;
-    private int capture3;
-    private int capture4;
-    private int capture5;
-    private int capture6;
-    private int capture7;
-    private int capture8;
-    private int capture9;
-    private int capture10;
-    private int totalCaptures;
+    private boolean mod1 = true;
+    private boolean mod2 = false;
+    private int win_rate = 35;
+    private int revives = 2;
+    private int round = 3;
+    private  int[] playerCaptures;
+    private ImageIcon[] pieceImages;
+    private int totalCaptures = 131;
 
     /**
      * <b>Constructor</b> Constructs a new Stat screen
@@ -32,17 +37,42 @@ public class Stats extends JPanel {
      */
     public Stats(Player player, int mode){
         this.m_player=player;
-        this.l_mod1 = new JCheckBox();
-        this.l_mod2 = new JCheckBox();
-        this.add(activeMods(mode));
+        this.l_mod1 = new JCheckBox("Μειωμένος Στρατος", false);
+        this.l_mod2 = new JCheckBox("Καμία Υποχώρηση", false);
+        this.labelMods = new JPanel();
+        this.labelStats = new JPanel();
+        this.labelCaptures = new JPanel();
+        this.modPanel = new JPanel();
+        this.statsPanel = new JPanel();
+        this.capturesPanel = new JPanel();
+        this.pieceImages = new ImageIcon[12];
+        this.playerCaptures = player.getCaptures();
+        activeMods(mode);
+        Statistics();
+        captures();
     }
 
+    public void addComponents(JFrame frame){
+        frame.add(labelMods);
+        frame.add(modPanel);
+        frame.add(labelStats);
+        frame.add(statsPanel);
+        frame.add(labelCaptures);
+        frame.add(capturesPanel);
+    }
     /**
      * <b>Transformer:</b> Generates the ActiveMods JPanel to go into the final JFrame
      * @param mode int between 0-3
      * @return the JPanel generated for the active mods
      */
-    JPanel activeMods(int mode){
+    void activeMods(int mode){
+        JLabel label = new JLabel("ΕΝΕΡΓΟΙ ΚΑΝΟΝΕΣ");
+        label.setFont(new Font("Didot", Font.BOLD, 25));
+        labelMods.setLayout(new FlowLayout());
+        labelMods.setOpaque(false);
+        labelMods.add(label);
+        labelMods.setBounds(1150,50,350,50);
+
         switch (mode){
             case 0:
                 l_mod1.setSelected(false);
@@ -63,111 +93,178 @@ public class Stats extends JPanel {
             default:
                 break;
         }
-
-        JPanel am = new JPanel(new GridLayout(2,1));
-        am.add(l_mod1);
-        am.add(l_mod2);
-        am.setBounds(0,0,500,250);
-    return am;
+        l_mod1.setOpaque(false);
+        l_mod2.setOpaque(false);
+        l_mod1.setEnabled(false);
+        l_mod2.setEnabled(false);
+        l_mod1.setFont(new Font("Didot", Font.TYPE1_FONT, 18));
+        l_mod2.setFont(new Font("Didot", Font.TYPE1_FONT, 18));
+        modPanel.setOpaque(false);
+        modPanel.setLayout
+                (new GridLayout(2,1,20,0));
+        modPanel.setBounds(1220,100,200,100);
+        modPanel.add(l_mod1);
+        modPanel.add(l_mod2);
     }
 
     /**
      * <b>Transformer:</b> Generates the Statistics JPanel to go into the final JFrame
-     * @return the JPanel generated for the Stats of the player
+     * @return the JPanel generated for the Stats of the m_player
      */
-    JPanel Statistics(){
-        JPanel m_Statistics = new JPanel(new FlowLayout());
-        JPanel tempo = new JPanel(new GridLayout(1,1));
-        tempo.setBackground((new Color(128,128,128)));//.setOpaque(false);
-        m_Statistics.add((new JLabel("ΣΤΑΤΙΣΤΙΚΑ"))).setFont(new Font("Arial",Font.BOLD,25));
-//        m_Statistics
-        return m_Statistics;
+    void Statistics(){
+        JLabel label = new JLabel("ΣΤΑΤΙΣΤΙΚΑ");
+        label.setFont(new Font("Didot", Font.BOLD, 25));
+        labelStats.setLayout(new FlowLayout());
+        labelStats.setOpaque(false);
+        labelStats.add(label);
+        labelStats.setBounds(1150,200,350,35);
+
+        statsPanel.setOpaque(false);
+        statsPanel.setLayout(new GridLayout(3,1));
+        statsPanel.setBounds(1180, 235, 300, 165);
+        label = new JLabel("Player " + m_player.toString());
+        label.setFont(new Font("Didot", Font.BOLD, 18));
+        statsPanel.add(label);
+        label = new JLabel("Ποσοστό επιτ. επίθεσης: " + String.format("%.02f", m_player.winRate()) + "%");
+        label.setFont(new Font("Didot", Font.BOLD, 18));
+        statsPanel.add(label);
+        label = new JLabel("Διασώσεις: " + "    Γύρος: " + m_player.getTurn());
+        label.setFont(new Font("Didot", Font.BOLD, 18));
+        statsPanel.add(label);
     }
 
     /**
      * <b>Transformer:</b> Generates the Captures JPanel to go into the final JFrame
-     * @param player the player to get the list of enemy captured pieces
-     * @return the JPanel generated for the Captured Units of the enemy Player
+     * @return the JPanel generated for the Captured Units of the enemy m_player
      */
-    JPanel captures(Player player){
-        JPanel toReturn = new JPanel(new GridLayout(3,1,0,0));
-        toReturn.add((new JLabel("ΑΙΧΜΑΛΩΤΙΣΕΙΣ"))).setFont(new Font("Arial",Font.BOLD,25));
+    void captures(){
+        JLabel label = new JLabel("ΑΙΧΜΑΛΩΤΙΣΕΙΣ");
+        label.setFont(new Font("Didot", Font.BOLD, 25));
+        labelCaptures.setLayout(new FlowLayout());
+        labelCaptures.setOpaque(false);
+        labelCaptures.add(label);
+        labelCaptures.setBounds(1150,400,350,50);
 
-        JPanel m_captures = new JPanel();
-        m_captures.setBackground((new Color(128,128,128)));
-//        m_captures.setBorder(BorderFactory.createEmptyBorder(5,5,5,5));
-        m_captures.setSize(new Dimension(400,500));
-        m_captures.setLayout(new GridLayout(3,6));
-        Image img = new ImageIcon(player.getImagePath() + "\\slayer.png").getImage();
-        img=img.getScaledInstance(35,35, Image.SCALE_SMOOTH);
-        m_captures.add(new JLabel(new ImageIcon(img)));
-        m_captures.add(new JLabel(String.valueOf(capture1)));
+        capturesPanel.setOpaque(false);
+        capturesPanel.setLayout(new GridLayout(4,6));
+        capturesPanel.setBounds(1150, 450, 350, 350);
 
-        img = new ImageIcon(player.getImagePath() + "\\scout.png").getImage();
-        img=img.getScaledInstance(35,35, Image.SCALE_SMOOTH);
-        m_captures.add(new JLabel(new ImageIcon(img)));
-        m_captures.add(new JLabel(String.valueOf(capture2)));
+        Image img = new ImageIcon(m_player.getImagePath() + "\\flag.png").getImage();
+        img = img.getScaledInstance(70, 85, Image.SCALE_SMOOTH);
+        pieceImages[0]=new ImageIcon(img);
+        capturesPanel.add(new JLabel(pieceImages[0]));
+        capturesPanel.add(new JLabel(" " + (playerCaptures[0]))).setFont(new Font("Didot", Font.CENTER_BASELINE, 20));
 
-        img = new ImageIcon(player.getImagePath() + "\\dwarf.png").getImage();
-        img=img.getScaledInstance(35,35, Image.SCALE_SMOOTH);
-        m_captures.add(new JLabel(new ImageIcon(img)));
-        m_captures.add(new JLabel(String.valueOf(capture3)));
 
-        img = new ImageIcon(player.getImagePath() + "\\elf.png").getImage();
-        img=img.getScaledInstance(35,35, Image.SCALE_SMOOTH);
-        m_captures.add(new JLabel(new ImageIcon(img)));
-        m_captures.add(new JLabel(String.valueOf(capture4)));
+        img = new ImageIcon(m_player.getImagePath() + "\\slayer.png").getImage();
+        img=img.getScaledInstance(70,85, Image.SCALE_SMOOTH);
+        pieceImages[1]=new ImageIcon(img);
+        capturesPanel.add(new JLabel(pieceImages[1]));
+        capturesPanel.add(new JLabel(" " + (playerCaptures[1]))).setFont(new Font("Didot", Font.CENTER_BASELINE, 20));
 
-        img = new ImageIcon(player.getImagePath() + "\\rank5.png").getImage();
-        img=img.getScaledInstance(35,35, Image.SCALE_SMOOTH);
-        m_captures.add(new JLabel(new ImageIcon(img)));
-        m_captures.add(new JLabel(String.valueOf(capture5)));
+        img = new ImageIcon(m_player.getImagePath() + "\\scout.png").getImage();
+        img=img.getScaledInstance(70,85, Image.SCALE_SMOOTH);
+        pieceImages[2]=new ImageIcon(img);
+        capturesPanel.add(new JLabel(pieceImages[2]));
+        capturesPanel.add(new JLabel(" " + (playerCaptures[2]))).setFont(new Font("Didot", Font.CENTER_BASELINE, 20));
 
-        img = new ImageIcon(player.getImagePath() + "\\sorceress.png").getImage();
-        img=img.getScaledInstance(35,35, Image.SCALE_SMOOTH);
-        m_captures.add(new JLabel(new ImageIcon(img)));
-        m_captures.add(new JLabel(String.valueOf(capture6)));
+        img = new ImageIcon(m_player.getImagePath() + "\\dwarf.png").getImage();
+        img=img.getScaledInstance(70,85, Image.SCALE_SMOOTH);
+        pieceImages[3]=new ImageIcon(img);
+        capturesPanel.add(new JLabel(pieceImages[3]));
+        capturesPanel.add(new JLabel(" " + (playerCaptures[3]))).setFont(new Font("Didot", Font.CENTER_BASELINE, 20));
 
-        img = new ImageIcon(player.getImagePath() + "\\beastRider.png").getImage();
-        img=img.getScaledInstance(35,35, Image.SCALE_SMOOTH);
-        m_captures.add(new JLabel(new ImageIcon(img)));
-        m_captures.add(new JLabel(String.valueOf(capture7)));
+        img = new ImageIcon(m_player.getImagePath() + "\\elf.png").getImage();
+        img=img.getScaledInstance(70,85, Image.SCALE_SMOOTH);
+        pieceImages[4]=new ImageIcon(img);
+        capturesPanel.add(new JLabel(pieceImages[4]));
+        capturesPanel.add(new JLabel(" " + (playerCaptures[4]))).setFont(new Font("Didot", Font.CENTER_BASELINE, 20));
 
-        img = new ImageIcon(player.getImagePath() + "\\knight.png").getImage();
-        img=img.getScaledInstance(35,35, Image.SCALE_SMOOTH);
-        m_captures.add(new JLabel(new ImageIcon(img)));
-        m_captures.add(new JLabel(String.valueOf(capture8)));
+        img = new ImageIcon(m_player.getImagePath() + "\\rank5.png").getImage();
+        img=img.getScaledInstance(70,85, Image.SCALE_SMOOTH);
+        pieceImages[5]=new ImageIcon(img);
+        capturesPanel.add(new JLabel(pieceImages[5]));
+        capturesPanel.add(new JLabel(" " + (playerCaptures[5]))).setFont(new Font("Didot", Font.CENTER_BASELINE, 20));
 
-        img = new ImageIcon(player.getImagePath() + "\\mage.png").getImage();
-        img=img.getScaledInstance(35,35, Image.SCALE_SMOOTH);
-        m_captures.add(new JLabel(new ImageIcon(img)));
-        m_captures.add(new JLabel(String.valueOf(capture9)));
+        img = new ImageIcon(m_player.getImagePath() + "\\sorceress.png").getImage();
+        img=img.getScaledInstance(70,85, Image.SCALE_SMOOTH);
+        pieceImages[6]=new ImageIcon(img);
+        capturesPanel.add(new JLabel(pieceImages[6]));
+        capturesPanel.add(new JLabel(" " + (playerCaptures[6]))).setFont(new Font("Didot", Font.CENTER_BASELINE, 20));
 
-        toReturn.add(m_captures);
-        img = new ImageIcon(player.getImagePath() + "\\dragon.png").getImage();
-        img=img.getScaledInstance(35,35, Image.SCALE_SMOOTH);
-        JLabel jLabel= new JLabel(new ImageIcon(img));
+        img = new ImageIcon(m_player.getImagePath() + "\\beastRider.png").getImage();
+        img=img.getScaledInstance(70,85, Image.SCALE_SMOOTH);
+        pieceImages[7]=new ImageIcon(img);
+        capturesPanel.add(new JLabel(pieceImages[7]));
+        capturesPanel.add(new JLabel(" " + (playerCaptures[7]))).setFont(new Font("Didot", Font.CENTER_BASELINE, 20));
 
-        toReturn.add(jLabel);
+        img = new ImageIcon(m_player.getImagePath() + "\\knight.png").getImage();
+        img=img.getScaledInstance(70,85, Image.SCALE_SMOOTH);
+        pieceImages[8]=new ImageIcon(img);
+        capturesPanel.add(new JLabel(pieceImages[8]));
+        capturesPanel.add(new JLabel(" " + (playerCaptures[8]))).setFont(new Font("Didot", Font.CENTER_BASELINE, 20));
 
-        return toReturn;
+        img = new ImageIcon(m_player.getImagePath() + "\\mage.png").getImage();
+        img=img.getScaledInstance(70,85, Image.SCALE_SMOOTH);
+        pieceImages[9]=new ImageIcon(img);
+        capturesPanel.add(new JLabel(pieceImages[9]));
+        capturesPanel.add(new JLabel(" " + (playerCaptures[9]))).setFont(new Font("Didot", Font.CENTER_BASELINE, 20));
+
+        img = new ImageIcon(m_player.getImagePath() + "\\dragon.png").getImage();
+        img = img.getScaledInstance(70, 85, Image.SCALE_SMOOTH);
+        pieceImages[10]=new ImageIcon(img);
+        capturesPanel.add(new JLabel(pieceImages[10]));
+        capturesPanel.add(new JLabel(" " + (playerCaptures[10]))).setFont(new Font("Didot", Font.CENTER_BASELINE, 20));
+
+        img = new ImageIcon(m_player.getImagePath() + "\\trap.png").getImage();
+        img = img.getScaledInstance(70, 85, Image.SCALE_SMOOTH);
+        pieceImages[11]=new ImageIcon(img);
+        capturesPanel.add(new JLabel(pieceImages[11]));
+        capturesPanel.add(new JLabel(" " + (playerCaptures[11]))).setFont(new Font("Didot", Font.CENTER_BASELINE, 20));
+
+
+
     }
 
     /**
      * <b>Accessor</b> Updates and returns the Stat JFrame
-     * @param player the players stat frame
-     * @return the updated JFrame
      */
-    public JFrame update(Player player){
-        return null;
+    public void update(){
+        for(int i=1;i<24;i+=2){
+            capturesPanel.remove(i);
+            capturesPanel.add(new JLabel(" " + (playerCaptures[(i-1)/2])),i).setFont(new Font("Didot", Font.CENTER_BASELINE, 20));
+        }
+        statsPanel.remove(1);
+        statsPanel.add(new JLabel("Ποσοστό επιτ. επίθεσης: " + String.format("%.02f", m_player.winRate()) + "%"),1).setFont(new Font("Didot", Font.BOLD, 18));
     }
-
+    public void hideAll(){
+        labelMods.setVisible(false);
+        labelStats.setVisible(false);
+        labelCaptures.setVisible(false);
+        modPanel.setVisible(false);
+        statsPanel.setVisible(false);
+        capturesPanel.setVisible(false);
+    }
+    public void showAll(){
+        labelMods.setVisible(true);
+        labelStats.setVisible(true);
+        labelCaptures.setVisible(true);
+        modPanel.setVisible(true);
+        statsPanel.setVisible(true);
+        capturesPanel.setVisible(true);
+    }
     public static void main(String[] args) {
         JFrame frame = new JFrame();
         Stats s = new Stats(new Player("Blue"),0);
+        frame.setMaximumSize(new Dimension(Toolkit.getDefaultToolkit().getScreenSize().width, Toolkit.getDefaultToolkit().getScreenSize().height));
+
+        frame.setResizable(false);
+        frame.setSize(new Dimension(Toolkit.getDefaultToolkit().getScreenSize().width, Toolkit.getDefaultToolkit().getScreenSize().height));
+//        this.setUndecorated(true);
+        frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         frame.add(s);
-        frame.pack();
+//        frame.pack();
         frame.setVisible(true);
 
 

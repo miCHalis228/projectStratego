@@ -53,7 +53,8 @@ public class Field{
 //                    System.out.println(f_board.getSpot(i,j).getButton().hashCode());
 //                }
             }
-        hiddenBlue.setBounds(100,(Toolkit.getDefaultToolkit().getScreenSize().height-800)/2,10*105+40,8*95+40);
+        hiddenBlue.setBounds(50,(Toolkit.getDefaultToolkit().getScreenSize().height-800)/2,10*105+40,8*95+40);
+
         hiddenBlue.setOpaque(false);
     }
 
@@ -76,7 +77,7 @@ public class Field{
 //
 //                }
             }
-        hiddenRed.setBounds(100,(Toolkit.getDefaultToolkit().getScreenSize().height-800)/2,10*105+40,8*95+40);
+        hiddenRed.setBounds(50,(Toolkit.getDefaultToolkit().getScreenSize().height-800)/2,10*105+40,8*95+40);
         hiddenRed.setOpaque(false);
     }
 
@@ -126,7 +127,7 @@ public class Field{
     }
 
     public static void main(String[] args) {
-        Field f = new Field(new Board());
+//        Field f = new Field(new Board());
 
         JFrame frame = new JFrame();
         ImageIcon imageIcon = new ImageIcon("C:\\Users\\user\\IdeaProjects\\StrategoPhase2\\src\\images\\dragon_background_cropped169.jpg"); // load the image to a imageIcon
@@ -139,9 +140,9 @@ public class Field{
         frame.setUndecorated(true);
         frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        frame.add(f.getHiddenBlue());
-        frame.add(f.getHiddenRed());
-        f.swapFields(false);
+//        frame.add(f.getHiddenBlue());
+//        frame.add(f.getHiddenRed());
+//        f.swapFields(false);
         frame.pack();
         frame.setVisible(true);
 //        f.updateField();

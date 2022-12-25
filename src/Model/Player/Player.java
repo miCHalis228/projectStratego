@@ -22,9 +22,16 @@ public class Player {
     private ImageIcon m_HiddenImage;
     private List<Piece> Pieces;
     private List<Piece> DeadPieces;
-    private List<Piece> CapturedPieces;
 
+    private int attackCount;
+    private int succesfulAttacks;
+    private int turn;
+
+    private int[] captures;
     public Player(String name, int mode) throws IllegalArgumentException {
+        attackCount=0;
+        succesfulAttacks=0;
+        turn=0;
         switch (name) {
             case "Red":
                 isBlue = false;
@@ -43,7 +50,7 @@ public class Player {
         Pieces = new ArrayList<Piece>();
         revival_counter = 2;
         DeadPieces = new ArrayList<Piece>();
-        CapturedPieces = new ArrayList<Piece>();
+        captures = new int[12];
 
         Image img = new ImageIcon(new StringBuilder().append(imagePath).append("\\Hidden.png").toString()).getImage();
         img = img.getScaledInstance(105, 95, Image.SCALE_SMOOTH);
@@ -74,7 +81,7 @@ public class Player {
         Pieces = new ArrayList<Piece>();
         revival_counter = 2;
         DeadPieces = new ArrayList<Piece>();
-        CapturedPieces = new ArrayList<Piece>();
+        captures = new int[12];
 
         Image img = new ImageIcon(imagePath + "\\Hidden.png").getImage();
         img = img.getScaledInstance(105, 95, Image.SCALE_SMOOTH);
@@ -114,10 +121,10 @@ public class Player {
                 Pieces.add(new MovablePiece(-1, -1, imagePath + "\\mage.png", 9, isBlue));
                 Pieces.add(new MovablePiece(-1, -1, imagePath + "\\dragon.png", 10, isBlue));
 
+
                 Pieces.stream()
-                        .forEach(piece -> piece.setHiddenImage(m_HiddenImage));
-                Pieces.stream()
-                        .forEach(piece -> );
+                        .forEach(piece -> piece.setHiddenImage(imagePath  + "\\Hidden.png"));
+
                 break;
             case 1:/*Code for 25 pieces*/
                 break;
@@ -158,11 +165,8 @@ public class Player {
      * @return true if the player can continue playing
      */
     public boolean isDefeated() {
-        if(Pieces.get(0).isDead()){
-            return true;
-        }
+        return Pieces.get(0).isDead();
         /*if it has movable pieces and flag is not captured return false*/
-        return false;
     }
 
     /**
@@ -179,10 +183,25 @@ public class Player {
      * <b>Transformer</b> Used to call the attack method from its pieces
      * <b>pre-condition</b> Both the attacking and defending piece are not dead
      * <b>post-condition</b> One or Both of these Pieces is Defeated
-     * @param enemyPiece
+     * @param index d
      */
-    public void attacks(Piece enemyPiece) {
+    public void attacks(int index) {
+        captures[index]++;
+        succesfulAttacks++;
+        attackCount++;
+    }
 
+    public void defends(int index){
+        captures[index]++;
+    }
+    public void doesAttack(){
+        attackCount++;
+    }
+
+    public float winRate(){
+        if (attackCount==0)
+            return 0.0f;
+        return(succesfulAttacks/(float)attackCount*100);
     }
 
     public void flipCards(){
@@ -251,5 +270,19 @@ public class Player {
 
     public List<Piece> getPieces() {
         return Pieces;
+    }
+
+    public void nextTurn(){
+        turn++;
+    }
+
+    public int getTurn(){
+        return turn;
+    }
+    public int[] getCaptures() {
+        return captures;
+    }
+    public String toString(){
+        return  m_name;
     }
 }

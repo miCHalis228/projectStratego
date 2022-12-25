@@ -4,6 +4,7 @@ import Model.Board.Board;
 import Model.Exceptions.BoardNotInitializedException;
 import Model.Player.Player;
 import View.Field;
+import View.Stats;
 
 import javax.swing.*;
 import java.awt.*;
@@ -17,6 +18,8 @@ public class Controller {
     private static boolean turnRed;
     private Player playerBlue;
     private Player playerRed;
+    private Stats statsBlue;
+    private Stats statsRed;
 
     private JPanel hiddenBlue;
     private JPanel hiddenRed;
@@ -27,12 +30,14 @@ public class Controller {
      * <b>post-condition</b> A Blue and a Red Player are created
      */
     public Controller(int mode) {
-        board = new Board();
         playerBlue = new Player("Blue",mode);
         playerBlue.randomizePositions();
         playerRed = new Player("Red",mode);
         playerRed.randomizePositions();
+        board = new Board(playerBlue,playerRed);
         turnRed=true;
+        statsBlue = new Stats(playerBlue,mode);
+        statsRed = new Stats(playerRed,mode);
 
         try {
             board.initializeBoard();
@@ -60,11 +65,16 @@ public class Controller {
         hiddenRed = f.getHiddenRed();
         frame.add(hiddenRed);
         frame.add(hiddenBlue);
+        statsBlue.addComponents(frame);
+        statsRed.addComponents(frame);
         frame.pack();
+
         hiddenRed.setVisible(true);
         hiddenBlue.setVisible(false);
-        frame.setVisible(true);
         hidePlayer();
+        statsRed.hideAll();
+        statsBlue.showAll();
+        frame.setVisible(true);
 
         while(!playerBlue.isDefeated() && !playerRed.isDefeated()){
             try {
@@ -98,6 +108,8 @@ public class Controller {
     private void updateLists() {
             playerBlue.setDeadPieces();
             playerRed.setDeadPieces();
+            statsBlue.update();
+            statsRed.update();
     }
 
     /**
@@ -115,7 +127,11 @@ public class Controller {
      * <b>post-condition</b> From Blue to Red to Blue...
      */
     public void nextTurn() {
-        this.turnRed = !this.turnRed;
+//        if(turnRed)
+//            playerRed.nextTurn();
+//        else
+//            playerBlue.nextTurn();
+        turnRed = !turnRed;
     }
 
     /**
@@ -167,9 +183,13 @@ public class Controller {
         if(!turnRed){
             playerBlue.unflipCards();
             playerRed.flipCards();
+            statsRed.showAll();
+            statsBlue.hideAll();
         } else {
             playerBlue.flipCards();
             playerRed.unflipCards();
+            statsRed.hideAll();
+            statsBlue.showAll();
         }
 
     }

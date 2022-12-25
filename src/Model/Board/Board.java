@@ -25,14 +25,19 @@ public class Board {
     private static Spot targetSpot;
     private Spot[][] spots;
     private int[] lastPressed;
+    private Player playerBlue;
+    private Player playerRed;
 
-    private static boolean moveMade = false;
-    private static boolean attackMade = false;
-    private List<Coordinates> possibleCoordinates = new ArrayList<Coordinates>();
+
+    private boolean moveMade = false;
+    private boolean attackMade = false;
+    private List<Coordinates> possibleCoordinates = new ArrayList<>();
 
     private List<JButton> possibleButtons = new ArrayList<JButton>();
 
-    public Board() {
+    public Board(Player blue,Player red) {
+        playerBlue=blue;
+        playerRed=red;
         spots = new Spot[8][10];
         lastPressed = new int[2];
         lastPressed[0] = -1;
@@ -93,12 +98,8 @@ public class Board {
             piece = iterator.next();
             if (!piece.isDead()) {
                 spots[piece.getY()][piece.getX()].setPiece(piece);
-                spots[piece.getY()][piece.getX()].setHiddenImage(p.getM_HiddenImage());
-//                spots[piece.getY()][piece.getX()].setButton();
             } else {
                 spots[piece.getY()][piece.getX()].setPiece(null);
-//                spots[piece.getY()][piece.getX()].setButton();
-
             }
         }
         for (int row = 0; row < 8; row++)
@@ -126,11 +127,30 @@ public class Board {
             try {
                 ((MovablePiece) lastPressedPiece.getPiece()).attack(targetSpot.getPiece());
                 if (lastPressedPiece.getPiece().isDead() && targetSpot.getPiece().isDead()) {
+                    if(lastPressedPiece.getPiece().isBlue()){
+                        playerRed.attacks(targetSpot.getPiece().getRank());
+                        playerBlue.defends(lastPressedPiece.getPiece().getRank());
+                    } else {
+                        playerBlue.attacks(targetSpot.getPiece().getRank());
+                        playerRed.defends(lastPressedPiece.getPiece().getRank());
+                    }
                     lastPressedPiece.setPiece(null);
                     targetSpot.setPiece(null);
                 } else if (lastPressedPiece.getPiece().isDead()) {
+                    if(lastPressedPiece.getPiece().isBlue()){
+                        playerBlue.defends(lastPressedPiece.getPiece().getRank());
+                        playerRed.doesAttack();
+                    } else {
+                        playerRed.defends(lastPressedPiece.getPiece().getRank());
+                        playerBlue.doesAttack();
+                    }
                     lastPressedPiece.setPiece(null);
                 } else if(targetSpot.getPiece().isDead()){
+                    if(lastPressedPiece.getPiece().isBlue()){
+                        playerRed.attacks(targetSpot.getPiece().getRank());
+                    } else {
+                        playerBlue.attacks(targetSpot.getPiece().getRank());
+                    }
                     ((MovablePiece) lastPressedPiece.getPiece()).move(temp);
                     targetSpot.setPiece(lastPressedPiece.getPiece());
                     lastPressedPiece.setPiece(null);
@@ -175,8 +195,8 @@ public class Board {
      * <b>post-condition</b> Board is updated
      */
     public void updateBoard(Player pblue, Player pred) {
-        this.placePlayer(pblue);
-        this.placePlayer(pred);
+//        this.placePlayer(pblue);
+//        this.placePlayer(pred);
         for (int row = 0; row < 8; row++)
             for (int col = 0; col < 10; col++) {
                 spots[row][col].setButton();
@@ -199,28 +219,28 @@ public class Board {
         this.attackMade = attackMade;
     }
 
-    public void hidePlayer(Player toHide, Player toShow) {
-        Iterator<Piece> iterator = toHide.getPieces().iterator();
-        Piece piece;
-
-        while (iterator.hasNext()) {
-            piece = iterator.next();
-            if (!piece.isDead()){
-                spots[piece.getY()][piece.getX()].hide();
-//                spots[piece.getY()][piece.getX()].getButton().set;
-
-            }
-        }
-        iterator = toShow.getPieces().iterator();
-
-        while (iterator.hasNext()) {
-            piece = iterator.next();
-            if (!piece.isDead()){
-                spots[piece.getY()][piece.getX()].show();
-
-            }
-        }
-    }
+//    public void hidePlayer(Player toHide, Player toShow) {
+//        Iterator<Piece> iterator = toHide.getPieces().iterator();
+//        Piece piece;
+//
+//        while (iterator.hasNext()) {
+//            piece = iterator.next();
+//            if (!piece.isDead()){
+//                spots[piece.getY()][piece.getX()].hide();
+////                spots[piece.getY()][piece.getX()].getButton().set;
+//
+//            }
+//        }
+//        iterator = toShow.getPieces().iterator();
+//
+//        while (iterator.hasNext()) {
+//            piece = iterator.next();
+//            if (!piece.isDead()){
+//                spots[piece.getY()][piece.getX()].show();
+//
+//            }
+//        }
+//    }
 
     public class selectedPawn implements ActionListener {
         Board m_board;
@@ -235,7 +255,7 @@ public class Board {
             Iterator<Coordinates> iteratorCoordinates;
             JButton source = (JButton) e.getSource();
             int row = 0, col = 0, index = 0;
-            if(moveMade==true)
+            if(moveMade)
                 return;
             while (true) {
                 if (index > 79) {
