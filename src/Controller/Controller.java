@@ -4,10 +4,6 @@ import Model.Board.Board;
 import Model.Exceptions.BoardNotInitializedException;
 import Model.Player.Player;
 import View.*;
-
-import javax.swing.*;
-import java.awt.*;
-
 /**
  * @author Michalis Ierodiakonou
  */
@@ -57,33 +53,6 @@ public class Controller {
             throw new RuntimeException(e);
         }
         view = new View(playerBlue,playerRed,board,mode);
-//        view.setVisible(false);
-//        field = new Field(board);
-//        JFrame frame = new JFrame();
-//        frame.setLayout(new CardLayout());
-//        ImageIcon imageIcon = new ImageIcon("C:\\Users\\user\\IdeaProjects\\StrategoPhase2\\src\\images\\dragon_background_cropped169.jpg"); // load the image to a imageIcon
-//        Image image = imageIcon.getImage().getScaledInstance((int)Toolkit.getDefaultToolkit().getScreenSize().width,(int)Toolkit.getDefaultToolkit().getScreenSize().height, Image.SCALE_SMOOTH);
-//        JLabel background = new JLabel(new ImageIcon(image), JLabel.CENTER);
-//        frame.setContentPane(background);
-//        frame.setMaximumSize(new Dimension(Toolkit.getDefaultToolkit().getScreenSize().width, Toolkit.getDefaultToolkit().getScreenSize().height));
-//        frame.setSize(new Dimension(Toolkit.getDefaultToolkit().getScreenSize().width, Toolkit.getDefaultToolkit().getScreenSize().height));
-//        frame.setResizable(false);
-//        frame.setUndecorated(true);
-//        frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
-//        frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-//        hiddenBlue = field.getHiddenBlue();
-//        hiddenRed = field.getHiddenRed();
-//        frame.add(hiddenRed);
-//        frame.add(hiddenBlue);
-//        statsBlue.addComponents(frame);
-//        statsRed.addComponents(frame);
-//        frame.pack();
-//
-//        hiddenRed.setVisible(true);
-//        hiddenBlue.setVisible(false);
-//        hidePlayer();
-//        statsRed.hideAll();
-//        statsBlue.showAll();
         for(int i=0;i<6;i++){
             try {
                 Thread.sleep(500);
@@ -137,8 +106,6 @@ public class Controller {
     private void updateLists() {
             playerBlue.setDeadPieces();
             playerRed.setDeadPieces();
-//            statsBlue.update();
-//            statsRed.update();
     }
 
     /**
@@ -156,10 +123,6 @@ public class Controller {
      * <b>post-condition</b> From Blue to Red to Blue...
      */
     public void nextTurn() {
-//        if(turnRed)
-//            playerRed.nextTurn();
-//        else
-//            playerBlue.nextTurn();
         turnRed = !turnRed;
     }
 
@@ -206,22 +169,6 @@ public class Controller {
 
     public static void main(String[] args) {
         Controller c = new Controller();
-    }
-
-    public void hidePlayer(){
-        if(!turnRed){
-            playerBlue.unflipCards();
-            playerRed.flipCards();
-//            statsRed.showAll();
-//            statsBlue.hideAll();
-        } else {
-            playerBlue.flipCards();
-            playerRed.unflipCards();
-//            statsRed.hideAll();
-//            statsBlue.showAll();
-        }
-//        statsBlue.nextTurn(round);
-//        statsRed.nextTurn(round);
     }
     class Thread_extended_class extends Thread {
         ModSelectionWindow mon;

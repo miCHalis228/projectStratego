@@ -45,6 +45,20 @@ public class View extends JFrame {
         this.mode=mode;
         statsBlue = new Stats(playerBlue,mode);
         statsRed = new Stats(playerRed,mode);
+        initView();
+        hiddenBlue = field.getHiddenBlue();
+        hiddenRed = field.getHiddenRed();
+        this.add(hiddenRed);
+        this.add(hiddenBlue);
+        statsBlue.addComponents(this);
+        statsRed.addComponents(this);
+        this.pack();
+
+        statsRed.hideAll();
+        statsBlue.showAll();
+    }
+
+    public void initView(){
         this.setLayout(new CardLayout());
         ImageIcon imageIcon = new ImageIcon("C:\\Users\\user\\IdeaProjects\\StrategoPhase2\\src\\images\\dragon_background_cropped169.jpg"); // load the image to a imageIcon
         Image image = imageIcon.getImage().getScaledInstance((int)Toolkit.getDefaultToolkit().getScreenSize().width,(int)Toolkit.getDefaultToolkit().getScreenSize().height, Image.SCALE_SMOOTH);
@@ -56,20 +70,7 @@ public class View extends JFrame {
         this.setUndecorated(true);
         this.setExtendedState(JFrame.MAXIMIZED_BOTH);
         this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        hiddenBlue = field.getHiddenBlue();
-        hiddenRed = field.getHiddenRed();
-        this.add(hiddenRed);
-        this.add(hiddenBlue);
-        statsBlue.addComponents(this);
-        statsRed.addComponents(this);
-        this.pack();
-
-        hiddenRed.setVisible(true);
-        hiddenBlue.setVisible(false);
-        statsRed.hideAll();
-        statsBlue.showAll();
     }
-
     public static void main(String[] args) {
 //        View v = new View(null);
     }
