@@ -20,9 +20,13 @@ public class View extends JFrame {
 
     private Controller controller;
 
-    private Player p1;
-    private Player p2;
-
+    private Player playerBlue;
+    private Player playerRed;
+    private JPanel hiddenBlue;
+    private JPanel hiddenRed;
+    private Field field;
+    private Stats statsBlue;
+    private Stats statsRed;
     private ArrayList<JButton> graveyard;
     private int mode = -1;
     private ModSelectionWindow msw;
@@ -34,56 +38,40 @@ public class View extends JFrame {
      * <b>Constructor</b> Constructs a View and Starts the game
      * <b>post-condition</b> The Game has started
      */
-    public View(Board board) {
-        msw = new ModSelectionWindow();
-        loading = new LoadingScreen();
-        Thread T = new Thread_extended_class(msw);
-        T.start();
-        try {
-            loading.setVisible(true);
-            T.join();
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
-        mode = msw.getMode();
+    public View(Player pblue, Player pred,Board board,int mode) {
+        playerBlue = pblue;
+        playerRed = pred;
+        field = new Field(board);
+        this.mode=mode;
+        statsBlue = new Stats(playerBlue,mode);
+        statsRed = new Stats(playerRed,mode);
+        this.setLayout(new CardLayout());
+        ImageIcon imageIcon = new ImageIcon("C:\\Users\\user\\IdeaProjects\\StrategoPhase2\\src\\images\\dragon_background_cropped169.jpg"); // load the image to a imageIcon
+        Image image = imageIcon.getImage().getScaledInstance((int)Toolkit.getDefaultToolkit().getScreenSize().width,(int)Toolkit.getDefaultToolkit().getScreenSize().height, Image.SCALE_SMOOTH);
+        JLabel background = new JLabel(new ImageIcon(image), JLabel.CENTER);
+        this.setContentPane(background);
+        this.setMaximumSize(new Dimension(Toolkit.getDefaultToolkit().getScreenSize().width, Toolkit.getDefaultToolkit().getScreenSize().height));
+        this.setSize(new Dimension(Toolkit.getDefaultToolkit().getScreenSize().width, Toolkit.getDefaultToolkit().getScreenSize().height));
+        this.setResizable(false);
+        this.setUndecorated(true);
+        this.setExtendedState(JFrame.MAXIMIZED_BOTH);
+        this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        hiddenBlue = field.getHiddenBlue();
+        hiddenRed = field.getHiddenRed();
+        this.add(hiddenRed);
+        this.add(hiddenBlue);
+        statsBlue.addComponents(this);
+        statsRed.addComponents(this);
+        this.pack();
 
-        for(int i=0;i<6;i++){
-            try {
-                Thread.sleep(500);
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
-            }
-            loading.count();
-        }
-        loading.setVisible(false);
-        loading.dispose();
-        controller = new Controller(mode);
-
-//        fieldScreen = new Field(controller.getBoard());
-
-//        JFrame frame = new JFrame();
-//        ImageIcon imageIcon = new ImageIcon("C:\\Users\\user\\IdeaProjects\\StrategoPhase2\\src\\images\\blue_red_wallpaper.jpg"); // load the image to a imageIcon
-//        JLabel background = new JLabel(imageIcon, JLabel.CENTER);
-//        frame.setContentPane(background);
-//        frame.setMaximumSize(new Dimension(Toolkit.getDefaultToolkit().getScreenSize().width, Toolkit.getDefaultToolkit().getScreenSize().height));
-//        frame.setSize(new Dimension(Toolkit.getDefaultToolkit().getScreenSize().width, Toolkit.getDefaultToolkit().getScreenSize().height));
-//        frame.setResizable(false);
-//        frame.setUndecorated(true);
-//        frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
-//        frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-//        frame.add(fieldScreen);
-//        frame.pack();
-//        frame.setVisible(true);
-
-//        System.exit(0);
-//        //one for each player
-//        statScreen = new Stats[2];
-//        p1=controller.getPlayerBlue();
-//        p2=controller.getPlayerRed();
+        hiddenRed.setVisible(true);
+        hiddenBlue.setVisible(false);
+        statsRed.hideAll();
+        statsBlue.showAll();
     }
 
     public static void main(String[] args) {
-        View v = new View(null);
+//        View v = new View(null);
     }
 
     /**
@@ -91,10 +79,30 @@ public class View extends JFrame {
      * <b>pre-condition</b> View is already drawn
      * <b>post-condition</b> View is updated
      *
-     * @param newBoard A reference to the updated board is sent from the controller
+     * @param turnRed A reference to the updated board is sent from the controller
+     * @param round A reference to the updated board is sent from the controller
      */
-    public void updateView(Board newBoard) {
+    public void updateView(boolean turnRed,int round) {
+        field.swapFields(turnRed);
+        if(!turnRed){
+            playerBlue.unflipCards();
+            playerRed.flipCards();
+            statsRed.showAll();
+            statsBlue.hideAll();
+        } else {
+            playerBlue.flipCards();
+            playerRed.unflipCards();
+            statsRed.hideAll();
+            statsBlue.showAll();
+        }
+        statsBlue.nextTurn(round);
+        statsRed.nextTurn(round);
         //TODO
+    }
+
+    public void updateStats(){
+        statsBlue.update();
+        statsRed.update();
     }
 
     class Thread_extended_class extends Thread {

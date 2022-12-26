@@ -31,6 +31,7 @@ public class Player {
     public Player(String name, int mode) throws IllegalArgumentException {
         attackCount=0;
         succesfulAttacks=0;
+        revival_counter=0;
         turn=0;
         switch (name) {
             case "Red":
@@ -48,7 +49,6 @@ public class Player {
         this.m_mode=mode;
         this.m_name = name;
         Pieces = new ArrayList<Piece>();
-        revival_counter = 2;
         DeadPieces = new ArrayList<Piece>();
         captures = new int[12];
 
@@ -79,7 +79,6 @@ public class Player {
         }
         this.m_name = name;
         Pieces = new ArrayList<Piece>();
-        revival_counter = 2;
         DeadPieces = new ArrayList<Piece>();
         captures = new int[12];
 
@@ -284,5 +283,20 @@ public class Player {
     }
     public String toString(){
         return  m_name;
+    }
+
+    public boolean isBlue() {
+        return isBlue;
+    }
+
+    public int getRevival_counter() {
+        return revival_counter;
+    }
+    public void revive(){
+        if(revival_counter>=2){
+            return;
+        } else{
+
+        }
     }
 }

@@ -19,7 +19,8 @@ public class Stats extends JPanel {
     private JPanel modPanel;
     private JPanel statsPanel;
     private JPanel capturesPanel;
-    
+    private JPanel totalCapturesPanel;
+
     private JCheckBox l_mod1;
     private JCheckBox l_mod2;
     private boolean mod1 = true;
@@ -29,7 +30,7 @@ public class Stats extends JPanel {
     private int round = 3;
     private  int[] playerCaptures;
     private ImageIcon[] pieceImages;
-    private int totalCaptures = 131;
+    private int totalCaptures = 0   ;
 
     /**
      * <b>Constructor</b> Constructs a new Stat screen
@@ -45,6 +46,7 @@ public class Stats extends JPanel {
         this.modPanel = new JPanel();
         this.statsPanel = new JPanel();
         this.capturesPanel = new JPanel();
+        this.totalCapturesPanel = new JPanel();
         this.pieceImages = new ImageIcon[12];
         this.playerCaptures = player.getCaptures();
         activeMods(mode);
@@ -59,6 +61,7 @@ public class Stats extends JPanel {
         frame.add(statsPanel);
         frame.add(labelCaptures);
         frame.add(capturesPanel);
+        frame.add(totalCapturesPanel);
     }
     /**
      * <b>Transformer:</b> Generates the ActiveMods JPanel to go into the final JFrame
@@ -71,7 +74,7 @@ public class Stats extends JPanel {
         labelMods.setLayout(new FlowLayout());
         labelMods.setOpaque(false);
         labelMods.add(label);
-        labelMods.setBounds(1150,50,350,50);
+        labelMods.setBounds(1150,30,350,50);
 
         switch (mode){
             case 0:
@@ -102,7 +105,7 @@ public class Stats extends JPanel {
         modPanel.setOpaque(false);
         modPanel.setLayout
                 (new GridLayout(2,1,20,0));
-        modPanel.setBounds(1220,100,200,100);
+        modPanel.setBounds(1220,80,200,100);
         modPanel.add(l_mod1);
         modPanel.add(l_mod2);
     }
@@ -117,18 +120,26 @@ public class Stats extends JPanel {
         labelStats.setLayout(new FlowLayout());
         labelStats.setOpaque(false);
         labelStats.add(label);
-        labelStats.setBounds(1150,200,350,35);
+        labelStats.setBounds(1150,180,350,35);
 
         statsPanel.setOpaque(false);
         statsPanel.setLayout(new GridLayout(3,1));
-        statsPanel.setBounds(1180, 235, 300, 165);
-        label = new JLabel("Player " + m_player.toString());
-        label.setFont(new Font("Didot", Font.BOLD, 18));
+        statsPanel.setBounds(1180, 215, 300, 165);
+        if(m_player.isBlue()){
+            label = new JLabel("Player RED");
+            label.setForeground(Color.RED);
+        }
+        else{
+            label = new JLabel("Player BLUE");
+            label.setForeground(Color.BLUE);
+        }
+        label.setFont(new Font("Didot", Font.CENTER_BASELINE, 22));
+        label.setHorizontalAlignment(SwingConstants.CENTER);
         statsPanel.add(label);
         label = new JLabel("Ποσοστό επιτ. επίθεσης: " + String.format("%.02f", m_player.winRate()) + "%");
         label.setFont(new Font("Didot", Font.BOLD, 18));
         statsPanel.add(label);
-        label = new JLabel("Διασώσεις: " + "    Γύρος: " + m_player.getTurn());
+        label = new JLabel("Διασώσεις: " + m_player.getRevival_counter() + "    Γύρος: 0");
         label.setFont(new Font("Didot", Font.BOLD, 18));
         statsPanel.add(label);
     }
@@ -143,11 +154,11 @@ public class Stats extends JPanel {
         labelCaptures.setLayout(new FlowLayout());
         labelCaptures.setOpaque(false);
         labelCaptures.add(label);
-        labelCaptures.setBounds(1150,400,350,50);
+        labelCaptures.setBounds(1150,380,350,50);
 
         capturesPanel.setOpaque(false);
         capturesPanel.setLayout(new GridLayout(4,6));
-        capturesPanel.setBounds(1150, 450, 350, 350);
+        capturesPanel.setBounds(1170, 430, 350, 380);
 
         Image img = new ImageIcon(m_player.getImagePath() + "\\flag.png").getImage();
         img = img.getScaledInstance(70, 85, Image.SCALE_SMOOTH);
@@ -222,6 +233,16 @@ public class Stats extends JPanel {
         capturesPanel.add(new JLabel(pieceImages[11]));
         capturesPanel.add(new JLabel(" " + (playerCaptures[11]))).setFont(new Font("Didot", Font.CENTER_BASELINE, 20));
 
+        for(int i=0;i<playerCaptures.length;i++){
+            totalCaptures+=playerCaptures[i];
+        }
+        label = new JLabel("Συνολικές Αιχμαλωτίσεις: " + (totalCaptures));
+        label.setFont(new Font("Didot", Font.CENTER_BASELINE, 20));
+        label.setForeground(Color.white);
+        totalCapturesPanel.setLayout(new FlowLayout());
+        totalCapturesPanel.setOpaque(false);
+        totalCapturesPanel.add(label);
+        totalCapturesPanel.setBounds(1150,810,350,50);
 
 
     }
@@ -234,8 +255,23 @@ public class Stats extends JPanel {
             capturesPanel.remove(i);
             capturesPanel.add(new JLabel(" " + (playerCaptures[(i-1)/2])),i).setFont(new Font("Didot", Font.CENTER_BASELINE, 20));
         }
+
         statsPanel.remove(1);
         statsPanel.add(new JLabel("Ποσοστό επιτ. επίθεσης: " + String.format("%.02f", m_player.winRate()) + "%"),1).setFont(new Font("Didot", Font.BOLD, 18));
+        totalCaptures=0;
+        for(int i=0;i<playerCaptures.length;i++){
+            totalCaptures+=playerCaptures[i];
+        }
+        JLabel label = new JLabel("Συνολικές Αιχμαλωτίσεις: " + (totalCaptures));
+        label.setFont(new Font("Didot", Font.CENTER_BASELINE, 20));
+        label.setForeground(Color.white);
+        totalCapturesPanel.remove(0);
+        totalCapturesPanel.add(label,0);
+    }
+
+    public void nextTurn(int turn){
+        statsPanel.remove(2);
+        statsPanel.add(new JLabel("Διασώσεις: " + m_player.getRevival_counter() + "    Γύρος: " + turn),2).setFont(new Font("Didot", Font.BOLD, 18));
     }
     public void hideAll(){
         labelMods.setVisible(false);
@@ -244,6 +280,8 @@ public class Stats extends JPanel {
         modPanel.setVisible(false);
         statsPanel.setVisible(false);
         capturesPanel.setVisible(false);
+        totalCapturesPanel.setVisible(false);
+        totalCapturesPanel.setVisible(false);
     }
     public void showAll(){
         labelMods.setVisible(true);
@@ -252,21 +290,7 @@ public class Stats extends JPanel {
         modPanel.setVisible(true);
         statsPanel.setVisible(true);
         capturesPanel.setVisible(true);
+        totalCapturesPanel.setVisible(true);
     }
-    public static void main(String[] args) {
-        JFrame frame = new JFrame();
-        Stats s = new Stats(new Player("Blue"),0);
-        frame.setMaximumSize(new Dimension(Toolkit.getDefaultToolkit().getScreenSize().width, Toolkit.getDefaultToolkit().getScreenSize().height));
 
-        frame.setResizable(false);
-        frame.setSize(new Dimension(Toolkit.getDefaultToolkit().getScreenSize().width, Toolkit.getDefaultToolkit().getScreenSize().height));
-//        this.setUndecorated(true);
-        frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
-        frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        frame.add(s);
-//        frame.pack();
-        frame.setVisible(true);
-
-
-    }
 }
