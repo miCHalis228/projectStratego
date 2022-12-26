@@ -1,10 +1,7 @@
 package Model.Player;
 
 import Model.Coordinates.Coordinates;
-import Model.Pieces.ImmovablePiece;
-import Model.Pieces.MovablePiece;
-import Model.Pieces.Piece;
-import Model.Pieces.SpecialMovablePiece;
+import Model.Pieces.*;
 
 import javax.swing.*;
 import java.awt.*;
@@ -102,11 +99,11 @@ public class Player {
                 Pieces.add(new ImmovablePiece(-1, -1, imagePath + "\\flag.png", isBlue ,true ));
                 for (i = 0; i < 6; i++)
                     Pieces.add(new ImmovablePiece(-1, -1, imagePath + "\\trap.png" , isBlue , false));
-                Pieces.add(new SpecialMovablePiece(-1, -1, imagePath + "\\slayer.png", 1, isBlue));
+                Pieces.add(new Slayer(-1, -1, imagePath + "\\slayer.png", 1, isBlue));
                 for (i = 0; i < 4; i++)
-                    Pieces.add(new SpecialMovablePiece(-1, -1, imagePath + "\\scout.png", 2, isBlue));
+                    Pieces.add(new Scout(-1, -1, imagePath + "\\scout.png", 2, isBlue));
                 for (i = 0; i < 5; i++)
-                    Pieces.add(new SpecialMovablePiece(-1, -1, imagePath + "\\dwarf.png", 3, isBlue));
+                    Pieces.add(new Dwarf(-1, -1, imagePath + "\\dwarf.png", 3, isBlue));
                 for (i = 0; i < 2; i++)
                     Pieces.add(new MovablePiece(-1, -1, imagePath + "\\elf.png", 4, isBlue));
                 for (i = 0; i < 2; i++)

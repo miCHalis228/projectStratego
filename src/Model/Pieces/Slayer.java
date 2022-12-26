@@ -12,7 +12,7 @@ public class Slayer extends SpecialMovablePiece {
      * @param imagePath path in the src where to get the image from
      * @param isBlue    if it is in the Blue or Red team
      */
-    Slayer(int x, int y, int rank, String imagePath, boolean isBlue) {
+    public Slayer(int x, int y,  String imagePath, int rank, boolean isBlue) {
         super(x, y, imagePath,rank, isBlue);
     }
 
@@ -24,6 +24,24 @@ public class Slayer extends SpecialMovablePiece {
      */
     @Override
     public void attack(Piece Enemy) throws DeadPieceException {
-        super.attack(Enemy);
+        if(Enemy instanceof MovablePiece ){
+            if(Enemy.getRank()==10){
+                Enemy.setDead();
+            }else if(this.getRank()> Enemy.getRank()){
+                this.setCoordinates(Enemy.getCoordinates());
+                Enemy.setDead();
+            } else if(this.getRank() == Enemy.getRank()){
+                Enemy.setDead();
+                this.setDead();
+            } else {
+                this.setDead();
+            }
+        } else {
+            if(((ImmovablePiece)Enemy).isFlag()){
+                Enemy.setDead();
+            } else {
+                this.setDead();
+            }
+        }
     }
 }

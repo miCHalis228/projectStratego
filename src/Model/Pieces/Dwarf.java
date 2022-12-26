@@ -12,7 +12,7 @@ public class Dwarf extends SpecialMovablePiece {
      * @param imagePath path in the src where to get the image from
      * @param isBlue    if it is in the Blue or Red team
      */
-    Dwarf(int x, int y, int rank, String imagePath, boolean isBlue) {
+    public Dwarf(int x, int y, String imagePath, int rank, boolean isBlue) {
         super(x, y,  imagePath,rank, isBlue);
     }
 
@@ -24,6 +24,18 @@ public class Dwarf extends SpecialMovablePiece {
      */
     @Override
     public void attack(Piece Enemy) throws DeadPieceException {
-        super.attack(Enemy);
+        if(Enemy instanceof MovablePiece ){
+            if(this.getRank()> Enemy.getRank()){
+                this.setCoordinates(Enemy.getCoordinates());
+                Enemy.setDead();
+            } else if(this.getRank() == Enemy.getRank()){
+                Enemy.setDead();
+                this.setDead();
+            } else {
+                this.setDead();
+            }
+        } else {
+            Enemy.setDead();
+        }
     }
 }

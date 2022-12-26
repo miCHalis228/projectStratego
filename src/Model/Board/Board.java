@@ -293,6 +293,11 @@ public class Board {
                     if (possibleCoordinates.isEmpty()) {
                         return;
                     }
+                    if(turnBlue){
+                        lastPressedPiece.getButtonBlue().setBorder(new LineBorder(Color.WHITE,4));
+                    } else {
+                        lastPressedPiece.getButtonRed().setBorder(new LineBorder(Color.WHITE,4));
+                    }
                     iteratorCoordinates = possibleCoordinates.iterator();
                     Coordinates temp;
                     while (iteratorCoordinates.hasNext()) {
@@ -313,6 +318,11 @@ public class Board {
 
                 Coordinates temp;
 
+                if(turnBlue){
+                    lastPressedPiece.getButtonBlue().setBorder(BorderFactory.createBevelBorder(1));
+                } else {
+                    lastPressedPiece.getButtonRed().setBorder(BorderFactory.createBevelBorder(1));
+                }
 //                possibleCoordinates = (lastPressedPiece.getPossibleMoves(m_board));
                 iteratorCoordinates = possibleCoordinates.iterator();
                 while (iteratorCoordinates.hasNext()) {

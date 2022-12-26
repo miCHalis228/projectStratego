@@ -20,14 +20,38 @@ public class Controller {
     private Board board;
     private LoadingScreen loading;
     private ModSelectionWindow msw;
+    private winningFrame blueWins;
+    private winningFrame redWins;
 
     /**
      * <b>Constructor</b> : Constructs a new Constructor with 2 players
      * <b>post-condition</b> A Blue and a Red Player are created
      */
     public Controller() {
+        this.init();
+        this.startGame();
+    }
+
+    public void startGame(){
+        this.menu();
+        mode = msw.getMode();
+        this.createBoard();
+        this.afterMenu();
+        this.GameLoop();
+        this.endGame();
+    }
+    /**
+     *
+     */
+    public void init(){
         msw = new ModSelectionWindow();
         loading = new LoadingScreen();
+    }
+
+    /**
+     *
+     */
+    public void menu(){
         Thread T = new Controller.Thread_extended_class(msw);
         T.start();
         try {
@@ -36,15 +60,20 @@ public class Controller {
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
-        mode = msw.getMode();
-        playerBlue = new Player("Blue",mode);
-        playerBlue.randomizePositions();
-        playerRed = new Player("Red",mode);
-        playerRed.randomizePositions();
-        board = new Board(playerBlue,playerRed);
+    }
+
+    /**
+     *
+     */
+    public void createBoard(){
+        this.playerBlue = new Player("Blue",mode);
+        this.playerBlue.randomizePositions();
+        this.playerRed = new Player("Red",mode);
+        this.playerRed.randomizePositions();
+        this.blueWins = new winningFrame(playerBlue);
+        this.redWins = new winningFrame(playerRed);
+        this.board = new Board(playerBlue,playerRed);
         turnRed=true;
-//        statsBlue = new Stats(playerBlue,3);
-//        statsRed = new Stats(playerRed,mode);
         try {
             board.initializeBoard();
             board.placePlayer(playerBlue);
@@ -52,6 +81,12 @@ public class Controller {
         } catch (BoardNotInitializedException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    /**
+     *
+     */
+    public void afterMenu(){
         view = new View(playerBlue,playerRed,board,mode);
         for(int i=0;i<6;i++){
             try {
@@ -71,9 +106,12 @@ public class Controller {
         }
         loading.setVisible(false);
         loading.dispose();
+    }
 
-
-
+    /**
+     * Game Loop
+     */
+    public void GameLoop(){
         while(!playerBlue.isDefeated() && !playerRed.isDefeated()){
             try {
                 Thread.sleep(90);
@@ -100,22 +138,27 @@ public class Controller {
                 throw new RuntimeException(e);
             }
         }
-        System.exit(0);
     }
 
+    public void endGame(){
+        view.setVisible(false);
+        if(playerBlue.isDefeated()){
+            redWins.setVisible(true);
+        } else {
+            blueWins.setVisible(true);
+        }
+    }
     private void updateLists() {
             playerBlue.setDeadPieces();
             playerRed.setDeadPieces();
     }
 
-    /**
-     * <b>Accessor</b>: Returns whose player turn it is
-     * <b>post-condition</b> true if Blue is playing, false if Red is
-     *
-     * @return this round's turn
-     */
-    public boolean isturnRed() {
-        return turnRed;
+    public Player getPlayerBlue() {
+        return playerBlue;
+    }
+
+    public Player getPlayerRed() {
+        return playerRed;
     }
 
     /**
@@ -125,6 +168,7 @@ public class Controller {
     public void nextTurn() {
         turnRed = !turnRed;
     }
+
 
     /**
      * <b>Transformer</b>: Go to the next round
@@ -151,25 +195,6 @@ public class Controller {
         return board;
     }
 
-    /**
-     * <b>Accessor</b> Returns the Blue Player
-     * @return the instance of Blue player
-     */
-    public Player getPlayerBlue() {
-        return playerBlue;
-    }
-
-    /**
-     * <b>Accessor</b> Returns the Red Player
-     * @return the instance of Red player
-     */
-    public Player getPlayerRed() {
-        return playerRed;
-    }
-
-    public static void main(String[] args) {
-        Controller c = new Controller();
-    }
     class Thread_extended_class extends Thread {
         ModSelectionWindow mon;
 

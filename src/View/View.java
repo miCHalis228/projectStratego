@@ -15,11 +15,6 @@ import java.util.ArrayList;
  * This is the main class from which everything is drawn and actions from the user are processed
  */
 public class View extends JFrame {
-    private Stats[] statScreen;
-    private Field fieldScreen;
-
-    private Controller controller;
-
     private Player playerBlue;
     private Player playerRed;
     private JPanel hiddenBlue;
@@ -27,12 +22,7 @@ public class View extends JFrame {
     private Field field;
     private Stats statsBlue;
     private Stats statsRed;
-    private ArrayList<JButton> graveyard;
-    private int mode = -1;
-    private ModSelectionWindow msw;
 
-    private JFrame gameView;
-    private LoadingScreen loading;
 
     /**
      * <b>Constructor</b> Constructs a View and Starts the game
@@ -42,10 +32,11 @@ public class View extends JFrame {
         playerBlue = pblue;
         playerRed = pred;
         field = new Field(board);
-        this.mode=mode;
         statsBlue = new Stats(playerBlue,mode);
         statsRed = new Stats(playerRed,mode);
+
         initView();
+
         hiddenBlue = field.getHiddenBlue();
         hiddenRed = field.getHiddenRed();
         this.add(hiddenRed);
@@ -70,9 +61,6 @@ public class View extends JFrame {
         this.setUndecorated(true);
         this.setExtendedState(JFrame.MAXIMIZED_BOTH);
         this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-    }
-    public static void main(String[] args) {
-//        View v = new View(null);
     }
 
     /**

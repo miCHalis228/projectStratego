@@ -1,19 +1,12 @@
 package View;
-
 import Model.Board.Board;
-import Model.Exceptions.BoardNotInitializedException;
 import Model.Exceptions.PathNotFoundException;
-import Model.Player.Player;
-
 import javax.swing.*;
 import java.awt.*;
 
 public class Field{
-
     private JPanel hiddenBlue;
     private JPanel hiddenRed;
-
-    private JButton[][] gridButtons;
     private Board f_board;
     /**
      * <b>Constructor</b> Constructs an object of Field to be used by the view
@@ -40,18 +33,6 @@ public class Field{
         for(int i=0;i<8;i++)
             for(int j=0;j<10;j++){
                 hiddenBlue.add(f_board.getSpot(i,j).getButtonBlue());
-
-//                if(!f_board.getSpot(i,j).isEmpty()){
-//                    if(f_board.getSpot(i,j).getPiece().isBlue()){
-//                        hiddenBlue.add(f_board.getSpot(i,j).getHiddenButton());
-//                    } else{
-//                        hiddenBlue.add(f_board.getSpot(i,j).getButton());
-//                    }
-//                } else {
-//                    System.out.println("hidden blue called empty");
-//                    hiddenBlue.add(f_board.getSpot(i,j).getButton());
-//                    System.out.println(f_board.getSpot(i,j).getButton().hashCode());
-//                }
             }
         hiddenBlue.setBounds(50,(Toolkit.getDefaultToolkit().getScreenSize().height-800)/2,10*105+40,8*95+40);
 
@@ -64,18 +45,6 @@ public class Field{
         for(int i=0;i<8;i++)
             for(int j=0;j<10;j++){
                 hiddenRed.add(f_board.getSpot(i,j).getButtonRed());
-
-//                if(!f_board.getSpot(i,j).isEmpty()){
-//                    if(!f_board.getSpot(i,j).getPiece().isBlue()){
-//                        hiddenRed.add(f_board.getSpot(i,j).getHiddenButton());
-//                    } else{
-//                        hiddenRed.add(f_board.getSpot(i,j).getButton());
-//                    }
-//                } else {
-//                    hiddenRed.add(f_board.getSpot(i,j).getButton());
-//                    System.out.println(f_board.getSpot(i,j).getButton().hashCode());
-//
-//                }
             }
         hiddenRed.setBounds(50,(Toolkit.getDefaultToolkit().getScreenSize().height-800)/2,10*105+40,8*95+40);
         hiddenRed.setOpaque(false);
@@ -125,31 +94,6 @@ public class Field{
     public void drawBoard(JFrame frame) throws PathNotFoundException {
         frame.setVisible(true);
     }
-
-    public static void main(String[] args) {
-//        Field f = new Field(new Board());
-
-        JFrame frame = new JFrame();
-        ImageIcon imageIcon = new ImageIcon("C:\\Users\\user\\IdeaProjects\\StrategoPhase2\\src\\images\\dragon_background_cropped169.jpg"); // load the image to a imageIcon
-        Image image = imageIcon.getImage().getScaledInstance((int)Toolkit.getDefaultToolkit().getScreenSize().width,(int)Toolkit.getDefaultToolkit().getScreenSize().height, Image.SCALE_SMOOTH);
-        JLabel background = new JLabel(new ImageIcon(image), JLabel.CENTER);
-        frame.setContentPane(background);
-        frame.setMaximumSize(new Dimension(Toolkit.getDefaultToolkit().getScreenSize().width, Toolkit.getDefaultToolkit().getScreenSize().height));
-        frame.setSize(new Dimension(Toolkit.getDefaultToolkit().getScreenSize().width, Toolkit.getDefaultToolkit().getScreenSize().height));
-        frame.setResizable(false);
-        frame.setUndecorated(true);
-        frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
-        frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-//        frame.add(f.getHiddenBlue());
-//        frame.add(f.getHiddenRed());
-//        f.swapFields(false);
-        frame.pack();
-        frame.setVisible(true);
-//        f.updateField();
-
-//        System.exit(0);
-    }
-
     class Thread_extended_class extends Thread {
         Field frame;
 
