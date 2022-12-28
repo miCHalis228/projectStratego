@@ -10,8 +10,6 @@ public class Stats extends JPanel {
 
     private Player m_player;
 
-    private JFrame frame;
-
     private JPanel labelMods;
     private JPanel labelStats;
     private JPanel labelCaptures;
@@ -20,17 +18,13 @@ public class Stats extends JPanel {
     private JPanel statsPanel;
     private JPanel capturesPanel;
     private JPanel totalCapturesPanel;
+    private JPanel revive;
 
     private JCheckBox l_mod1;
     private JCheckBox l_mod2;
-    private boolean mod1 = true;
-    private boolean mod2 = false;
-    private int win_rate = 35;
-    private int revives = 2;
-    private int round = 3;
     private  int[] playerCaptures;
     private ImageIcon[] pieceImages;
-    private int totalCaptures = 0   ;
+    private int totalCaptures = 0;
 
     /**
      * <b>Constructor</b> Constructs a new Stat screen
@@ -47,11 +41,13 @@ public class Stats extends JPanel {
         this.statsPanel = new JPanel();
         this.capturesPanel = new JPanel();
         this.totalCapturesPanel = new JPanel();
+        this.revive = new JPanel();
         this.pieceImages = new ImageIcon[12];
         this.playerCaptures = player.getCaptures();
         activeMods(mode);
         Statistics();
         captures();
+        setRevivePanel();
     }
 
     public void addComponents(JFrame frame){
@@ -62,13 +58,14 @@ public class Stats extends JPanel {
         frame.add(labelCaptures);
         frame.add(capturesPanel);
         frame.add(totalCapturesPanel);
+        frame.add(revive);
     }
     /**
      * <b>Transformer:</b> Generates the ActiveMods JPanel to go into the final JFrame
      * @param mode int between 0-3
      * @return the JPanel generated for the active mods
      */
-    void activeMods(int mode){
+    private void activeMods(int mode){
         JLabel label = new JLabel("ΕΝΕΡΓΟΙ ΚΑΝΟΝΕΣ");
         label.setFont(new Font("Didot", Font.BOLD, 25));
         labelMods.setLayout(new FlowLayout());
@@ -103,8 +100,7 @@ public class Stats extends JPanel {
         l_mod1.setFont(new Font("Didot", Font.TYPE1_FONT, 18));
         l_mod2.setFont(new Font("Didot", Font.TYPE1_FONT, 18));
         modPanel.setOpaque(false);
-        modPanel.setLayout
-                (new GridLayout(2,1,20,0));
+        modPanel.setLayout(new GridLayout(2,1,20,0));
         modPanel.setBounds(1220,80,200,100);
         modPanel.add(l_mod1);
         modPanel.add(l_mod2);
@@ -114,7 +110,7 @@ public class Stats extends JPanel {
      * <b>Transformer:</b> Generates the Statistics JPanel to go into the final JFrame
      * @return the JPanel generated for the Stats of the m_player
      */
-    void Statistics(){
+    private  void Statistics(){
         JLabel label = new JLabel("ΣΤΑΤΙΣΤΙΚΑ");
         label.setFont(new Font("Didot", Font.BOLD, 25));
         labelStats.setLayout(new FlowLayout());
@@ -148,7 +144,7 @@ public class Stats extends JPanel {
      * <b>Transformer:</b> Generates the Captures JPanel to go into the final JFrame
      * @return the JPanel generated for the Captured Units of the enemy m_player
      */
-    void captures(){
+    private void captures(){
         JLabel label = new JLabel("ΑΙΧΜΑΛΩΤΙΣΕΙΣ");
         label.setFont(new Font("Didot", Font.BOLD, 25));
         labelCaptures.setLayout(new FlowLayout());
@@ -247,6 +243,11 @@ public class Stats extends JPanel {
 
     }
 
+    private void setRevivePanel(){
+        JButton reviveButton = new JButton("REVIVE");
+        revive.setOpaque(false);
+    }
+
     /**
      * <b>Accessor</b> Updates and returns the Stat JFrame
      */
@@ -282,6 +283,7 @@ public class Stats extends JPanel {
         capturesPanel.setVisible(false);
         totalCapturesPanel.setVisible(false);
         totalCapturesPanel.setVisible(false);
+        revive.setVisible(false);
     }
     public void showAll(){
         labelMods.setVisible(true);
@@ -291,6 +293,7 @@ public class Stats extends JPanel {
         statsPanel.setVisible(true);
         capturesPanel.setVisible(true);
         totalCapturesPanel.setVisible(true);
+        revive.setVisible(true);
     }
 
 }

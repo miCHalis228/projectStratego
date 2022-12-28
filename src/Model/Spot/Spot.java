@@ -2,6 +2,10 @@ package Model.Spot;
 import Model.Pieces.Piece;
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 
 public class Spot {
 
@@ -110,6 +114,7 @@ public class Spot {
         button.setIcon(s_Piece.getHiddenImage());
     }
 
+
     public JButton getButtonBlue() {
         return buttonBlue;
     }
@@ -117,5 +122,6 @@ public class Spot {
     public JButton getButtonRed() {
         return buttonRed;
     }
+
 
 }

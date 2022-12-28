@@ -27,88 +27,132 @@ public class Scout extends SpecialMovablePiece {
      * @return
      */
     @Override
-    public List<Coordinates> getPossibleMoves(Board board) {
+    public List<Coordinates> getPossibleMoves(Board board , int mode) {
         List<Coordinates> possibleCoordinates = new ArrayList<>();
         //Check for the for valid spots if are available for movement
         int x= this.getX();
         int y= this.getY();
         int i=1;
         Spot tempSpot;
-
-        //LINE LEFT
         Coordinates coordinates;
-        coordinates = new Coordinates(x-i,y);
-        while(coordinates.isValid()){
-            tempSpot = board.getSpot(y,x-i);
-            if(!tempSpot.isLake()){
-                if(tempSpot.isEmpty()) {
-                    possibleCoordinates.add(coordinates);
-                } else if (tempSpot.getPiece().isBlue() != isBlue()){
-                    possibleCoordinates.add(coordinates);
-                    break;
-                } else if(tempSpot.getPiece().isBlue() == isBlue()){
-                    break;
+        OnlyForward:{
+            if(mode==2 || mode==3){
+                if(this.isBlue()){
+                    //LINE DOWN
+                    coordinates = new Coordinates(x,y+i);
+                    while(coordinates.isValid()){
+                        tempSpot = board.getSpot(y+i,x);
+                        if(!tempSpot.isLake()){
+                            if(tempSpot.isEmpty()) {
+                                possibleCoordinates.add(coordinates);
+                            } else if (tempSpot.getPiece().isBlue() != isBlue()){
+                                possibleCoordinates.add(coordinates);
+                                break;
+                            } else if(tempSpot.getPiece().isBlue() == isBlue()){
+                                break;
+                            }
+                        }
+                        i++;
+                        coordinates = new Coordinates(x,y+i);
+                    }
+                } else {
+                    //LINE UP
+                    coordinates = new Coordinates(x,y-i);
+                    while(coordinates.isValid()){
+                        tempSpot = board.getSpot(y-i,x);
+                        if(!tempSpot.isLake()){
+                            if(tempSpot.isEmpty()) {
+                                possibleCoordinates.add(coordinates);
+                            } else if (tempSpot.getPiece().isBlue() != isBlue()){
+                                possibleCoordinates.add(coordinates);
+                                break;
+                            } else if(tempSpot.getPiece().isBlue() == isBlue()){
+                                break;
+                            }
+                        }
+                        i++;
+                        coordinates = new Coordinates(x,y-i);
+                    }
                 }
+                return possibleCoordinates;
             }
-            i++;
+        }
+        NoMods:{
+            //LINE LEFT
             coordinates = new Coordinates(x-i,y);
-        }
-        i=1;
-        //LINE RIGHT
-        coordinates = new Coordinates(x+i,y);
-        while(coordinates.isValid()){
-            tempSpot = board.getSpot(y,x+i);
-            if(!tempSpot.isLake()){
-                if(tempSpot.isEmpty()) {
-                    possibleCoordinates.add(coordinates);
-                } else if (tempSpot.getPiece().isBlue() != isBlue()){
-                    possibleCoordinates.add(coordinates);
-                    break;
-                } else if(tempSpot.getPiece().isBlue() == isBlue()){
-                    break;
+            while(coordinates.isValid()){
+                tempSpot = board.getSpot(y,x-i);
+                if(!tempSpot.isLake()){
+                    if(tempSpot.isEmpty()) {
+                        possibleCoordinates.add(coordinates);
+                    } else if (tempSpot.getPiece().isBlue() != isBlue()){
+                        possibleCoordinates.add(coordinates);
+                        break;
+                    } else if(tempSpot.getPiece().isBlue() == isBlue()){
+                        break;
+                    }
                 }
+                i++;
+                coordinates = new Coordinates(x-i,y);
             }
-            i++;
+            i=1;
+            //LINE RIGHT
             coordinates = new Coordinates(x+i,y);
-        }
-        //LINE DOWN
-        i=1;
-
-        coordinates = new Coordinates(x,y+i);
-        while(coordinates.isValid()){
-            tempSpot = board.getSpot(y+i,x);
-            if(!tempSpot.isLake()){
-                if(tempSpot.isEmpty()) {
-                    possibleCoordinates.add(coordinates);
-                } else if (tempSpot.getPiece().isBlue() != isBlue()){
-                    possibleCoordinates.add(coordinates);
-                    break;
-                } else if(tempSpot.getPiece().isBlue() == isBlue()){
-                    break;
+            while(coordinates.isValid()){
+                tempSpot = board.getSpot(y,x+i);
+                if(!tempSpot.isLake()){
+                    if(tempSpot.isEmpty()) {
+                        possibleCoordinates.add(coordinates);
+                    } else if (tempSpot.getPiece().isBlue() != isBlue()){
+                        possibleCoordinates.add(coordinates);
+                        break;
+                    } else if(tempSpot.getPiece().isBlue() == isBlue()){
+                        break;
+                    }
                 }
+                i++;
+                coordinates = new Coordinates(x+i,y);
             }
-            i++;
+            //LINE DOWN
+            i=1;
+
             coordinates = new Coordinates(x,y+i);
-        }
-        //LINE UP
-        i=1;
-
-        coordinates = new Coordinates(x,y-i);
-        while(coordinates.isValid()){
-            tempSpot = board.getSpot(y-i,x);
-            if(!tempSpot.isLake()){
-                if(tempSpot.isEmpty()) {
-                    possibleCoordinates.add(coordinates);
-                } else if (tempSpot.getPiece().isBlue() != isBlue()){
-                    possibleCoordinates.add(coordinates);
-                    break;
-                } else if(tempSpot.getPiece().isBlue() == isBlue()){
-                    break;
+            while(coordinates.isValid()){
+                tempSpot = board.getSpot(y+i,x);
+                if(!tempSpot.isLake()){
+                    if(tempSpot.isEmpty()) {
+                        possibleCoordinates.add(coordinates);
+                    } else if (tempSpot.getPiece().isBlue() != isBlue()){
+                        possibleCoordinates.add(coordinates);
+                        break;
+                    } else if(tempSpot.getPiece().isBlue() == isBlue()){
+                        break;
+                    }
                 }
+                i++;
+                coordinates = new Coordinates(x,y+i);
             }
-            i++;
+            //LINE UP
+            i=1;
+
             coordinates = new Coordinates(x,y-i);
+            while(coordinates.isValid()){
+                tempSpot = board.getSpot(y-i,x);
+                if(!tempSpot.isLake()){
+                    if(tempSpot.isEmpty()) {
+                        possibleCoordinates.add(coordinates);
+                    } else if (tempSpot.getPiece().isBlue() != isBlue()){
+                        possibleCoordinates.add(coordinates);
+                        break;
+                    } else if(tempSpot.getPiece().isBlue() == isBlue()){
+                        break;
+                    }
+                }
+                i++;
+                coordinates = new Coordinates(x,y-i);
+            }
+            return possibleCoordinates;
         }
-        return possibleCoordinates;
     }
+
 }

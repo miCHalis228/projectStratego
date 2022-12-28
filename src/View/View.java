@@ -61,6 +61,7 @@ public class View extends JFrame {
         this.setUndecorated(true);
         this.setExtendedState(JFrame.MAXIMIZED_BOTH);
         this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        this.add(closeButton());
     }
 
     /**
@@ -89,6 +90,25 @@ public class View extends JFrame {
         //TODO
     }
 
+    public JPanel closeButton(){
+        JPanel panel = new JPanel();
+        JButton exit = new JButton();
+        Image img = new ImageIcon("src\\images\\redX.png.jpg").getImage();
+        img = img.getScaledInstance(30, 30, Image.SCALE_SMOOTH);
+        exit.setIcon(new ImageIcon(img));
+        panel.setOpaque(false);
+        panel.setLayout(new FlowLayout());
+        panel.setBounds(Toolkit.getDefaultToolkit().getScreenSize().width - 50,10,30,40);
+        exit.setBackground(Color.BLACK);
+        exit.setForeground(Color.DARK_GRAY);
+        exit.setOpaque(false);
+        exit.setBorderPainted(false);
+        exit.setFocusable(false);
+        exit.setBorder(BorderFactory.createEmptyBorder(0,0,0,0));
+        exit.addActionListener(e -> System.exit(0));
+        panel.add(exit);
+        return panel;
+    }
     public void updateStats(){
         statsBlue.update();
         statsRed.update();

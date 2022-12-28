@@ -4,14 +4,10 @@ import Controller.Controller;
 import Model.Player.Player;
 
 import javax.swing.*;
-import javax.swing.border.LineBorder;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 public class winningFrame extends JFrame {
     private Player m_player;
-    private Controller controller;
     private JButton exit;
     public winningFrame( Player player){
         this.m_player=player;
@@ -24,7 +20,7 @@ public class winningFrame extends JFrame {
         JLabel label = new JLabel(new ImageIcon(image), JLabel.CENTER);
         this.setContentPane(label);
         this.setMaximumSize(new Dimension(Toolkit.getDefaultToolkit().getScreenSize().width, Toolkit.getDefaultToolkit().getScreenSize().height));
-//        this.setUndecorated(true);
+        this.setUndecorated(true);
         this.setExtendedState(JFrame.MAXIMIZED_BOTH);
         this.setResizable(false);
         this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);

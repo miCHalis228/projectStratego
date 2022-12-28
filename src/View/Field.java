@@ -7,7 +7,9 @@ import java.awt.*;
 public class Field{
     private JPanel hiddenBlue;
     private JPanel hiddenRed;
+
     private Board f_board;
+
     /**
      * <b>Constructor</b> Constructs an object of Field to be used by the view
      * Creates an initial board by referencing the given one

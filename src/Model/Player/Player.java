@@ -2,6 +2,7 @@ package Model.Player;
 
 import Model.Coordinates.Coordinates;
 import Model.Pieces.*;
+import View.reviveSelectionFrame;
 
 import javax.swing.*;
 import java.awt.*;
@@ -95,7 +96,7 @@ public class Player {
 
         switch (mode) {
             /*code for 30 pieces*/
-            case 0:
+            case 0 , 2:
                 Pieces.add(new ImmovablePiece(-1, -1, imagePath + "\\flag.png", isBlue ,true ));
                 for (i = 0; i < 6; i++)
                     Pieces.add(new ImmovablePiece(-1, -1, imagePath + "\\trap.png" , isBlue , false));
@@ -122,7 +123,29 @@ public class Player {
                         .forEach(piece -> piece.setHiddenImage(imagePath  + "\\Hidden.png"));
 
                 break;
-            case 1:/*Code for 25 pieces*/
+            case 1 , 3:/*Code for half pieces*/
+                Pieces.add(new ImmovablePiece(-1, -1, imagePath + "\\flag.png", isBlue ,true ));
+                for (i = 0; i < 3; i++)
+                    Pieces.add(new ImmovablePiece(-1, -1, imagePath + "\\trap.png" , isBlue , false));
+                Pieces.add(new Slayer(-1, -1, imagePath + "\\slayer.png", 1, isBlue));
+                for (i = 0; i < 2; i++)
+                    Pieces.add(new Scout(-1, -1, imagePath + "\\scout.png", 2, isBlue));
+                for (i = 0; i < 2; i++)
+                    Pieces.add(new Dwarf(-1, -1, imagePath + "\\dwarf.png", 3, isBlue));
+                for (i = 0; i < 1; i++)
+                    Pieces.add(new MovablePiece(-1, -1, imagePath + "\\elf.png", 4, isBlue));
+                for (i = 0; i < 1; i++)
+                    Pieces.add(new MovablePiece(-1, -1, imagePath + "\\rank5.png", 5, isBlue));
+                for (i = 0; i < 1; i++)
+                    Pieces.add(new MovablePiece(-1, -1, imagePath + "\\sorceress.png", 6, isBlue));
+                for (i = 0; i < 2; i++)
+                    Pieces.add(new MovablePiece(-1, -1, imagePath + "\\beastRider.png", 7, isBlue));
+                for (i = 0; i < 1; i++)
+                    Pieces.add(new MovablePiece(-1, -1, imagePath + "\\knight.png", 8, isBlue));
+                Pieces.add(new MovablePiece(-1, -1, imagePath + "\\mage.png", 9, isBlue));
+                Pieces.add(new MovablePiece(-1, -1, imagePath + "\\dragon.png", 10, isBlue));
+                Pieces.stream()
+                        .forEach(piece -> piece.setHiddenImage(imagePath  + "\\Hidden.png"));
                 break;
             default:
                 break;
@@ -140,7 +163,7 @@ public class Player {
         Iterator<Piece> iterator = Pieces.iterator();
         Piece p;
         int next;
-        while (rng.hasNext()) {
+        while (iterator.hasNext()) {
             next = rng.next();
             p = iterator.next();
             p.setX(next%10);
@@ -230,7 +253,10 @@ public class Player {
         DeadPieces = Pieces.stream()
                 .filter(piece -> piece.isDead() == true)
                 .collect(Collectors.toList());
+    }
 
+    public List<Piece> getDeadPieces() {
+        return DeadPieces;
     }
 
     public class UniqueRng implements Iterator<Integer> {
@@ -247,7 +273,6 @@ public class Player {
                     numbers.add(i);
                 }
             }
-
             Collections.shuffle(numbers);
         }
         @Override
@@ -289,11 +314,54 @@ public class Player {
     public int getRevival_counter() {
         return revival_counter;
     }
-    public void revive(){
-        if(revival_counter>=2){
-            return;
-        } else{
+    public Piece revive(){
+        if (revival_counter < 2) {
+            System.out.println(getDeadPieces());
+            System.out.println("select which rank you want to revive");
+            getDeadPieces().stream()
+                    .forEach(System.out::println);
+            Iterator<Piece> iterator = getDeadPieces().iterator();
+            if(iterator.hasNext()){
+                reviveSelectionFrame rsf = new reviveSelectionFrame(this);
+//                rsf.setVisible(true);
+//                rsf.toFront();
+//                while(rsf.getRank()==-2){
+//                    try {
+////                        Thread.currentThread().wait(100);
+//                        Thread.sleep(100);
+////                        rsf.setVisible(true);
+//                    } catch (InterruptedException e) {
+//                        throw new RuntimeException(e);
+//                    }
+//                }
+//                rsf.setVisible(false);
+                int selectedRank = rsf.getRank();
+//                rsf.dispose();
+//                Scanner scanner = new Scanner(System.in);
+//                int selectRank = scanner.nextInt();
+//                System.out.println("selected: " + selectRank);
+                if(selectedRank!=-1){
+                    System.out.println(selectedRank);
 
+                    Piece p = null;
+                    int i = 0;
+                    while (iterator.hasNext()) {
+                        p = iterator.next();
+                        if (p.getRank() == selectedRank) {
+                            p.isRevived();
+                            getDeadPieces().remove(i);
+                            return p;
+                        }
+                        i++;
+                    }
+                }
+            }
         }
+        System.out.println("not possbile");
+        return null;
+    }
+
+    public void increaseRescues(){
+        revival_counter++;
     }
 }

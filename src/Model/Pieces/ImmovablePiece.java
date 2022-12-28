@@ -33,7 +33,7 @@ public class ImmovablePiece extends Piece {
     }
 
     @Override
-    public List<Coordinates> getPossibleMoves(Board board) {
+    public List<Coordinates> getPossibleMoves(Board board,int mode) {
         return null;
     }
 }

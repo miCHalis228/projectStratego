@@ -30,40 +30,46 @@ public class MovablePiece extends Piece {
      *
      * @return an Integer array of possible moves
      */
-    public List<Coordinates> getPossibleMoves(Board board){
+    public List<Coordinates> getPossibleMoves(Board board , int mode){
+
         List<Coordinates> possibleCoordinates = new ArrayList<>();
         //Check for the for valid spots if are available for movement
         int x= this.getX();
         int y= this.getY();
         Spot tempSpot;
-
-        //ONE LEFT
         Coordinates coordinates;
-        coordinates = new Coordinates(x-1,y);
-        if(coordinates.isValid()){
-            tempSpot = board.getSpot(y,x-1);
-            if(!tempSpot.isLake()){
-                if(tempSpot.isEmpty()) {
-                    possibleCoordinates.add(coordinates);
-                } else if (tempSpot.getPiece().isBlue() != isBlue()){
-                    possibleCoordinates.add(coordinates);
+
+        if(mode==2 || mode==3){
+            if(this.isBlue()){
+                //ONE DOWN
+                coordinates = new Coordinates(x,y+1);
+                if(coordinates.isValid()){
+                    tempSpot = board.getSpot(y+1,x);
+                    if(!tempSpot.isLake()){
+                        if(tempSpot.isEmpty()) {
+                            possibleCoordinates.add(coordinates);
+                        } else if (tempSpot.getPiece().isBlue() != isBlue()){
+                            possibleCoordinates.add(coordinates);
+                        }
+                    }
+                }
+            } else {
+                //ONE UP
+                coordinates = new Coordinates(x,y-1);
+                if(coordinates.isValid()){
+                    tempSpot = board.getSpot(y-1,x);
+                    if(!tempSpot.isLake()){
+                        if(tempSpot.isEmpty()) {
+                            possibleCoordinates.add(coordinates);
+                        } else if (tempSpot.getPiece().isBlue() != isBlue()){
+                            possibleCoordinates.add(coordinates);
+                        }
+                    }
                 }
             }
-        }
-//        //ONE RIGHT
-        coordinates = new Coordinates(x+1,y);
-        if(coordinates.isValid()){
-            tempSpot = board.getSpot(y,x+1);
-            if(!tempSpot.isLake()){
-                if(tempSpot.isEmpty()) {
-                    possibleCoordinates.add(coordinates);
-                } else if (tempSpot.getPiece().isBlue() != isBlue()){
-                    possibleCoordinates.add(coordinates);
-                }
-            }
+            return possibleCoordinates;
         }
         //ONE DOWN
-
         coordinates = new Coordinates(x,y+1);
         if(coordinates.isValid()){
             tempSpot = board.getSpot(y+1,x);
@@ -88,6 +94,31 @@ public class MovablePiece extends Piece {
                 }
             }
         }
+        //ONE LEFT
+        coordinates = new Coordinates(x-1,y);
+        if(coordinates.isValid()){
+            tempSpot = board.getSpot(y,x-1);
+            if(!tempSpot.isLake()){
+                if(tempSpot.isEmpty()) {
+                    possibleCoordinates.add(coordinates);
+                } else if (tempSpot.getPiece().isBlue() != isBlue()){
+                    possibleCoordinates.add(coordinates);
+                }
+            }
+        }
+//        //ONE RIGHT
+        coordinates = new Coordinates(x+1,y);
+        if(coordinates.isValid()){
+            tempSpot = board.getSpot(y,x+1);
+            if(!tempSpot.isLake()){
+                if(tempSpot.isEmpty()) {
+                    possibleCoordinates.add(coordinates);
+                } else if (tempSpot.getPiece().isBlue() != isBlue()){
+                    possibleCoordinates.add(coordinates);
+                }
+            }
+        }
+
         return possibleCoordinates;
     }
 

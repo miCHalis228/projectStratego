@@ -10,8 +10,8 @@ import java.util.List;
 public abstract class Piece {
     private int rank;
     private String imagePath;
-    private String hiddenImagePath;
 
+    private boolean hasRevived;
     private boolean isBlue;
 
     private boolean isDead;
@@ -41,7 +41,7 @@ public abstract class Piece {
         this.isBlue = isBlue;
         this.isDead = false;
         this.setPieceImage();
-
+        this.hasRevived=false;
     }
 
     public int getX(){
@@ -142,5 +142,20 @@ public abstract class Piece {
 
 
 
-    public abstract List<Coordinates> getPossibleMoves(Board board);
+    public abstract List<Coordinates> getPossibleMoves(Board board,int mode);
+
+    public String toString(){
+        return "Rank: "+this.rank;
+    }
+
+    public void isRevived(){
+        isDead = true;
+    }
+    public boolean hasRevived() {
+        return hasRevived;
+    }
+    public void revivedSomebody(){
+        hasRevived = true;
+    }
 }
+

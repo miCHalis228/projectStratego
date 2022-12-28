@@ -7,6 +7,7 @@ import Model.Exceptions.InvalidCoordinatesException;
 import Model.Pieces.ImmovablePiece;
 import Model.Pieces.MovablePiece;
 import Model.Pieces.Piece;
+import Model.Pieces.Scout;
 import Model.Player.Player;
 import Model.Spot.Spot;
 
@@ -28,20 +29,25 @@ public class Board {
     private Player playerBlue;
     private Player playerRed;
 
-
+    private Piece pieceToRevive;
+    private int m_mode;
     private boolean moveMade = false;
     private boolean attackMade = false;
+    private boolean revivePending = false;
+    private boolean reviveMade = false;
     private List<Coordinates> possibleCoordinates = new ArrayList<>();
 
     private List<JButton> possibleButtons = new ArrayList<JButton>();
 
-    public Board(Player blue,Player red) {
-        playerBlue=blue;
-        playerRed=red;
+    public Board(Player blue, Player red, int mode) {
+        m_mode = mode;
+        playerBlue = blue;
+        playerRed = red;
         spots = new Spot[8][10];
         lastPressed = new int[2];
         lastPressed[0] = -1;
         lastPressed[1] = -1;
+        pieceToRevive = null;
     }
 
     /**
@@ -66,7 +72,6 @@ public class Board {
         spots[4][7].setLake(true);
 
         initButtonSpots();
-
     }
 
     public void initButtonSpots() {
@@ -79,7 +84,6 @@ public class Board {
                 }
             }
     }
-
 
     public Spot getSpot(int x, int y) {
         return spots[x][y];
@@ -106,7 +110,6 @@ public class Board {
             for (int col = 0; col < 10; col++) {
                 spots[row][col].setButton();
             }
-
     }
 
     public void printBoard() {
@@ -122,65 +125,131 @@ public class Board {
     public void movePiece(Coordinates temp) throws InvalidCoordinatesException {
         Iterator<JButton> iteratorButtons;
         JButton tempButton;
-        if (targetSpot.getPiece() != null) {
-            setAttackMade(true);
-            try {
-                ((MovablePiece) lastPressedPiece.getPiece()).attack(targetSpot.getPiece());
-                if (lastPressedPiece.getPiece().isDead() && targetSpot.getPiece().isDead()) {
-                    if(lastPressedPiece.getPiece().isBlue()){
-                        playerRed.attacks(targetSpot.getPiece().getRank());
-                        playerBlue.defends(lastPressedPiece.getPiece().getRank());
-                    } else {
-                        playerBlue.attacks(targetSpot.getPiece().getRank());
-                        playerRed.defends(lastPressedPiece.getPiece().getRank());
-                    }
-                    lastPressedPiece.setPiece(null);
-                    targetSpot.setPiece(null);
-                } else if (lastPressedPiece.getPiece().isDead()) {
-                    if(lastPressedPiece.getPiece().isBlue()){
-                        playerBlue.defends(lastPressedPiece.getPiece().getRank());
-                        playerRed.doesAttack();
-                    } else {
-                        playerRed.defends(lastPressedPiece.getPiece().getRank());
-                        playerBlue.doesAttack();
-                    }
-                    lastPressedPiece.setPiece(null);
-                } else if(targetSpot.getPiece().isDead()){
-                    if(lastPressedPiece.getPiece().isBlue()){
-                        playerRed.attacks(targetSpot.getPiece().getRank());
-                    } else {
-                        playerBlue.attacks(targetSpot.getPiece().getRank());
-                    }
-                    ((MovablePiece) lastPressedPiece.getPiece()).move(temp);
-                    targetSpot.setPiece(lastPressedPiece.getPiece());
-                    lastPressedPiece.setPiece(null);
-                }
-            } catch (DeadPieceException e) {
-                throw new RuntimeException(e);
-            }
-        } else {
-            ((MovablePiece) lastPressedPiece.getPiece()).move(temp);
-            targetSpot.setPiece(lastPressedPiece.getPiece());
-            lastPressedPiece.setPiece(null);
-            possibleCoordinates.clear();
-
-        }
         iteratorButtons = possibleButtons.iterator();
         while (iteratorButtons.hasNext()) {
             tempButton = iteratorButtons.next();
             tempButton.setBorder(BorderFactory.createBevelBorder(1));
         }
-        possibleButtons.clear();
+        if (targetSpot.getPiece() != null) {
+            moveAndAttack(temp);
+            setAttackMade(true);
+        } else {
+            ((MovablePiece) lastPressedPiece.getPiece()).move(temp);
+            swapSpots();
+            if (!possibleRevive()) {
+                return;
+            }
+        }
+        initFields();
+    }
+
+    private void swapSpots() {
+        targetSpot.setPiece(lastPressedPiece.getPiece());
+        lastPressedPiece.setPiece(null);
         lastPressedPiece.setButton();
         targetSpot.setButton();
+    }
+
+    private void initFields() {
+        possibleButtons.clear();
         lastPressedPiece = null;
         targetSpot = null;
         lastPressed[0] = -1;
         lastPressed[1] = -1;
         setMoveMade(true);
-
     }
 
+    private boolean possibleRevive() {
+        if (!(targetSpot.getPiece() instanceof Scout) && !targetSpot.getPiece().hasRevived()) {
+            if (targetSpot.getPiece().isBlue() && targetSpot.getPiece().getY() == 7) {
+                //REVIVES
+                pieceToRevive = playerBlue.revive();
+                if (pieceToRevive == null) {
+                    revivePending = false;
+                    reviveMade = false;
+                    initFields();
+                    return false;
+                }
+                revivePending = true;
+                for (int col = 0; col < 10; col++) {
+                    if (spots[0][col].isEmpty()) {
+                        spots[0][col].getButtonBlue().setBorder(new LineBorder(Color.BLACK, 5));
+                    }
+                    if (spots[1][col].isEmpty()) {
+                        spots[1][col].getButtonBlue().setBorder(new LineBorder(Color.BLACK, 5));
+                    }
+                    if (spots[2][col].isEmpty()) {
+                        spots[2][col].getButtonBlue().setBorder(new LineBorder(Color.BLACK, 5));
+                    }
+                }
+                targetSpot.getPiece().revivedSomebody();
+            } else if (!targetSpot.getPiece().isBlue() && targetSpot.getPiece().getY() == 0) {
+                //REVIVES
+                pieceToRevive = playerRed.revive();
+                if (pieceToRevive == null) {
+                    revivePending = false;
+                    reviveMade = false;
+                    initFields();
+                    return false;
+                }
+                revivePending = true;
+                for (int col = 0; col < 10; col++) {
+                    if (spots[5][col].isEmpty()) {
+                        spots[5][col].getButtonRed().setBorder(new LineBorder(Color.BLACK, 5));
+                    }
+                    if (spots[6][col].isEmpty()) {
+                        spots[6][col].getButtonRed().setBorder(new LineBorder(Color.BLACK, 5));
+                    }
+                    if (spots[7][col].isEmpty()) {
+                        spots[7][col].getButtonRed().setBorder(new LineBorder(Color.BLACK, 5));
+                    }
+                }
+                targetSpot.getPiece().revivedSomebody();
+            }
+        }
+        return true;
+    }
+
+    private void moveAndAttack(Coordinates temp) throws InvalidCoordinatesException {
+        try {
+            ((MovablePiece) lastPressedPiece.getPiece()).attack(targetSpot.getPiece());
+            if (lastPressedPiece.getPiece().isDead() && targetSpot.getPiece().isDead()) {
+                if (lastPressedPiece.getPiece().isBlue()) {
+                    playerRed.attacks(targetSpot.getPiece().getRank());
+                    playerBlue.defends(lastPressedPiece.getPiece().getRank());
+                } else {
+                    playerBlue.attacks(targetSpot.getPiece().getRank());
+                    playerRed.defends(lastPressedPiece.getPiece().getRank());
+                }
+                targetSpot.setPiece(null);
+                lastPressedPiece.setPiece(null);
+                lastPressedPiece.setButton();
+                targetSpot.setButton();
+            } else if (lastPressedPiece.getPiece().isDead()) {
+                if (lastPressedPiece.getPiece().isBlue()) {
+                    playerBlue.defends(lastPressedPiece.getPiece().getRank());
+                    playerRed.doesAttack();
+                } else {
+                    playerRed.defends(lastPressedPiece.getPiece().getRank());
+                    playerBlue.doesAttack();
+                }
+                lastPressedPiece.setPiece(null);
+                lastPressedPiece.setButton();
+                targetSpot.setButton();
+            } else if (targetSpot.getPiece().isDead()) {
+                if (lastPressedPiece.getPiece().isBlue()) {
+                    playerRed.attacks(targetSpot.getPiece().getRank());
+                } else {
+                    playerBlue.attacks(targetSpot.getPiece().getRank());
+                }
+                ((MovablePiece) lastPressedPiece.getPiece()).move(temp);
+                swapSpots();
+                possibleRevive();
+            }
+        } catch (DeadPieceException e) {
+            throw new RuntimeException(e);
+        }
+    }
     /**
      * <b>Accessor</b>: Return the current state of the board
      *
@@ -194,9 +263,7 @@ public class Board {
      * <b>Transformer</b>: Updates the board based on both players Pieces
      * <b>post-condition</b> Board is updated
      */
-    public void updateBoard(Player pblue, Player pred) {
-//        this.placePlayer(pblue);
-//        this.placePlayer(pred);
+    public void updateBoard() {
         for (int row = 0; row < 8; row++)
             for (int col = 0; col < 10; col++) {
                 spots[row][col].setButton();
@@ -219,44 +286,35 @@ public class Board {
         this.attackMade = attackMade;
     }
 
-//    public void hidePlayer(Player toHide, Player toShow) {
-//        Iterator<Piece> iterator = toHide.getPieces().iterator();
-//        Piece piece;
-//
-//        while (iterator.hasNext()) {
-//            piece = iterator.next();
-//            if (!piece.isDead()){
-//                spots[piece.getY()][piece.getX()].hide();
-////                spots[piece.getY()][piece.getX()].getButton().set;
-//
-//            }
-//        }
-//        iterator = toShow.getPieces().iterator();
-//
-//        while (iterator.hasNext()) {
-//            piece = iterator.next();
-//            if (!piece.isDead()){
-//                spots[piece.getY()][piece.getX()].show();
-//
-//            }
-//        }
-//    }
+    public boolean isRevivePending() {
+        return revivePending;
+    }
+
+    public void setRevivePending(boolean revivePending) {
+        this.revivePending = revivePending;
+    }
+
+    public boolean isReviveMade() {
+        return reviveMade;
+    }
+
+    public void setReviveMade(boolean reviveMade) {
+        this.reviveMade = reviveMade;
+        if (!reviveMade) setRevivePending(false);
+    }
 
     public class selectedPawn implements ActionListener {
         Board m_board;
-
         public selectedPawn(Board board) {
             m_board = board;
         }
-
         @Override
         public void actionPerformed(ActionEvent e) {
             boolean turnBlue;
             Iterator<Coordinates> iteratorCoordinates;
             JButton source = (JButton) e.getSource();
             int row = 0, col = 0, index = 0;
-            if(moveMade)
-                return;
+
             while (true) {
                 if (index > 79) {
                     row = col = -1;
@@ -265,44 +323,73 @@ public class Board {
                 row = index / 10;
                 col = index % 10;
                 if (spots[row][col].getButtonRed() == source) {
-                    turnBlue=false;
+                    turnBlue = false;
                     break;
                 }
                 if (spots[row][col].getButtonBlue() == source) {
-                    turnBlue=true;
+                    turnBlue = true;
+
                     break;
                 }
                 index++;
             }
+            if (revivePending && pieceToRevive == null) {
+                reviveMade = false;
+                revivePending = false;
+                moveMade = true;
+                lastPressedPiece = null;
+                lastPressed[0] = -1;
+                lastPressed[1] = -1;
+                System.out.println("abort revive");
+            }
+            if (revivePending && pieceToRevive != null) {
+                if (spots[row][col].getPiece() == null) {
+                    if (pieceToRevive != null) {
+                        if (!turnBlue && (row == 5 || row == 6 || row == 7)) {
+                            playerBlue.increaseRescues();
+                            spots[row][col].setPiece(pieceToRevive);
+                            pieceToRevive.setCoordinates(new Coordinates(col, row));
+                            pieceToRevive = null;
+                            revivePending = false;
+                        } else if (turnBlue && (row == 0 || row == 1 || row == 2)) {
+                            playerRed.increaseRescues();
+                            spots[row][col].setPiece(pieceToRevive);
+                            pieceToRevive.setCoordinates(new Coordinates(col, row));
+                            revivePending = false;
+                            pieceToRevive = null;
+                        }
+                    }
+                }
+            }
 
-//            if (spots[row][col].getPiece()==null ||  spots[row][col].getPiece() instanceof ImmovablePiece) {
+            if (moveMade) return;
+
             if (lastPressedPiece == null && spots[row][col].getPiece() instanceof ImmovablePiece) {
                 return;
             }
             if (lastPressed[0] == -1 && lastPressed[1] == -1) {
                 if ((spots[row][col].getPiece() != null)) {
-                    if(spots[row][col].getPiece() != null && spots[row][col].getPiece().isFlipped()) {
+                    if (spots[row][col].getPiece().isFlipped()) {
+                        return;
+                    }
+                    lastPressedPiece = (spots[row][col]);
+                    possibleCoordinates = (lastPressedPiece.getPiece().getPossibleMoves(m_board, m_mode));
+
+                    if (possibleCoordinates.isEmpty()) {
                         return;
                     }
                     lastPressed[0] = row;
                     lastPressed[1] = col;
-                    if (spots[row][col].getPiece() != null){
-                        lastPressedPiece = (spots[row][col]);
-                        possibleCoordinates = (lastPressedPiece.getPiece().getPossibleMoves(m_board));
-                    }
-                    if (possibleCoordinates.isEmpty()) {
-                        return;
-                    }
-                    if(turnBlue){
-                        lastPressedPiece.getButtonBlue().setBorder(new LineBorder(Color.WHITE,4));
+                    if (turnBlue) {
+                        lastPressedPiece.getButtonBlue().setBorder(new LineBorder(Color.WHITE, 4));
                     } else {
-                        lastPressedPiece.getButtonRed().setBorder(new LineBorder(Color.WHITE,4));
+                        lastPressedPiece.getButtonRed().setBorder(new LineBorder(Color.WHITE, 4));
                     }
                     iteratorCoordinates = possibleCoordinates.iterator();
                     Coordinates temp;
                     while (iteratorCoordinates.hasNext()) {
                         temp = iteratorCoordinates.next();
-                        if(turnBlue){
+                        if (turnBlue) {
                             spots[temp.getY()][temp.getX()].getButtonBlue().setBorder(new LineBorder(Color.BLACK, 5));
                             possibleButtons.add(spots[temp.getY()][temp.getX()].getButtonBlue());
                         } else {
@@ -312,22 +399,18 @@ public class Board {
                     }
                 }
             } else if (lastPressed[0] == row && lastPressed[1] == col) {
-
                 lastPressed[0] = -1;
                 lastPressed[1] = -1;
-
                 Coordinates temp;
-
-                if(turnBlue){
+                if (turnBlue) {
                     lastPressedPiece.getButtonBlue().setBorder(BorderFactory.createBevelBorder(1));
                 } else {
                     lastPressedPiece.getButtonRed().setBorder(BorderFactory.createBevelBorder(1));
                 }
-//                possibleCoordinates = (lastPressedPiece.getPossibleMoves(m_board));
                 iteratorCoordinates = possibleCoordinates.iterator();
                 while (iteratorCoordinates.hasNext()) {
                     temp = iteratorCoordinates.next();
-                    if(turnBlue){
+                    if (turnBlue) {
                         spots[temp.getY()][temp.getX()].getButtonBlue().setBorder(BorderFactory.createBevelBorder(1));
                     } else {
                         spots[temp.getY()][temp.getX()].getButtonRed().setBorder(BorderFactory.createBevelBorder(1));
@@ -352,6 +435,8 @@ public class Board {
                 }
                 //TODO ERROR SOUND
             }
+
+
         }
 
     }

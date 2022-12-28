@@ -122,6 +122,7 @@ public class ModSelectionWindow {
                 }
             }
         });
+        reducedArmy.setIcon(new ImageIcon("C:\\Users\\user\\IdeaProjects\\StrategoPhase2\\src\\images\\unchecked.jpg"));
 
         onlyForword = new JRadioButton("Only Forward");
         onlyForword.setActionCommand(onlyForwardCommand);
@@ -141,6 +142,8 @@ public class ModSelectionWindow {
                 }
             }
         });
+        onlyForword.setIcon(new ImageIcon("C:\\Users\\user\\IdeaProjects\\StrategoPhase2\\src\\images\\unchecked.jpg"));
+
         radioButtons.add(reducedArmy);
         radioButtons.add(onlyForword);
 

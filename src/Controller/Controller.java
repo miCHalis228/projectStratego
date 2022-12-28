@@ -4,35 +4,37 @@ import Model.Board.Board;
 import Model.Exceptions.BoardNotInitializedException;
 import Model.Player.Player;
 import View.*;
+
+import java.math.RoundingMode;
+
 /**
  * @author Michalis Ierodiakonou
  */
 public class Controller {
-
     private int round = 0;
     private static boolean turnRed;
     private Player playerBlue;
     private Player playerRed;
-
     private int mode;
-
+//    private JPanel playAgainPanel;
     private View view;
     private Board board;
     private LoadingScreen loading;
     private ModSelectionWindow msw;
     private winningFrame blueWins;
     private winningFrame redWins;
+    private reviveSelectionFrame rsf=null;
 
     /**
      * <b>Constructor</b> : Constructs a new Constructor with 2 players
      * <b>post-condition</b> A Blue and a Red Player are created
      */
     public Controller() {
-        this.init();
         this.startGame();
     }
 
     public void startGame(){
+        this.init();
         this.menu();
         mode = msw.getMode();
         this.createBoard();
@@ -40,12 +42,40 @@ public class Controller {
         this.GameLoop();
         this.endGame();
     }
+//    public final void killController(){
+//        view.dispose();
+//        blueWins.dispose();
+//        redWins.dispose();
+//        loading.dispose();
+//
+//    }
     /**
      *
      */
     public void init(){
         msw = new ModSelectionWindow();
         loading = new LoadingScreen();
+//        playAgainPanel = new JPanel();
+//        Play_Again:{
+//            JButton playAgainButton = new JButton("PLAY AGAIN");
+//            playAgainPanel.setOpaque(false);
+//            playAgainPanel.setLayout(new FlowLayout());
+//            playAgainPanel.setBounds(Toolkit.getDefaultToolkit().getScreenSize().width/2-100,Toolkit.getDefaultToolkit().getScreenSize().height/2+150,200,50);
+//            playAgainButton.setBackground(Color.BLACK);
+//            playAgainButton.setForeground(Color.DARK_GRAY);
+//            playAgainButton.setOpaque(false);
+//            playAgainButton.setBorderPainted(false);
+//            playAgainButton.setFocusable(false);
+//            playAgainButton.setFont(new Font("Garamond", Font.BOLD, 30));
+//            playAgainButton.setBorder(BorderFactory.createRaisedBevelBorder());
+//            playAgainButton.addActionListener(e -> {
+//                killController();
+////                Controller controller = new Controller();
+//                startGame();
+//            });
+//            playAgainPanel.add(playAgainButton);
+//
+//        }
     }
 
     /**
@@ -72,7 +102,7 @@ public class Controller {
         this.playerRed.randomizePositions();
         this.blueWins = new winningFrame(playerBlue);
         this.redWins = new winningFrame(playerRed);
-        this.board = new Board(playerBlue,playerRed);
+        this.board = new Board(playerBlue,playerRed,mode);
         turnRed=true;
         try {
             board.initializeBoard();
@@ -116,23 +146,52 @@ public class Controller {
             try {
                 Thread.sleep(90);
                 if(board.getMoveMade()){
-                    if(board.getAttackMade()){
-                        updateLists();
-                        view.updateStats();
+                    if(!board.isRevivePending()) {
+                        if (rsf != null) {
+//                            rsf.dispose();
+                            rsf = null;
+                        }
+//                        view.toFront();
+                        if (board.getAttackMade() && board.isReviveMade()) {
+                            updateLists();
+                            view.updateStats();
+                            board.setReviveMade(false);
+                        } else if (board.getAttackMade()) {
+                            updateLists();
+                            view.updateStats();
+                        } else if (board.isReviveMade()) {
+                            board.setReviveMade(false);
+                            view.setVisible(true);
+                            System.out.println("HELLOOOOO");
+
+                        }
+                        /**
+                         * make second panel
+                         * change between the two
+                         */
+                        nextTurn();
+                        if (turnRed) {
+                            nextRound();
+                        }
+                        board.updateBoard();
+                        Thread.sleep(1000);
+                        view.updateView(turnRed, round);
+                        board.setAttackMade(false);
+                        board.setMoveMade(false);
                     }
-                    /**
-                     * make second panel
-                     * change between the two
-                     */
-                    nextTurn();
-                    if(turnRed) {
-                        nextRound();
-                    }
-                    board.updateBoard(playerBlue,playerRed);
-                    Thread.sleep(1000);
-                    view.updateView(turnRed,round);
-                    board.setAttackMade(false);
-                    board.setMoveMade(false);
+//                    } else {
+//                        if(rsf==null){
+//                            System.out.println("making rsf");
+//                            if(turnRed){
+//                                rsf = new reviveSelectionFrame(playerRed);
+//                            } else {
+//                                rsf = new reviveSelectionFrame(playerBlue);
+//                            }
+//                            rsf.setVisible(true);
+//                            view.add(rsf);
+//                        }
+//                    }
+//                    view.toBack();
                 }
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
@@ -141,12 +200,19 @@ public class Controller {
     }
 
     public void endGame(){
-        view.setVisible(false);
         if(playerBlue.isDefeated()){
+//            redWins.add(playAgainPanel);
             redWins.setVisible(true);
         } else {
+//            blueWins.add(playAgainPanel);
             blueWins.setVisible(true);
         }
+        try {
+            Thread.sleep(100);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+        view.setVisible(false);
     }
     private void updateLists() {
             playerBlue.setDeadPieces();
