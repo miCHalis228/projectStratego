@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class Player {
+    boolean isDefeated = false;
     private String m_name;
     private boolean isBlue;
     private int revival_counter;
@@ -183,7 +184,7 @@ public class Player {
      * <b>Accessor</b> Calculates and returns if the player is defeated or not
      * @return true if the player can continue playing
      */
-    public boolean isDefeated() {
+    public boolean flagCaptured() {
         return Pieces.get(0).isDead();
         /*if it has movable pieces and flag is not captured return false*/
     }
@@ -293,13 +294,6 @@ public class Player {
         return Pieces;
     }
 
-    public void nextTurn(){
-        turn++;
-    }
-
-    public int getTurn(){
-        return turn;
-    }
     public int[] getCaptures() {
         return captures;
     }
@@ -316,33 +310,14 @@ public class Player {
     }
     public Piece revive(){
         if (revival_counter < 2) {
-            System.out.println(getDeadPieces());
-            System.out.println("select which rank you want to revive");
             getDeadPieces().stream()
                     .forEach(System.out::println);
             Iterator<Piece> iterator = getDeadPieces().iterator();
             if(iterator.hasNext()){
                 reviveSelectionFrame rsf = new reviveSelectionFrame(this);
-//                rsf.setVisible(true);
-//                rsf.toFront();
-//                while(rsf.getRank()==-2){
-//                    try {
-////                        Thread.currentThread().wait(100);
-//                        Thread.sleep(100);
-////                        rsf.setVisible(true);
-//                    } catch (InterruptedException e) {
-//                        throw new RuntimeException(e);
-//                    }
-//                }
-//                rsf.setVisible(false);
                 int selectedRank = rsf.getRank();
-//                rsf.dispose();
-//                Scanner scanner = new Scanner(System.in);
-//                int selectRank = scanner.nextInt();
-//                System.out.println("selected: " + selectRank);
                 if(selectedRank!=-1){
                     System.out.println(selectedRank);
-
                     Piece p = null;
                     int i = 0;
                     while (iterator.hasNext()) {
@@ -357,11 +332,21 @@ public class Player {
                 }
             }
         }
-        System.out.println("not possbile");
         return null;
     }
 
     public void increaseRescues(){
         revival_counter++;
+    }
+    public void removeCapture(int index){
+        captures[index]--;
+    }
+
+    public boolean isDefeated() {
+        return this.isDefeated;
+    }
+
+    public void setDefeated(){
+        this.isDefeated = true;
     }
 }

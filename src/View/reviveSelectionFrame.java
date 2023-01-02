@@ -46,7 +46,7 @@ public class reviveSelectionFrame extends JFrame{
                 this,
                 "Select a Rank to revive:\n"
                 ,
-                "Revive a Paen",
+                "Revive a Pawn",
                 JOptionPane.PLAIN_MESSAGE,
                 new ImageIcon(img),
                 ranksToRevive.toArray(),

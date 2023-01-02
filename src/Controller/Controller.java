@@ -142,7 +142,7 @@ public class Controller {
      * Game Loop
      */
     public void GameLoop(){
-        while(!playerBlue.isDefeated() && !playerRed.isDefeated()){
+        while(!board.playerDefeated()){
             try {
                 Thread.sleep(90);
                 if(board.getMoveMade()){
@@ -162,7 +162,6 @@ public class Controller {
                         } else if (board.isReviveMade()) {
                             board.setReviveMade(false);
                             view.setVisible(true);
-                            System.out.println("HELLOOOOO");
 
                         }
                         /**
@@ -179,19 +178,6 @@ public class Controller {
                         board.setAttackMade(false);
                         board.setMoveMade(false);
                     }
-//                    } else {
-//                        if(rsf==null){
-//                            System.out.println("making rsf");
-//                            if(turnRed){
-//                                rsf = new reviveSelectionFrame(playerRed);
-//                            } else {
-//                                rsf = new reviveSelectionFrame(playerBlue);
-//                            }
-//                            rsf.setVisible(true);
-//                            view.add(rsf);
-//                        }
-//                    }
-//                    view.toBack();
                 }
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
@@ -201,10 +187,8 @@ public class Controller {
 
     public void endGame(){
         if(playerBlue.isDefeated()){
-//            redWins.add(playAgainPanel);
             redWins.setVisible(true);
         } else {
-//            blueWins.add(playAgainPanel);
             blueWins.setVisible(true);
         }
         try {
@@ -219,14 +203,6 @@ public class Controller {
             playerRed.setDeadPieces();
     }
 
-    public Player getPlayerBlue() {
-        return playerBlue;
-    }
-
-    public Player getPlayerRed() {
-        return playerRed;
-    }
-
     /**
      * <b>Transformer</b>: Change whose player turn it is to play
      * <b>post-condition</b> From Blue to Red to Blue...
@@ -235,21 +211,11 @@ public class Controller {
         turnRed = !turnRed;
     }
 
-
     /**
      * <b>Transformer</b>: Go to the next round
      */
     public void nextRound() {
         round++;
-    }
-
-    /**
-     * <b>Accessor</b>: Returns the number of round we are now in the game
-     *
-     * @return current round
-     */
-    public int getRound() {
-        return round;
     }
 
     /**

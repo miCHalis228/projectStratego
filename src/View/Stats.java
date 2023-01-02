@@ -244,7 +244,6 @@ public class Stats extends JPanel {
     }
 
     private void setRevivePanel(){
-        JButton reviveButton = new JButton("REVIVE");
         revive.setOpaque(false);
     }
 

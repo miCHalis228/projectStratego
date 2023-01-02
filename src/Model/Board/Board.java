@@ -31,6 +31,8 @@ public class Board {
 
     private Piece pieceToRevive;
     private int m_mode;
+
+    private int movables = 0;
     private boolean moveMade = false;
     private boolean attackMade = false;
     private boolean revivePending = false;
@@ -48,6 +50,11 @@ public class Board {
         lastPressed[0] = -1;
         lastPressed[1] = -1;
         pieceToRevive = null;
+        if(m_mode == 1 || m_mode==3)
+            movables = 13;
+        else{
+            movables = 23;
+        }
     }
 
     /**
@@ -347,12 +354,14 @@ public class Board {
                     if (pieceToRevive != null) {
                         if (!turnBlue && (row == 5 || row == 6 || row == 7)) {
                             playerBlue.increaseRescues();
+                            playerRed.removeCapture(pieceToRevive.getRank());
                             spots[row][col].setPiece(pieceToRevive);
                             pieceToRevive.setCoordinates(new Coordinates(col, row));
                             pieceToRevive = null;
                             revivePending = false;
                         } else if (turnBlue && (row == 0 || row == 1 || row == 2)) {
                             playerRed.increaseRescues();
+                            playerBlue.removeCapture(pieceToRevive.getRank());
                             spots[row][col].setPiece(pieceToRevive);
                             pieceToRevive.setCoordinates(new Coordinates(col, row));
                             revivePending = false;
@@ -439,5 +448,49 @@ public class Board {
 
         }
 
+    }
+
+    public boolean playerDefeated(){
+        int deadMovables = 0;
+
+        Iterator<Piece> iterator;
+        Piece p;
+
+        /*BLUE PLAYER*/
+        deadMovables=0;
+        iterator = playerBlue.getPieces().iterator();
+        while (iterator.hasNext()) {
+            p = iterator.next();
+            if(p instanceof MovablePiece && !p.isDead()){
+                if(p.getPossibleMoves(this,m_mode)==null){
+                    playerBlue.setDefeated();
+                    return true;
+                }
+            } else if(p instanceof MovablePiece && p.isDead()){
+                deadMovables++;
+            }
+        }
+        if(playerBlue.flagCaptured() || deadMovables==movables) {
+            playerBlue.setDefeated();
+            return true;
+        }
+
+        /*RED PLAYER*/
+        deadMovables=0;
+        iterator = playerRed.getPieces().iterator();
+        while (iterator.hasNext()) {
+            p = iterator.next();
+            if(p instanceof MovablePiece && !p.isDead()){
+                if(p.getPossibleMoves(this,m_mode)==null){
+                    playerRed.setDefeated();
+                    return true;
+                }
+            }
+        }
+        if(playerRed.flagCaptured() || deadMovables==movables) {
+            playerRed.setDefeated();
+            return true;
+        }
+        return false;
     }
 }
