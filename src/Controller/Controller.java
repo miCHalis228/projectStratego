@@ -33,6 +33,9 @@ public class Controller {
         this.startGame();
     }
 
+    /**
+     * Method which simulates game
+     */
     public void startGame(){
         this.init();
         this.menu();
@@ -42,44 +45,20 @@ public class Controller {
         this.GameLoop();
         this.endGame();
     }
-//    public final void killController(){
-//        view.dispose();
-//        blueWins.dispose();
-//        redWins.dispose();
-//        loading.dispose();
-//
-//    }
+
     /**
-     *
+     * Method creating the menu and loading screen
+     * <b>pre-condition</b> objects are null
+     * <b>post-condition</b> objects are created
      */
     public void init(){
         msw = new ModSelectionWindow();
         loading = new LoadingScreen();
-//        playAgainPanel = new JPanel();
-//        Play_Again:{
-//            JButton playAgainButton = new JButton("PLAY AGAIN");
-//            playAgainPanel.setOpaque(false);
-//            playAgainPanel.setLayout(new FlowLayout());
-//            playAgainPanel.setBounds(Toolkit.getDefaultToolkit().getScreenSize().width/2-100,Toolkit.getDefaultToolkit().getScreenSize().height/2+150,200,50);
-//            playAgainButton.setBackground(Color.BLACK);
-//            playAgainButton.setForeground(Color.DARK_GRAY);
-//            playAgainButton.setOpaque(false);
-//            playAgainButton.setBorderPainted(false);
-//            playAgainButton.setFocusable(false);
-//            playAgainButton.setFont(new Font("Garamond", Font.BOLD, 30));
-//            playAgainButton.setBorder(BorderFactory.createRaisedBevelBorder());
-//            playAgainButton.addActionListener(e -> {
-//                killController();
-////                Controller controller = new Controller();
-//                startGame();
-//            });
-//            playAgainPanel.add(playAgainButton);
-//
-//        }
     }
 
     /**
-     *
+     * Method creating a menu GUI and wating for mod selection to return game mode
+     * <b>post-condition</b> Game mode is set
      */
     public void menu(){
         Thread T = new Controller.Thread_extended_class(msw);
@@ -93,7 +72,8 @@ public class Controller {
     }
 
     /**
-     *
+     * Method to create players and randomize piece positions
+     * Also creates game board object and places each player's piece on it
      */
     public void createBoard(){
         this.playerBlue = new Player("Blue",mode);
@@ -139,7 +119,7 @@ public class Controller {
     }
 
     /**
-     * Game Loop
+     * Game Loop checking for defeated players or revives initiated
      */
     public void GameLoop(){
         while(!board.playerDefeated()){
@@ -148,10 +128,8 @@ public class Controller {
                 if(board.getMoveMade()){
                     if(!board.isRevivePending()) {
                         if (rsf != null) {
-//                            rsf.dispose();
                             rsf = null;
                         }
-//                        view.toFront();
                         if (board.getAttackMade() && board.isReviveMade()) {
                             updateLists();
                             view.updateStats();
@@ -185,6 +163,9 @@ public class Controller {
         }
     }
 
+    /**
+     *
+     */
     public void endGame(){
         if(playerBlue.isDefeated()){
             redWins.setVisible(true);
@@ -227,6 +208,12 @@ public class Controller {
         return board;
     }
 
+    /**
+     * <b> A custom inner class extending Thread class waits until
+     * mode is given</b>
+     *
+     * <b>post-condition: </b> Mode is given by the user and returned to controller
+     */
     class Thread_extended_class extends Thread {
         ModSelectionWindow mon;
 

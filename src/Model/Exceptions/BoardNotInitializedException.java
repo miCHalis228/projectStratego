@@ -1,7 +1,7 @@
 package Model.Exceptions;
 
 public class BoardNotInitializedException extends Exception {
-    BoardNotInitializedException() {
+    public BoardNotInitializedException() {
         super("Couldn't Initialize Board");
     }
 }

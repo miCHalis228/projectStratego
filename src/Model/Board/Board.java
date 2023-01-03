@@ -41,6 +41,12 @@ public class Board {
 
     private List<JButton> possibleButtons = new ArrayList<JButton>();
 
+    /**
+     * <b>Constructor: </b> Creates a board object and sets private fields
+     * @param blue instance of blue player
+     * @param red instance of blue player
+     * @param mode mode given by the user
+     */
     public Board(Player blue, Player red, int mode) {
         m_mode = mode;
         playerBlue = blue;
@@ -81,6 +87,9 @@ public class Board {
         initButtonSpots();
     }
 
+    /**
+     *
+     */
     public void initButtonSpots() {
         for (int row = 0; row < 8; row++)
             for (int col = 0; col < 10; col++) {
@@ -92,6 +101,13 @@ public class Board {
             }
     }
 
+    /**
+     * <b>Accessor</b> Returns a spot of the board
+     *
+     * @param x X-coordinate
+     * @param y Y-coordinate
+     * @return Spot at given coordinates
+     */
     public Spot getSpot(int x, int y) {
         return spots[x][y];
     }
@@ -119,24 +135,22 @@ public class Board {
             }
     }
 
-    public void printBoard() {
-        for (int i = 0; i < 8; i++) {
-            for (int j = 0; j < 10; j++) {
-                System.out.print(this.getSpot(i, j).getPiece() != null ? this.getSpot(i, j).getPiece().getRank() + " " : "null ");
-            }
-            System.out.println();
-        }
-    }
 
-
-    public void movePiece(Coordinates temp) throws InvalidCoordinatesException {
+    /**
+     * simulates movement and/or calls attack method
+     * @param temp selected piece's desired coordinates
+     * @throws InvalidCoordinatesException if coordinates are off the board
+     */
+    private void movePiece(Coordinates temp) throws InvalidCoordinatesException {
         Iterator<JButton> iteratorButtons;
         JButton tempButton;
         iteratorButtons = possibleButtons.iterator();
+        //highlight possible coordinates buttons
         while (iteratorButtons.hasNext()) {
             tempButton = iteratorButtons.next();
             tempButton.setBorder(BorderFactory.createBevelBorder(1));
         }
+        //if there is a piece in the target coordinates make attack else just move
         if (targetSpot.getPiece() != null) {
             moveAndAttack(temp);
             setAttackMade(true);
@@ -150,6 +164,9 @@ public class Board {
         initFields();
     }
 
+    /**
+     * swap the piece of the last pressed spot with the target spot
+     */
     private void swapSpots() {
         targetSpot.setPiece(lastPressedPiece.getPiece());
         lastPressedPiece.setPiece(null);
@@ -157,6 +174,9 @@ public class Board {
         targetSpot.setButton();
     }
 
+    /**
+     * set all private temporary fields to their default values
+     */
     private void initFields() {
         possibleButtons.clear();
         lastPressedPiece = null;
@@ -166,6 +186,10 @@ public class Board {
         setMoveMade(true);
     }
 
+    /**
+     * checks if the player has a piece that can make a rescue happen
+     * @return true if a player can revive or not
+     */
     private boolean possibleRevive() {
         if (!(targetSpot.getPiece() instanceof Scout) && !targetSpot.getPiece().hasRevived()) {
             if (targetSpot.getPiece().isBlue() && targetSpot.getPiece().getY() == 7) {
@@ -217,6 +241,11 @@ public class Board {
         return true;
     }
 
+    /**
+     *
+     * @param temp selected piece's desired coordinates
+     * @throws InvalidCoordinatesException if coordinates are off the board
+     */
     private void moveAndAttack(Coordinates temp) throws InvalidCoordinatesException {
         try {
             ((MovablePiece) lastPressedPiece.getPiece()).attack(targetSpot.getPiece());
