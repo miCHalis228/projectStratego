@@ -135,7 +135,6 @@ public class Board {
             }
     }
 
-
     /**
      * simulates movement and/or calls attack method
      * @param temp selected piece's desired coordinates
@@ -242,6 +241,7 @@ public class Board {
     }
 
     /**
+     * Simulates the attack and moves the pieces accordingly
      *
      * @param temp selected piece's desired coordinates
      * @throws InvalidCoordinatesException if coordinates are off the board
@@ -306,39 +306,81 @@ public class Board {
             }
     }
 
+    /**
+     * <b>Accessor</b>: Returns value of moveMade
+     *
+     * @return if a move was made
+     */
     public boolean getMoveMade() {
         return moveMade;
     }
 
+    /**
+     * <b>Transformer</b>: Sets value of moveMade
+     *
+     * @param moveMade boolean value if move was made or not
+     */
     public void setMoveMade(boolean moveMade) {
         this.moveMade = moveMade;
     }
-
+    /**
+     * <b>Accessor</b>: Returns value of attackMade
+     *
+     * @return if an attack was made
+     */
     public boolean getAttackMade() {
         return attackMade;
     }
 
+    /**
+     * <b>Transformer</b>: Sets value of attackMade
+     *
+     * @param attackMade boolean value if attack was made or not
+     */
     public void setAttackMade(boolean attackMade) {
         this.attackMade = attackMade;
     }
 
+    /**
+     * <b>Accessor</b>: Returns value of revivePending
+     *
+     * @return if revive is Pending
+     */
     public boolean isRevivePending() {
         return revivePending;
     }
 
+    /**
+     * <b>Transformer</b>: Sets value of revivePending if rescue is imminent
+     *
+     * @param revivePending boolean value if revive is Pending or not
+     */
     public void setRevivePending(boolean revivePending) {
         this.revivePending = revivePending;
     }
-
+    /**
+     * <b>Accessor</b>: Returns value of reviveMade
+     *
+     * @return if a rescue was made
+     */
     public boolean isReviveMade() {
         return reviveMade;
     }
 
+    /**
+     * <b>Transformer</b>: Sets value of reviveMade
+     *
+     * @param reviveMade boolean value if revive was made or not
+     */
     public void setReviveMade(boolean reviveMade) {
         this.reviveMade = reviveMade;
         if (!reviveMade) setRevivePending(false);
     }
 
+    /**
+     * Inner class implementing ActionListener to be added to Spots' JButtons when a Piece was selected
+     *
+     */
     public class selectedPawn implements ActionListener {
         Board m_board;
         public selectedPawn(Board board) {
@@ -479,6 +521,11 @@ public class Board {
 
     }
 
+    /**
+     * <b>Accessor</b> Calculates if either of the players are defeated or not
+     *
+     * @return if a player is defeated
+     */
     public boolean playerDefeated(){
         int deadMovables = 0;
 

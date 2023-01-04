@@ -47,7 +47,7 @@ public class Stats extends JPanel {
         activeMods(mode);
         Statistics();
         captures();
-        setRevivePanel();
+        revive.setOpaque(false);
     }
 
     public void addComponents(JFrame frame){
@@ -243,9 +243,6 @@ public class Stats extends JPanel {
 
     }
 
-    private void setRevivePanel(){
-        revive.setOpaque(false);
-    }
 
     /**
      * <b>Accessor</b> Updates and returns the Stat JFrame
