@@ -1,10 +1,12 @@
 package Model.Pieces;
-
 import Model.Board.Board;
 import Model.Coordinates.Coordinates;
-
 import java.util.List;
 
+/**
+ * @author Michalis Ierodiakonou
+ * A class extending Piece for Traps/Flag
+ */
 public class ImmovablePiece extends Piece {
 
     private boolean isFlag;
@@ -16,6 +18,7 @@ public class ImmovablePiece extends Piece {
      * @param y         y-coordinate
      * @param imagePath path in the src where to get the image from
      * @param isBlue    if it is in the Blue or Red team
+     * @param isFlag    wether this immovablePiece is flag or trap
      */
     public ImmovablePiece(int x, int y, String imagePath, boolean isBlue, boolean isFlag) {
 

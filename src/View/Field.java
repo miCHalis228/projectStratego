@@ -1,9 +1,12 @@
 package View;
 import Model.Board.Board;
-import Model.Exceptions.PathNotFoundException;
 import javax.swing.*;
 import java.awt.*;
 
+/**
+ * @author Michalis Ierodiakonou
+ * A
+ */
 public class Field{
     private JPanel hiddenBlue;
     private JPanel hiddenRed;

@@ -3,6 +3,10 @@ package View;
 import javax.swing.*;
 import java.awt.*;
 
+/**
+ * @author Michalis Ierodiakonou
+ * The Loading screen of the game
+ */
 public class LoadingScreen extends JFrame {
     private JLabel loading;
     private JLabel background;

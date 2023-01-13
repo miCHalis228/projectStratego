@@ -24,7 +24,7 @@ public class Scout extends SpecialMovablePiece {
 
     /**
      * <b>Accessor</b> Calculates possible moves are returned as Coordinate objects which store (x,y) values
-     * <b></b> The scout can move in lines not just a square each time
+     * The scout can move in lines not just a square each time
      * @param board board in which the moves will be made
      * @param mode mode to check if only forward
      * @return an Array List of possible moves (Coordinates)

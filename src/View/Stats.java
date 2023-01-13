@@ -32,8 +32,8 @@ public class Stats extends JPanel {
      */
     public Stats(Player player, int mode){
         this.m_player=player;
-        this.l_mod1 = new JCheckBox("Μειωμένος Στρατος", false);
-        this.l_mod2 = new JCheckBox("Καμία Υποχώρηση", false);
+        this.l_mod1 = new JCheckBox("Reduced Army", false);
+        this.l_mod2 = new JCheckBox("No Retreat", false);
         this.labelMods = new JPanel();
         this.labelStats = new JPanel();
         this.labelCaptures = new JPanel();
@@ -66,7 +66,7 @@ public class Stats extends JPanel {
      * @return the JPanel generated for the active mods
      */
     private void activeMods(int mode){
-        JLabel label = new JLabel("ΕΝΕΡΓΟΙ ΚΑΝΟΝΕΣ");
+        JLabel label = new JLabel("Active Mods");
         label.setFont(new Font("Didot", Font.BOLD, 25));
         labelMods.setLayout(new FlowLayout());
         labelMods.setOpaque(false);
@@ -111,7 +111,7 @@ public class Stats extends JPanel {
      * @return the JPanel generated for the Stats of the m_player
      */
     private  void Statistics(){
-        JLabel label = new JLabel("ΣΤΑΤΙΣΤΙΚΑ");
+        JLabel label = new JLabel("STATS");
         label.setFont(new Font("Didot", Font.BOLD, 25));
         labelStats.setLayout(new FlowLayout());
         labelStats.setOpaque(false);
@@ -132,10 +132,10 @@ public class Stats extends JPanel {
         label.setFont(new Font("Didot", Font.CENTER_BASELINE, 22));
         label.setHorizontalAlignment(SwingConstants.CENTER);
         statsPanel.add(label);
-        label = new JLabel("Ποσοστό επιτ. επίθεσης: " + String.format("%.02f", m_player.winRate()) + "%");
+        label = new JLabel("Successful Attack Ratio: " + String.format("%.02f", m_player.winRate()) + "%");
         label.setFont(new Font("Didot", Font.BOLD, 18));
         statsPanel.add(label);
-        label = new JLabel("Διασώσεις: " + m_player.getRevival_counter() + "    Γύρος: 0");
+        label = new JLabel("Rescues: " + m_player.getRevival_counter() + "    Round: 0");
         label.setFont(new Font("Didot", Font.BOLD, 18));
         statsPanel.add(label);
     }
@@ -145,7 +145,7 @@ public class Stats extends JPanel {
      * @return the JPanel generated for the Captured Units of the enemy m_player
      */
     private void captures(){
-        JLabel label = new JLabel("ΑΙΧΜΑΛΩΤΙΣΕΙΣ");
+        JLabel label = new JLabel("CAPTURES");
         label.setFont(new Font("Didot", Font.BOLD, 25));
         labelCaptures.setLayout(new FlowLayout());
         labelCaptures.setOpaque(false);
@@ -232,7 +232,7 @@ public class Stats extends JPanel {
         for(int i=0;i<playerCaptures.length;i++){
             totalCaptures+=playerCaptures[i];
         }
-        label = new JLabel("Συνολικές Αιχμαλωτίσεις: " + (totalCaptures));
+        label = new JLabel("Total Captures: " + (totalCaptures));
         label.setFont(new Font("Didot", Font.CENTER_BASELINE, 20));
         label.setForeground(Color.white);
         totalCapturesPanel.setLayout(new FlowLayout());
@@ -254,12 +254,12 @@ public class Stats extends JPanel {
         }
 
         statsPanel.remove(1);
-        statsPanel.add(new JLabel("Ποσοστό επιτ. επίθεσης: " + String.format("%.02f", m_player.winRate()) + "%"),1).setFont(new Font("Didot", Font.BOLD, 18));
+        statsPanel.add(new JLabel("Succesful Attack Ratio: " + String.format("%.02f", m_player.winRate()) + "%"),1).setFont(new Font("Didot", Font.BOLD, 18));
         totalCaptures=0;
         for(int i=0;i<playerCaptures.length;i++){
             totalCaptures+=playerCaptures[i];
         }
-        JLabel label = new JLabel("Συνολικές Αιχμαλωτίσεις: " + (totalCaptures));
+        JLabel label = new JLabel("Total Captures: " + (totalCaptures));
         label.setFont(new Font("Didot", Font.CENTER_BASELINE, 20));
         label.setForeground(Color.white);
         totalCapturesPanel.remove(0);
@@ -268,7 +268,7 @@ public class Stats extends JPanel {
 
     public void nextTurn(int turn){
         statsPanel.remove(2);
-        statsPanel.add(new JLabel("Διασώσεις: " + m_player.getRevival_counter() + "    Γύρος: " + turn),2).setFont(new Font("Didot", Font.BOLD, 18));
+        statsPanel.add(new JLabel("Rescues: " + m_player.getRevival_counter() + "    Round: " + turn),2).setFont(new Font("Didot", Font.BOLD, 18));
     }
     public void hideAll(){
         labelMods.setVisible(false);

@@ -60,9 +60,9 @@ public class Player {
     }
 
     /**
-     * IF MODE IS NOT KNOWN DONT INIT CARDS
-     * @param name
-     * @throws IllegalArgumentException
+     * IF MODE IS NOT KNOWN DON'T INIT CARDS
+     * @param name of the player
+     * @throws IllegalArgumentException when a name other than the given two
      */
     public Player(String name) throws IllegalArgumentException {
         switch (name) {
@@ -92,7 +92,7 @@ public class Player {
      * <b>Transformer</b> Initializes the Piece List of the player depending on the mod chosen by the player at the start of the Game
      * <b>pre-condition</b> Cards are not initialized
      * <b>post-condition</b> Cards are initialized all with coordinates (0,0) to later be randomized
-     * @param mode
+     * @param mode selected by the player
      */
     public void initCards(int mode) {
         int i;
@@ -228,7 +228,7 @@ public class Player {
 
     /**
      * <b>Accessor:</b> Calculates and returns successful attack ratio
-     * @return
+     * @return successful attack ratio
      */
     public float winRate(){
         if (attackCount==0)

@@ -152,8 +152,7 @@ public abstract class Piece {
 
     /**
      * <b>Accessor:</b>
-     * @param flipped
-     * @return if the piece is flipped or not
+     * @param flipped if the piece is flipped or not
      */
     public void setFlipped(boolean flipped) {
         this.flipped = flipped;

@@ -5,6 +5,10 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+/**
+ * @author Michalis Ierodiakonou
+ * Creates the Window where the player selects mods
+ */
 public class ModSelectionWindow {
     private static final JPanel startingScreen = new JPanel();
     private static final JPanel radioButtons = new JPanel();
@@ -26,6 +30,9 @@ public class ModSelectionWindow {
         teliko = new JFrame("MOD SELECTION SCREEN");
     }
 
+    /**
+     * <b>Transformer:</b> Initializes the mod selection window and adds the components
+     */
     public void init() {
         initTeliko();
         teliko.add(setStartingScreen());
