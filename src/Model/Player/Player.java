@@ -36,17 +36,19 @@ public class Player {
             case "Red":
                 isBlue = false;
                 imagePath = "src\\images\\RedPieces";
+                m_name = "Volcandria";
                 break;
             case "Blue":
                 isBlue = true;
                 imagePath = "src\\images\\BluePieces";
+                m_name = "Everwinter";
                 break;
             default:
                 throw new IllegalArgumentException("Incorrect Name for Player");
 
         }
         this.m_mode=mode;
-        this.m_name = name;
+
         Pieces = new ArrayList<Piece>();
         DeadPieces = new ArrayList<Piece>();
         captures = new int[12];
@@ -173,31 +175,28 @@ public class Player {
     }
 
     /**
-     * <b>Accessor</b>: Returns the path for the players hidden image
-     * @return image path for when it is not his turn
+     * <b>Accessor</b> Calculates and returns if the player's flag is captured or not
+     * @return true if the player can continue playing
      */
-    public ImageIcon getM_HiddenImage() {
-        return m_HiddenImage;
+    public boolean flagCaptured() {
+        return Pieces.get(0).isDead();
     }
 
     /**
      * <b>Accessor</b> Calculates and returns if the player is defeated or not
      * @return true if the player can continue playing
      */
-    public boolean flagCaptured() {
-        return Pieces.get(0).isDead();
-        /*if it has movable pieces and flag is not captured return false*/
+    public boolean isDefeated() {
+        return this.isDefeated;
     }
 
     /**
-     * <b>Transformer</b> Changes the coordinates and state of one of its Pieces
-     * called from controller on action performed by the buttons
-     *
-     * @param newPos is the coordinate given to move by the player
+     * <b>Transformer:</b> Sets this player as defeated
      */
-    public void makeMove(Coordinates newPos) {
-        //TODO
+    public void setDefeated(){
+        this.isDefeated = true;
     }
+
 
     /**
      * <b>Transformer</b> Used to call the attack method from its pieces
@@ -211,19 +210,35 @@ public class Player {
         attackCount++;
     }
 
+
+    /**
+     * <b>Transformer:</b> Increases counter for which unit was captuerd
+     * @param index the rank of captured piece
+     */
     public void defends(int index){
         captures[index]++;
     }
+
+    /**
+     * <b>Transformer:</b> Increases counter for attacks made
+     */
     public void doesAttack(){
         attackCount++;
     }
 
+    /**
+     * <b>Accessor:</b> Calculates and returns successful attack ratio
+     * @return
+     */
     public float winRate(){
         if (attackCount==0)
             return 0.0f;
         return(succesfulAttacks/(float)attackCount*100);
     }
 
+    /**
+     * <b>Transformer:</b> Sets each piece as flipped
+     */
     public void flipCards(){
         Iterator<Piece> iterator = Pieces.iterator();
         Piece p;
@@ -233,6 +248,9 @@ public class Player {
         }
     }
 
+    /**
+     * <b>Transformer:</b> Sets each piece as not flipped
+     */
     public void unflipCards(){
         Iterator<Piece> iterator = Pieces.iterator();
         Piece p;
@@ -250,16 +268,111 @@ public class Player {
         return imagePath;
     }
 
+    /**
+     * <b>Accessor:</b> Updates Dead Pieces List
+     */
     public void setDeadPieces(){
         DeadPieces = Pieces.stream()
                 .filter(piece -> piece.isDead() == true)
                 .collect(Collectors.toList());
     }
 
+    /**
+     * <b>Accessor:</b>
+     * @return the List of Dead Pieces this player has
+     */
     public List<Piece> getDeadPieces() {
         return DeadPieces;
     }
 
+    /**
+     * <b>Accessor:</b>
+     * @return the List of Pieces this player has
+     */
+    public List<Piece> getPieces() {
+        return Pieces;
+    }
+
+    /**
+     * <b>Accessor:</b>
+     * @return The array of captures made by this player
+     */
+    public int[] getCaptures() {
+        return captures;
+    }
+
+    /**
+     * <b>Accessor:</b>
+     * @return The name of this player
+     */
+    public String toString(){
+        return  m_name;
+    }
+
+    /**
+     * <b>Accessor:</b>
+     * @return if this the blue player or not
+     */
+    public boolean isBlue() {
+        return isBlue;
+    }
+
+    /**
+     * <b>Accessor:</b>
+     * @return The number of rescues made by this player
+     */
+    public int getRevival_counter() {
+        return revival_counter;
+    }
+
+    /**
+     * <b>Accessor:</b> Generates a UI for the user to select which available rank to revive (if there are any) and then returns it to the caller
+     *
+     * @return The piece chosen by the user for revival or null
+     */
+    public Piece revive(){
+        if (revival_counter < 2) {
+
+            Iterator<Piece> iterator = getDeadPieces().iterator();
+            if(iterator.hasNext()){
+                reviveSelectionFrame rsf = new reviveSelectionFrame(this);
+                int selectedRank = rsf.getRank();
+                if(selectedRank!=-1){
+                    Piece p = null;
+                    int i = 0;
+                    while (iterator.hasNext()) {
+                        p = iterator.next();
+                        if (p.getRank() == selectedRank) {
+                            p.isRevived();
+                            getDeadPieces().remove(i);
+                            return p;
+                        }
+                        i++;
+                    }
+                }
+            }
+        }
+        return null;
+    }
+
+    /**
+     * <b>Transformer:</b>Increases rescue counter
+     */
+    public void increaseRescues(){
+        revival_counter++;
+    }
+
+    /**
+     * <b>Transformer:</b> Decreases captured pieces for given rank when a rescue happens
+     * @param index rank of rescued piece
+     */
+    public void removeCapture(int index){
+        captures[index]--;
+    }
+
+    /**
+     * An inner class responsible for generating a sequence of randomly generated numbers between 1-29 or 50-79 depending on player's side
+     */
     public class UniqueRng implements Iterator<Integer> {
         private List<Integer> numbers = new ArrayList<>();
 
@@ -290,63 +403,4 @@ public class Player {
         }
     }
 
-    public List<Piece> getPieces() {
-        return Pieces;
-    }
-
-    public int[] getCaptures() {
-        return captures;
-    }
-    public String toString(){
-        return  m_name;
-    }
-
-    public boolean isBlue() {
-        return isBlue;
-    }
-
-    public int getRevival_counter() {
-        return revival_counter;
-    }
-    public Piece revive(){
-        if (revival_counter < 2) {
-            getDeadPieces().stream()
-                    .forEach(System.out::println);
-            Iterator<Piece> iterator = getDeadPieces().iterator();
-            if(iterator.hasNext()){
-                reviveSelectionFrame rsf = new reviveSelectionFrame(this);
-                int selectedRank = rsf.getRank();
-                if(selectedRank!=-1){
-                    System.out.println(selectedRank);
-                    Piece p = null;
-                    int i = 0;
-                    while (iterator.hasNext()) {
-                        p = iterator.next();
-                        if (p.getRank() == selectedRank) {
-                            p.isRevived();
-                            getDeadPieces().remove(i);
-                            return p;
-                        }
-                        i++;
-                    }
-                }
-            }
-        }
-        return null;
-    }
-
-    public void increaseRescues(){
-        revival_counter++;
-    }
-    public void removeCapture(int index){
-        captures[index]--;
-    }
-
-    public boolean isDefeated() {
-        return this.isDefeated;
-    }
-
-    public void setDefeated(){
-        this.isDefeated = true;
-    }
 }

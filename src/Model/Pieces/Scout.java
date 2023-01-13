@@ -21,10 +21,13 @@ public class Scout extends SpecialMovablePiece {
         super(x, y, imagePath, rank, isBlue);
     }
 
+
     /**
-     * It has greater rang of movement.
-     *
-     * @return
+     * <b>Accessor</b> Calculates possible moves are returned as Coordinate objects which store (x,y) values
+     * <b></b> The scout can move in lines not just a square each time
+     * @param board board in which the moves will be made
+     * @param mode mode to check if only forward
+     * @return an Array List of possible moves (Coordinates)
      */
     @Override
     public List<Coordinates> getPossibleMoves(Board board , int mode) {
@@ -73,6 +76,41 @@ public class Scout extends SpecialMovablePiece {
                         i++;
                         coordinates = new Coordinates(x,y-i);
                     }
+                }
+                i=1;
+                coordinates = new Coordinates(x-i,y);
+                while(coordinates.isValid()){
+                    tempSpot = board.getSpot(y,x-i);
+                    if(!tempSpot.isLake()){
+                        if(tempSpot.isEmpty()) {
+                            possibleCoordinates.add(coordinates);
+                        } else if (tempSpot.getPiece().isBlue() != isBlue()){
+                            possibleCoordinates.add(coordinates);
+                            break;
+                        } else if(tempSpot.getPiece().isBlue() == isBlue()){
+                            break;
+                        }
+                    }
+                    i++;
+                    coordinates = new Coordinates(x-i,y);
+                }
+                i=1;
+                //LINE RIGHT
+                coordinates = new Coordinates(x+i,y);
+                while(coordinates.isValid()){
+                    tempSpot = board.getSpot(y,x+i);
+                    if(!tempSpot.isLake()){
+                        if(tempSpot.isEmpty()) {
+                            possibleCoordinates.add(coordinates);
+                        } else if (tempSpot.getPiece().isBlue() != isBlue()){
+                            possibleCoordinates.add(coordinates);
+                            break;
+                        } else if(tempSpot.getPiece().isBlue() == isBlue()){
+                            break;
+                        }
+                    }
+                    i++;
+                    coordinates = new Coordinates(x+i,y);
                 }
                 return possibleCoordinates;
             }

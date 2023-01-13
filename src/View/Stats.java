@@ -122,11 +122,11 @@ public class Stats extends JPanel {
         statsPanel.setLayout(new GridLayout(3,1));
         statsPanel.setBounds(1180, 215, 300, 165);
         if(m_player.isBlue()){
-            label = new JLabel("Player RED");
+            label = new JLabel("Volcandria");
             label.setForeground(Color.RED);
         }
         else{
-            label = new JLabel("Player BLUE");
+            label = new JLabel("Everwinter");
             label.setForeground(Color.BLUE);
         }
         label.setFont(new Font("Didot", Font.CENTER_BASELINE, 22));

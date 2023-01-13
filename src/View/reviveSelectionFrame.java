@@ -5,9 +5,6 @@ import Model.Player.Player;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.Iterator;
 
@@ -16,6 +13,11 @@ public class reviveSelectionFrame extends JFrame{
     String imageURL;
     private int rank;
     private Player m_player;
+
+    /**
+     * <b>Constructor: </b> Creates an InputDialogBox to Select the rank of the player which has the ability to rescue
+     * @param player with the ability to rescue
+     */
     public reviveSelectionFrame(Player player){
         m_player=player;
         Object[] objects = new String[10];
@@ -53,15 +55,22 @@ public class reviveSelectionFrame extends JFrame{
                 "2");
 
     }
+
+    /**
+     * <b>Accessor:</b> Calculates if the choice string is null and returns -1 or the rank selected as a String
+     * @return the string selected
+     */
     private String choice(){
         if (s==null){
             s="-1";
         }
         return s;
     }
-    public void setRank(int rank){
-        this.rank=rank;
-    }
+
+    /**
+     * <b>Accessor:</b> Calculates the rank the player selected for rescuing
+     * @return The rank selected to be Rescued
+     */
     public int getRank(){
         rank = Integer.parseInt(choice());
         return this.rank;

@@ -17,6 +17,10 @@ public class Spot {
     private static final int buttonWidth = 105;
     private static final int buttonHeight = 95;
 
+    /**
+     * Constructor of a Spot object
+     * @param piece the piece "inhabiting" this spot
+     */
     public Spot(Piece piece) {
         this.s_Piece = piece;
     }
@@ -56,10 +60,18 @@ public class Spot {
     }
 
 
+    /**
+     * <b>Accessor:</b>
+     * @return if the spot has a piece inhabiting it or not
+     */
     public boolean isEmpty(){
         return this.s_Piece == null;
     }
 
+    /**
+     * <b>Transformer:</b> Used to generate the buttons of this spot depending on its properties and the piece in it
+     *
+     */
     public void setButton() {
         if (isLake()) {
             setLakeButton();
@@ -70,6 +82,9 @@ public class Spot {
         }
     }
 
+    /**
+     * <b>Transformer:</b> private method to set a button when the spot has a piece in it
+     */
     private void setPieceButton() {
         if(this.s_Piece.isBlue()){
             this.buttonBlue.setIcon(s_Piece.getPieceImage());
@@ -83,7 +98,9 @@ public class Spot {
             setHiddenButton(this.buttonBlue);
         }
     }
-
+    /**
+     * <b>Transformer:</b> private method to set a button when the spot is a lake and doesn't have a piece in it
+     */
     private void setLakeButton() {
         /*Red*/
         this.buttonRed.setBackground(Color.ORANGE);
@@ -95,6 +112,9 @@ public class Spot {
         this.buttonBlue.setEnabled(false);
     }
 
+    /**
+     * <b>Transformer:</b> private method to set a button when the spot doesn't have a piece in it
+     */
     private void setNullButton() {
         /*Red*/
         this.buttonRed.setIcon(null);
@@ -107,6 +127,10 @@ public class Spot {
         this.buttonBlue.setContentAreaFilled(false);
         this.buttonBlue.setBorder(BorderFactory.createBevelBorder(1));
     }
+
+    /**
+     * <b>Transformer:</b> private method to set a button depending on the piece's hidden image for when it is flipped
+     */
     private void setHiddenButton(JButton button){
         button.setSize(buttonWidth, buttonHeight);
         button.setContentAreaFilled(false);
@@ -115,10 +139,18 @@ public class Spot {
     }
 
 
+    /**
+     * <b>Accessor:</b> Returns the button the blue player is supposed to be seeing on the board
+     * @return button blue
+     */
     public JButton getButtonBlue() {
         return buttonBlue;
     }
 
+    /**
+     * <b>Accessor:</b> Returns the button the red player is supposed to be seeing on the board
+     * @return button blue
+     */
     public JButton getButtonRed() {
         return buttonRed;
     }

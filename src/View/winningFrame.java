@@ -7,16 +7,22 @@ import java.awt.*;
 
 public class winningFrame extends JFrame {
     private Player m_player;
-    private JButton exit;
 
+    /**
+     * <b>Constructor:</b> Creates the winning frame with the winning Player's name
+     * @param player who won
+     */
     public winningFrame(Player player) {
         this.m_player = player;
         init();
     }
 
+    /**
+     * <b>Transformer:</b> Initializes the winning fame and sets the background
+     */
     public void init() {
         this.setLayout(new CardLayout());
-        ImageIcon imageIcon = new ImageIcon("C:\\Users\\user\\IdeaProjects\\StrategoPhase2\\src\\images\\dragon_background_cropped169.jpg"); // load the image to a imageIcon
+        ImageIcon imageIcon = new ImageIcon("src\\images\\dragon_background_cropped169.jpg"); // load the image to a imageIcon
         Image image = imageIcon.getImage().getScaledInstance(Toolkit.getDefaultToolkit().getScreenSize().width, Toolkit.getDefaultToolkit().getScreenSize().height, Image.SCALE_SMOOTH);
         JLabel label = new JLabel(new ImageIcon(image), JLabel.CENTER);
         this.setContentPane(label);
@@ -32,6 +38,10 @@ public class winningFrame extends JFrame {
         this.pack();
     }
 
+    /**
+     * <b>Transformer:</b> Sets up the UI for the winning player label
+     * @return a JPanel with the winning player
+     */
     public JPanel WinningPlayer() {
         JLabel label;
         JPanel panel = new JPanel();
@@ -44,8 +54,13 @@ public class winningFrame extends JFrame {
         return panel;
     }
 
+    /**
+     * <b>Transformer:</b> Sets up the UI for exit button
+     * @return the panel with the exit button
+     */
     public JPanel exitButton() {
-        this.exit = new JButton("EXIT");
+        JButton exit;
+        exit = new JButton("EXIT");
         JPanel panel = new JPanel();
         panel.setOpaque(false);
         panel.setLayout(new FlowLayout());

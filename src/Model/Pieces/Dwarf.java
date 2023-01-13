@@ -18,7 +18,7 @@ public class Dwarf extends SpecialMovablePiece {
 
     /**
      * Overrides MovablePiece attack as it has a different attack pattern
-     *
+     * Checks if enemy piece is trap so dwarf (this) wins the fight
      * @param Enemy an enemy Piece sent by the controller
      * @throws DeadPieceException if this piece is dead
      */

@@ -9,7 +9,7 @@ public class ModSelectionWindow {
     private static final JPanel startingScreen = new JPanel();
     private static final JPanel radioButtons = new JPanel();
     private static final JPanel confirmCancel = new JPanel();
-    static JFrame teliko = new JFrame("MOD SELECTION SCREEN");
+    static JFrame teliko ;
     private static JButton confirm;
     private static JButton cancel;
     private static JRadioButton reducedArmy;
@@ -23,20 +23,23 @@ public class ModSelectionWindow {
      * <b>post-conditions</b> The private field m_mode is set and available for reading by the caller
      */
     public ModSelectionWindow() {
-//        init();
+        teliko = new JFrame("MOD SELECTION SCREEN");
     }
 
     public void init() {
-        initTeliko(teliko);
+        initTeliko();
         teliko.add(setStartingScreen());
         teliko.pack();
         teliko.setVisible(true);
     }
 
-    public void initTeliko(JFrame teliko) {
+    /**
+     * <b>Transformer:</b> Initializes the field teliko (JFrame) and adding on it the required UI
+     */
+    public void initTeliko() {
         teliko.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         teliko.setMaximumSize(Toolkit.getDefaultToolkit().getScreenSize());
-        setBackground(teliko);
+        setBackground();
         teliko.add(setTitle());
         teliko.add(setRadioButtons());
         radioButtons.setVisible(false);
@@ -49,6 +52,10 @@ public class ModSelectionWindow {
         teliko.setUndecorated(true);
     }
 
+    /**
+     * <b>Transformer:</b> Creates the starting Screen panel adding the UI which is the first screen the user sees
+     * @return A JPanel for the starting Screen
+     */
     public JPanel setStartingScreen() {
         JButton start = new JButton("START");
         JButton exit = new JButton("EXIT");
@@ -95,6 +102,10 @@ public class ModSelectionWindow {
         return startingScreen;
     }
 
+    /**
+     * <b>Transformer:</b> Creates the radio buttons for the selection of the mods
+     * @return A JPanel for the selection buttons for each mod
+     */
 
     public JPanel setRadioButtons() {
         final String reducedArmyCommand = "Reduced Army",
@@ -116,13 +127,13 @@ public class ModSelectionWindow {
             public void actionPerformed(ActionEvent e) {
                 JRadioButton source = (JRadioButton) e.getSource();
                 if (source.isSelected()) {
-                    source.setIcon(new ImageIcon("C:\\Users\\user\\IdeaProjects\\StrategoPhase2\\src\\images\\tick.jpg"));
+                    source.setIcon(new ImageIcon("src\\images\\tick.jpg"));
                 } else {
-                    source.setIcon(new ImageIcon("C:\\Users\\user\\IdeaProjects\\StrategoPhase2\\src\\images\\unchecked.jpg"));
+                    source.setIcon(new ImageIcon("src\\images\\unchecked.jpg"));
                 }
             }
         });
-        reducedArmy.setIcon(new ImageIcon("C:\\Users\\user\\IdeaProjects\\StrategoPhase2\\src\\images\\unchecked.jpg"));
+        reducedArmy.setIcon(new ImageIcon("src\\images\\unchecked.jpg"));
 
         onlyForword = new JRadioButton("Only Forward");
         onlyForword.setActionCommand(onlyForwardCommand);
@@ -136,13 +147,13 @@ public class ModSelectionWindow {
             public void actionPerformed(ActionEvent e) {
                 JRadioButton source = (JRadioButton) e.getSource();
                 if (source.isSelected()) {
-                    source.setIcon(new ImageIcon("C:\\Users\\user\\IdeaProjects\\StrategoPhase2\\src\\images\\tick.jpg"));
+                    source.setIcon(new ImageIcon("src\\images\\tick.jpg"));
                 } else {
-                    source.setIcon(new ImageIcon("C:\\Users\\user\\IdeaProjects\\StrategoPhase2\\src\\images\\unchecked.jpg"));
+                    source.setIcon(new ImageIcon("src\\images\\unchecked.jpg"));
                 }
             }
         });
-        onlyForword.setIcon(new ImageIcon("C:\\Users\\user\\IdeaProjects\\StrategoPhase2\\src\\images\\unchecked.jpg"));
+        onlyForword.setIcon(new ImageIcon("src\\images\\unchecked.jpg"));
 
         radioButtons.add(reducedArmy);
         radioButtons.add(onlyForword);
@@ -150,6 +161,10 @@ public class ModSelectionWindow {
         return radioButtons;
     }
 
+    /**
+     * <b>Transformer:</b> Creates the confirm/cancel buttons for the selection of the mods
+     * @return A JPanel
+     */
     public JPanel setConfirmButton() {
         final String reducedArmyCommand = "Reduced Army",
                 onlyForwardCommand = "Only Forward";
@@ -208,9 +223,13 @@ public class ModSelectionWindow {
         return confirmCancel;
     }
 
+    /**
+     * <b>Transformer:</b> Creates the title panel
+     * @return A JPanel for the Title
+     */
     public JPanel setTitle() {
         JPanel panel = new JPanel();
-        ImageIcon imageIcon = new ImageIcon("C:\\Users\\user\\IdeaProjects\\StrategoPhase2\\src\\images\\stratego_logo256.png");
+        ImageIcon imageIcon = new ImageIcon("src\\images\\stratego_logo256.png");
         JLabel title = new JLabel(imageIcon);
         panel.setOpaque(false);
         panel.setBounds(Toolkit.getDefaultToolkit().getScreenSize().width / 2 - 128, 50, 256, 256);
@@ -218,8 +237,11 @@ public class ModSelectionWindow {
         return panel;
     }
 
-    public void setBackground(JFrame teliko) {
-        ImageIcon imageIcon = new ImageIcon("C:\\Users\\user\\IdeaProjects\\StrategoPhase2\\src\\images\\blue_red_wallpaper.jpg"); // load the image to a imageIcon
+    /**
+     * <b>Transformer:</b> Sets the Background for the Menu Screen
+     */
+    public void setBackground() {
+        ImageIcon imageIcon = new ImageIcon("src\\images\\blue_red_wallpaper.jpg"); // load the image to a imageIcon
         JLabel background = new JLabel(imageIcon, JLabel.CENTER);
         teliko.setContentPane(background);
     }
@@ -234,10 +256,5 @@ public class ModSelectionWindow {
     public int getMode() {
         return m_mode;
     }
-
-    public void clear() {
-        teliko.removeAll();
-    }
-
 
 }

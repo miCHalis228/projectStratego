@@ -6,6 +6,10 @@ import java.awt.*;
 public class LoadingScreen extends JFrame {
     private JLabel loading;
     private JLabel background;
+
+    /**
+     * <b>Constructor:</b> Constructs a LoadingScreen Frame
+     */
     public LoadingScreen(){
         /*
             Set Loading Text

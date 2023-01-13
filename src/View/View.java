@@ -49,10 +49,13 @@ public class View extends JFrame {
         statsBlue.showAll();
     }
 
+    /**
+     * <b>Transformer:</b> Initializes the View Frame and adds the background
+     */
     public void initView(){
         this.setLayout(new CardLayout());
-        ImageIcon imageIcon = new ImageIcon("C:\\Users\\user\\IdeaProjects\\StrategoPhase2\\src\\images\\dragon_background_cropped169.jpg"); // load the image to a imageIcon
-        Image image = imageIcon.getImage().getScaledInstance((int)Toolkit.getDefaultToolkit().getScreenSize().width,(int)Toolkit.getDefaultToolkit().getScreenSize().height, Image.SCALE_SMOOTH);
+        ImageIcon imageIcon = new ImageIcon("src\\images\\dragon_background_cropped169.jpg"); // load the image to a imageIcon
+        Image image = imageIcon.getImage().getScaledInstance(Toolkit.getDefaultToolkit().getScreenSize().width,Toolkit.getDefaultToolkit().getScreenSize().height, Image.SCALE_SMOOTH);
         JLabel background = new JLabel(new ImageIcon(image), JLabel.CENTER);
         this.setContentPane(background);
         this.setMaximumSize(new Dimension(Toolkit.getDefaultToolkit().getScreenSize().width, Toolkit.getDefaultToolkit().getScreenSize().height));
@@ -87,9 +90,12 @@ public class View extends JFrame {
         }
         statsBlue.nextTurn(round);
         statsRed.nextTurn(round);
-        //TODO
     }
 
+    /**
+     * <b>Transformer:</b> Adds a close/ 'X' button for exiting the game
+     * @return the panel with the close button
+     */
     public JPanel closeButton(){
         JPanel panel = new JPanel();
         JButton exit = new JButton();
@@ -109,33 +115,13 @@ public class View extends JFrame {
         panel.add(exit);
         return panel;
     }
+
+    /**
+     * <b>Accessor:</b> Updates the statsBlue/Red panels for each player
+     */
     public void updateStats(){
         statsBlue.update();
         statsRed.update();
     }
-
-    class Thread_extended_class extends Thread {
-        ModSelectionWindow mon;
-
-        Thread_extended_class(ModSelectionWindow mon) {
-            super();
-            this.mon = mon;
-        }
-        @Override
-        public void run() {
-            try {
-                mon.init();
-                do {
-                    Thread.sleep(100);
-                    if (mon.getMode() != -1) {
-                        break;
-                    }
-                } while (true);
-            } catch (Exception x) {
-            }
-        }
-
-    } // end class
-
 
 }

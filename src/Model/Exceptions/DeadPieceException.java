@@ -2,7 +2,7 @@ package Model.Exceptions;
 
 /**
  * @author Michalis Ierodiakonou
- * <p>
+ *
  * An exception thrown when you try to move/attack a dead piece
  */
 public class DeadPieceException extends Exception {

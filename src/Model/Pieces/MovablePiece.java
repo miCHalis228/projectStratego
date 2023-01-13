@@ -26,9 +26,10 @@ public class MovablePiece extends Piece {
     }
 
     /**
-     * Possible moves are returned as Coordinate objects which store (x,y) values
-     *
-     * @return an Integer array of possible moves
+     * <b>Accessor</b> Calculates possible moves are returned as Coordinate objects which store (x,y) values
+     * @param board board in which the moves will be made
+     * @param mode mode to check if only forward
+     * @return an Array List of possible moves (Coordinates)
      */
     public List<Coordinates> getPossibleMoves(Board board , int mode){
 
@@ -64,6 +65,30 @@ public class MovablePiece extends Piece {
                         } else if (tempSpot.getPiece().isBlue() != isBlue()){
                             possibleCoordinates.add(coordinates);
                         }
+                    }
+                }
+            }
+            //ONE LEFT
+            coordinates = new Coordinates(x-1,y);
+            if(coordinates.isValid()){
+                tempSpot = board.getSpot(y,x-1);
+                if(!tempSpot.isLake()){
+                    if(tempSpot.isEmpty()) {
+                        possibleCoordinates.add(coordinates);
+                    } else if (tempSpot.getPiece().isBlue() != isBlue()){
+                        possibleCoordinates.add(coordinates);
+                    }
+                }
+            }
+//        //ONE RIGHT
+            coordinates = new Coordinates(x+1,y);
+            if(coordinates.isValid()){
+                tempSpot = board.getSpot(y,x+1);
+                if(!tempSpot.isLake()){
+                    if(tempSpot.isEmpty()) {
+                        possibleCoordinates.add(coordinates);
+                    } else if (tempSpot.getPiece().isBlue() != isBlue()){
+                        possibleCoordinates.add(coordinates);
                     }
                 }
             }

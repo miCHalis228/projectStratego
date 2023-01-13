@@ -24,12 +24,20 @@ public class Field{
 
     }
 
+    /**
+     * A method to reduce code
+     *
+     */
     public void initField(){
         setHiddenBlue();
         setHiddenRed();
     }
 
-    public void setHiddenBlue() {
+    /**
+     * <b>Transformer:</b> Sets blue panel, panel blue player is seeing
+     * with the (blue)buttons (from the spot) in a grid layout
+     */
+    private void setHiddenBlue() {
         hiddenBlue.setLayout(new GridLayout(8,10 , 5 ,5 ));
 
         for(int i=0;i<8;i++)
@@ -40,8 +48,11 @@ public class Field{
 
         hiddenBlue.setOpaque(false);
     }
-
-    public void setHiddenRed() {
+    /**
+     * <b>Transformer:</b> Sets red panel, panel red player is seeing
+     * with the (red)buttons (from the spot) in a grid layout
+     */
+    private void setHiddenRed() {
         hiddenRed.setLayout(new GridLayout(8,10 , 5 ,5 ));
 
         for(int i=0;i<8;i++)
@@ -52,6 +63,10 @@ public class Field{
         hiddenRed.setOpaque(false);
     }
 
+    /**
+     * <b>Transformer:</b> Changes which players' panel is visible
+     * @param turnBlue depending on the turn switches either panel on or off and the other off or on
+     */
     public void swapFields(boolean turnBlue){
         if(!turnBlue){
             hiddenBlue.setVisible(true);
@@ -62,57 +77,20 @@ public class Field{
         }
     }
 
+    /**
+     * <b>Accessor:</b> Returns the panel blue player is seeing
+     * @return blue player's panel
+     */
     public JPanel getHiddenBlue(){
         return this.hiddenBlue;
     }
+
+    /**
+     * <b>Accessor:</b> Returns the panel red player is seeing
+     * @return red player's panel
+     */
     public JPanel getHiddenRed(){
         return this.hiddenRed;
     }
-    public void setFieldMode(int mode){
 
-    }
-
-    /**
-     * <b>Transformer</b> Updates the gridButtons based on the updated Board reference
-     * <b>pre-condition</b> Field is already drawn
-     * <b>post-condition</b> Field is updated
-     *
-     * #@param newBoard A reference to the updated board is sent from the View
-     */
-    public void updateField(){//Board newBoard) {
-        Thread T = new Thread_extended_class(this);
-        T.start();
-        try {
-            T.join();
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    /**
-     * <b>Transformer</b> Changes this instance of Field, adding all the components and also setting the images in the buttons
-     * @throws PathNotFoundException when trying to access an Image whose path is given wrong
-     */
-    public void drawBoard(JFrame frame) throws PathNotFoundException {
-        frame.setVisible(true);
-    }
-    class Thread_extended_class extends Thread {
-        Field frame;
-
-        Thread_extended_class(Field frame) {
-            super();
-            this.frame = frame;
-        }
-        @Override
-        public void run() {
-            try {
-                do {
-                    frame.updateField();
-                    Thread.sleep(500);
-                } while (true);
-            } catch (Exception x) {
-            }
-        }
-
-    } // end class
 }

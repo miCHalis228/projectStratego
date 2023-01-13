@@ -32,6 +32,12 @@ public class ImmovablePiece extends Piece {
         return isFlag;
     }
 
+    /**
+     * <b>Accessor</b> null because immovable pieces cannot move
+     * @param board board in which the moves will be made
+     * @param mode mode to check if only forward
+     * @return null
+     */
     @Override
     public List<Coordinates> getPossibleMoves(Board board,int mode) {
         return null;
