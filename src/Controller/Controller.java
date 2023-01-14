@@ -76,10 +76,15 @@ public class Controller {
      * Also creates game board object and places each player's piece on it
      */
     public void createBoard(){
-        this.playerBlue = new Player("Blue",mode);
-        this.playerBlue.randomizePositions();
-        this.playerRed = new Player("Red",mode);
-        this.playerRed.randomizePositions();
+        try {
+            this.playerBlue = new Player("Blue",mode);
+            this.playerBlue.randomizePositions();
+            this.playerRed = new Player("Red",mode);
+            this.playerRed.randomizePositions();
+
+        } catch (Exception e){
+            System.out.println(e);
+        }
         this.blueWins = new winningFrame(playerBlue);
         this.redWins = new winningFrame(playerRed);
         this.board = new Board(playerBlue,playerRed,mode);
@@ -151,7 +156,7 @@ public class Controller {
                             nextRound();
                         }
                         board.updateBoard();
-                        Thread.sleep(1000);
+                        Thread.sleep(500);
                         view.updateView(turnRed, round);
                         board.setAttackMade(false);
                         board.setMoveMade(false);

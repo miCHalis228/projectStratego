@@ -2,6 +2,7 @@ package Model.Pieces;
 
 import Model.Board.Board;
 import Model.Coordinates.Coordinates;
+import Model.Exceptions.PathNotFoundException;
 import Model.Spot.Spot;
 
 import java.util.ArrayList;
@@ -16,8 +17,9 @@ public class Scout extends SpecialMovablePiece {
      * @param rank      rank/power
      * @param imagePath path in the src where to get the image from
      * @param isBlue    if it is in the Blue or Red team
+     * @throws PathNotFoundException when the image path does not exist
      */
-    public Scout(int x, int y, String imagePath, int rank, boolean isBlue) {
+    public Scout(int x, int y, String imagePath, int rank, boolean isBlue) throws PathNotFoundException {
         super(x, y, imagePath, rank, isBlue);
     }
 

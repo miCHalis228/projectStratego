@@ -2,9 +2,12 @@ package Model.Pieces;
 
 import Model.Board.Board;
 import Model.Coordinates.Coordinates;
+import Model.Exceptions.PathNotFoundException;
 
 import javax.swing.*;
 import java.awt.*;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.List;
 
 public abstract class Piece {
@@ -32,15 +35,21 @@ public abstract class Piece {
      * @param rank      rank/power
      * @param imagePath path in the src where to get the image from
      * @param isBlue    if it is in the Blue or Red team
+     * @throws PathNotFoundException when the image path does not exist
      */
 
-    Piece(int x, int y, int rank, String imagePath, boolean isBlue) {
+
+    Piece(int x, int y, int rank, String imagePath, boolean isBlue) throws PathNotFoundException{
         this.coordinates = new Coordinates(x,y);
         this.rank = rank;
         this.imagePath = imagePath;
         this.isBlue = isBlue;
         this.isDead = false;
-        this.setPieceImage();
+        try {
+            this.setPieceImage();
+        } catch (PathNotFoundException e){
+            throw e;
+        }
         this.hasRevived=false;
     }
 
@@ -112,9 +121,10 @@ public abstract class Piece {
     /**
      * <b>Transformer</b> gives an imagePath to the piece
      *
-     * @param imagePath return the imagePath for the view to manage
+     * @param imagePath the imagePath for the view to manage
      */
-    public void setImagePath(String imagePath) {
+    public void setImagePath(String imagePath){
+
         this.imagePath = imagePath;
     }
 
@@ -160,9 +170,13 @@ public abstract class Piece {
 
     /**
      * <b>Transformer</b> Generates and stores an ImageIcon of the piece when the piece is flipped
+     * @throws PathNotFoundException when the image path does not exist
      * @param path path of hidden image from source
      */
-    public void setHiddenImage(String path) {
+    public void setHiddenImage(String path)   throws PathNotFoundException {
+        if (!Files.exists(Paths.get(imagePath))){
+            throw  new PathNotFoundException();
+        }
         Image img = new ImageIcon(path).getImage();
         img = img.getScaledInstance(buttonWidth, buttonHeight, Image.SCALE_SMOOTH);
         this.hiddenImage = new ImageIcon(img);
@@ -180,9 +194,13 @@ public abstract class Piece {
 
     /**
      * <b>Transformer</b> Generates and stores an ImageIcon of the piece when the piece is shown
+     * @throws PathNotFoundException when the image path does not exist
      *
      */
-    public void setPieceImage() {
+    public void setPieceImage()  throws PathNotFoundException {
+        if (!Files.exists(Paths.get(imagePath))){
+            throw  new PathNotFoundException();
+        }
         Image img = new ImageIcon(imagePath).getImage();
         img = img.getScaledInstance(buttonWidth, buttonHeight, Image.SCALE_SMOOTH);
         this.pieceImage = new ImageIcon(img);

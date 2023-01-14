@@ -4,6 +4,7 @@ import Model.Board.Board;
 import Model.Coordinates.Coordinates;
 import Model.Exceptions.DeadPieceException;
 import Model.Exceptions.InvalidCoordinatesException;
+import Model.Exceptions.PathNotFoundException;
 import Model.Spot.Spot;
 
 import java.util.ArrayList;
@@ -20,8 +21,10 @@ public class MovablePiece extends Piece {
      * @param rank      rank/power
      * @param imagePath path in the src where to get the image from
      * @param isBlue    if it is in the Blue or Red team
+     * @throws PathNotFoundException when the image path does not exist
+     *
      */
-    public MovablePiece(int x, int y, String imagePath, int rank, boolean isBlue) {
+    public MovablePiece(int x, int y, String imagePath, int rank, boolean isBlue) throws PathNotFoundException{
         super(x, y, rank, imagePath, isBlue);
     }
 
@@ -155,8 +158,12 @@ public class MovablePiece extends Piece {
      * @throws InvalidCoordinatesException when the Coordinates sent are invalid
      */
     public void move(Coordinates newPos) throws InvalidCoordinatesException {
-        this.setX(newPos.getX());
-        this.setY(newPos.getY());
+        if(newPos.isValid()){
+            this.setX(newPos.getX());
+            this.setY(newPos.getY());
+        } else{
+            throw new InvalidCoordinatesException();
+        }
     }
 
     /**
@@ -168,6 +175,9 @@ public class MovablePiece extends Piece {
      * @throws DeadPieceException if this piece trying to attack or is attacked is dead
      */
     public void attack(Piece Enemy) throws DeadPieceException{
+        if(this.isDead() || Enemy.isDead()){
+            throw new DeadPieceException();
+        }
          if(Enemy instanceof MovablePiece ){
             if(this.getRank()> Enemy.getRank()){
                 this.setCoordinates(Enemy.getCoordinates());
@@ -187,17 +197,4 @@ public class MovablePiece extends Piece {
         }
     }
 
-    /**
-     * @return if this piece was revived before
-     */
-    public boolean WasRevived() {
-        return wasRevived;
-    }
-
-    /**
-     * Set true when this piece was revived ,so it won't be again
-     */
-    public void setRevived() {
-        this.wasRevived = true;
-    }
 }

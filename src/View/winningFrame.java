@@ -47,7 +47,7 @@ public class winningFrame extends JFrame {
         JPanel panel = new JPanel();
         panel.setOpaque(false);
         panel.setLayout(new FlowLayout());
-        panel.setBounds(Toolkit.getDefaultToolkit().getScreenSize().width / 2 - 200, Toolkit.getDefaultToolkit().getScreenSize().height / 2 - 50, 400, 100);
+        panel.setBounds(Toolkit.getDefaultToolkit().getScreenSize().width / 2 - 300, Toolkit.getDefaultToolkit().getScreenSize().height / 2 - 75, 600, 150);
         label = new JLabel(m_player.toString().toUpperCase() + " WINS!!");
         label.setFont(new Font("Didot", Font.ITALIC, 60));
         panel.add(label);

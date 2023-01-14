@@ -1,11 +1,15 @@
 package Model.Player;
 
 import Model.Coordinates.Coordinates;
+import Model.Exceptions.PathNotFoundException;
 import Model.Pieces.*;
 import View.reviveSelectionFrame;
 
 import javax.swing.*;
 import java.awt.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.*;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -18,20 +22,17 @@ public class Player {
     private String imagePath;
 
     private int m_mode;
-    private ImageIcon m_HiddenImage;
     private List<Piece> Pieces;
     private List<Piece> DeadPieces;
 
     private int attackCount;
     private int succesfulAttacks;
-    private int turn;
 
     private int[] captures;
     public Player(String name, int mode) throws IllegalArgumentException {
         attackCount=0;
         succesfulAttacks=0;
         revival_counter=0;
-        turn=0;
         switch (name) {
             case "Red":
                 isBlue = false;
@@ -55,7 +56,6 @@ public class Player {
 
         Image img = new ImageIcon(new StringBuilder().append(imagePath).append("\\Hidden.png").toString()).getImage();
         img = img.getScaledInstance(105, 95, Image.SCALE_SMOOTH);
-        this.m_HiddenImage = new ImageIcon(img);
         initCards(m_mode);
     }
 
@@ -85,7 +85,6 @@ public class Player {
 
         Image img = new ImageIcon(imagePath + "\\Hidden.png").getImage();
         img = img.getScaledInstance(105, 95, Image.SCALE_SMOOTH);
-        this.m_HiddenImage = new ImageIcon(img);
     }
 
     /**
@@ -96,63 +95,67 @@ public class Player {
      */
     public void initCards(int mode) {
         int i;
+        try{
+            switch (mode) {
+                /*code for 30 pieces*/
+                case 0, 2:
+                    Pieces.add(new ImmovablePiece(-1, -1, imagePath + "\\flag.png", isBlue, true));
+                    for (i = 0; i < 6; i++)
+                        Pieces.add(new ImmovablePiece(-1, -1, imagePath + "\\trap.png", isBlue, false));
+                    Pieces.add(new Slayer(-1, -1, imagePath + "\\slayer.png", 1, isBlue));
+                    for (i = 0; i < 4; i++)
+                        Pieces.add(new Scout(-1, -1, imagePath + "\\scout.png", 2, isBlue));
+                    for (i = 0; i < 5; i++)
+                        Pieces.add(new Dwarf(-1, -1, imagePath + "\\dwarf.png", 3, isBlue));
+                    for (i = 0; i < 2; i++) {
+                        Pieces.add(new MovablePiece(-1, -1, imagePath + "\\elf.png", 4, isBlue));
+                    }
+                    for (i = 0; i < 2; i++)
+                        Pieces.add(new MovablePiece(-1, -1, imagePath + "\\rank5.png", 5, isBlue));
+                    for (i = 0; i < 2; i++)
+                        Pieces.add(new MovablePiece(-1, -1, imagePath + "\\sorceress.png", 6, isBlue));
+                    for (i = 0; i < 3; i++)
+                        Pieces.add(new MovablePiece(-1, -1, imagePath + "\\beastRider.png", 7, isBlue));
+                    for (i = 0; i < 2; i++)
+                        Pieces.add(new MovablePiece(-1, -1, imagePath + "\\knight.png", 8, isBlue));
+                    Pieces.add(new MovablePiece(-1, -1, imagePath + "\\mage.png", 9, isBlue));
+                    Pieces.add(new MovablePiece(-1, -1, imagePath + "\\dragon.png", 10, isBlue));
 
-        switch (mode) {
-            /*code for 30 pieces*/
-            case 0 , 2:
-                Pieces.add(new ImmovablePiece(-1, -1, imagePath + "\\flag.png", isBlue ,true ));
-                for (i = 0; i < 6; i++)
-                    Pieces.add(new ImmovablePiece(-1, -1, imagePath + "\\trap.png" , isBlue , false));
-                Pieces.add(new Slayer(-1, -1, imagePath + "\\slayer.png", 1, isBlue));
-                for (i = 0; i < 4; i++)
-                    Pieces.add(new Scout(-1, -1, imagePath + "\\scout.png", 2, isBlue));
-                for (i = 0; i < 5; i++)
-                    Pieces.add(new Dwarf(-1, -1, imagePath + "\\dwarf.png", 3, isBlue));
-                for (i = 0; i < 2; i++)
-                    Pieces.add(new MovablePiece(-1, -1, imagePath + "\\elf.png", 4, isBlue));
-                for (i = 0; i < 2; i++)
-                    Pieces.add(new MovablePiece(-1, -1, imagePath + "\\rank5.png", 5, isBlue));
-                for (i = 0; i < 2; i++)
-                    Pieces.add(new MovablePiece(-1, -1, imagePath + "\\sorceress.png", 6, isBlue));
-                for (i = 0; i < 3; i++)
-                    Pieces.add(new MovablePiece(-1, -1, imagePath + "\\beastRider.png", 7, isBlue));
-                for (i = 0; i < 2; i++)
-                    Pieces.add(new MovablePiece(-1, -1, imagePath + "\\knight.png", 8, isBlue));
-                Pieces.add(new MovablePiece(-1, -1, imagePath + "\\mage.png", 9, isBlue));
-                Pieces.add(new MovablePiece(-1, -1, imagePath + "\\dragon.png", 10, isBlue));
 
 
-                Pieces.stream()
-                        .forEach(piece -> piece.setHiddenImage(imagePath  + "\\Hidden.png"));
+                    break;
+                case 1 , 3:/*Code for half pieces*/
+                    Pieces.add(new ImmovablePiece(-1, -1, imagePath + "\\flag.png", isBlue ,true ));
+                    for (i = 0; i < 3; i++)
+                        Pieces.add(new ImmovablePiece(-1, -1, imagePath + "\\trap.png" , isBlue , false));
+                    Pieces.add(new Slayer(-1, -1, imagePath + "\\slayer.png", 1, isBlue));
+                    for (i = 0; i < 2; i++)
+                        Pieces.add(new Scout(-1, -1, imagePath + "\\scout.png", 2, isBlue));
+                    for (i = 0; i < 2; i++)
+                        Pieces.add(new Dwarf(-1, -1, imagePath + "\\dwarf.png", 3, isBlue));
+                    for (i = 0; i < 1; i++)
+                        Pieces.add(new MovablePiece(-1, -1, imagePath + "\\elf.png", 4, isBlue));
+                    for (i = 0; i < 1; i++)
+                        Pieces.add(new MovablePiece(-1, -1, imagePath + "\\rank5.png", 5, isBlue));
+                    for (i = 0; i < 1; i++)
+                        Pieces.add(new MovablePiece(-1, -1, imagePath + "\\sorceress.png", 6, isBlue));
+                    for (i = 0; i < 2; i++)
+                        Pieces.add(new MovablePiece(-1, -1, imagePath + "\\beastRider.png", 7, isBlue));
+                    for (i = 0; i < 1; i++)
+                        Pieces.add(new MovablePiece(-1, -1, imagePath + "\\knight.png", 8, isBlue));
+                    Pieces.add(new MovablePiece(-1, -1, imagePath + "\\mage.png", 9, isBlue));
+                    Pieces.add(new MovablePiece(-1, -1, imagePath + "\\dragon.png", 10, isBlue));
+                    break;
+                default:
+                    break;
+            }
 
-                break;
-            case 1 , 3:/*Code for half pieces*/
-                Pieces.add(new ImmovablePiece(-1, -1, imagePath + "\\flag.png", isBlue ,true ));
-                for (i = 0; i < 3; i++)
-                    Pieces.add(new ImmovablePiece(-1, -1, imagePath + "\\trap.png" , isBlue , false));
-                Pieces.add(new Slayer(-1, -1, imagePath + "\\slayer.png", 1, isBlue));
-                for (i = 0; i < 2; i++)
-                    Pieces.add(new Scout(-1, -1, imagePath + "\\scout.png", 2, isBlue));
-                for (i = 0; i < 2; i++)
-                    Pieces.add(new Dwarf(-1, -1, imagePath + "\\dwarf.png", 3, isBlue));
-                for (i = 0; i < 1; i++)
-                    Pieces.add(new MovablePiece(-1, -1, imagePath + "\\elf.png", 4, isBlue));
-                for (i = 0; i < 1; i++)
-                    Pieces.add(new MovablePiece(-1, -1, imagePath + "\\rank5.png", 5, isBlue));
-                for (i = 0; i < 1; i++)
-                    Pieces.add(new MovablePiece(-1, -1, imagePath + "\\sorceress.png", 6, isBlue));
-                for (i = 0; i < 2; i++)
-                    Pieces.add(new MovablePiece(-1, -1, imagePath + "\\beastRider.png", 7, isBlue));
-                for (i = 0; i < 1; i++)
-                    Pieces.add(new MovablePiece(-1, -1, imagePath + "\\knight.png", 8, isBlue));
-                Pieces.add(new MovablePiece(-1, -1, imagePath + "\\mage.png", 9, isBlue));
-                Pieces.add(new MovablePiece(-1, -1, imagePath + "\\dragon.png", 10, isBlue));
-                Pieces.stream()
-                        .forEach(piece -> piece.setHiddenImage(imagePath  + "\\Hidden.png"));
-                break;
-            default:
-                break;
-        }
+                for (Piece piece : Pieces) {
+                    piece.setHiddenImage(imagePath + "\\Hidden.png");
+                }
+            } catch (PathNotFoundException e){
+                System.out.println(e);
+            }
 
     }
 
