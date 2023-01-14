@@ -1,4 +1,6 @@
+import Model.Board.Board;
 import Model.Coordinates.Coordinates;
+import Model.Exceptions.BoardNotInitializedException;
 import Model.Exceptions.DeadPieceException;
 import Model.Exceptions.InvalidCoordinatesException;
 import Model.Exceptions.PathNotFoundException;
@@ -10,7 +12,7 @@ public class test {
     MovablePiece piece1, piece2;
 
     @Test
-    void imagePath() {
+    void invalidImagePath() {
         try {
             piece1 = new MovablePiece(-1, -1, "FileDoesNotExist", 4, true);
         } catch (PathNotFoundException e) {
@@ -69,11 +71,23 @@ public class test {
 
     Player player;
     @Test
-    void playerName() {
+    void wrongPlayerName() {
         try {
             player = new Player("WrongName");
         } catch (Exception e){
             System.out.println(e);
         }
     }
+
+    Board board;
+    @Test
+    void accessBoardBeforeInitialization() {
+        board = new Board(new Player("Blue",0),new Player("Red",0),0);
+        try {
+            board.getBoard();
+        } catch (BoardNotInitializedException e){
+            System.out.println(e);
+        }
+    }
+
 }

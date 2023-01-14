@@ -67,9 +67,8 @@ public class Board {
      * <b>Transformer</b>: Initialize Board with all NULL spots and set Lakes/inaccessible spots in the middle
      * <b>post-condition</b>: Board is initialized with all
      *
-     * @throws BoardNotInitializedException in case of error
      */
-    public void initializeBoard() throws BoardNotInitializedException {
+    public void initializeBoard()  {
         for (int i = 0; i < 8; i++)
             for (int j = 0; j < 10; j++) {
                 this.spots[i][j] = new Spot(null);
@@ -151,7 +150,11 @@ public class Board {
         }
         //if there is a piece in the target coordinates make attack else just move
         if (targetSpot.getPiece() != null) {
-            moveAndAttack(temp);
+            try{
+                moveAndAttack(temp);
+            } catch (Exception e){
+                System.out.println(e);
+            }
             setAttackMade(true);
         } else {
             ((MovablePiece) lastPressedPiece.getPiece()).move(temp);
@@ -245,8 +248,9 @@ public class Board {
      *
      * @param temp selected piece's desired coordinates
      * @throws InvalidCoordinatesException if coordinates are off the board
+     * @throws DeadPieceException if piece attacking/getting attacked is dead
      */
-    private void moveAndAttack(Coordinates temp) throws InvalidCoordinatesException {
+    private void moveAndAttack(Coordinates temp) throws InvalidCoordinatesException , DeadPieceException {
         try {
             ((MovablePiece) lastPressedPiece.getPiece()).attack(targetSpot.getPiece());
             if (lastPressedPiece.getPiece().isDead() && targetSpot.getPiece().isDead()) {
@@ -282,16 +286,19 @@ public class Board {
                 swapSpots();
                 possibleRevive();
             }
-        } catch (DeadPieceException e) {
-            throw new RuntimeException(e);
+        } catch (Exception e) {
+            System.out.println(e);
         }
     }
     /**
      * <b>Accessor</b>: Return the current state of the board
      *
-     * @return The board to update the View
+     * @throws BoardNotInitializedException in case of error
+     * @return The board
      */
-    public Spot[][] getBoard() {
+    public Spot[][] getBoard() throws BoardNotInitializedException {
+        if(this.spots == null)
+            throw new BoardNotInitializedException();
         return spots;
     }
 
@@ -379,7 +386,7 @@ public class Board {
 
     /**
      * Inner class implementing ActionListener to be added to Spots' JButtons when a Piece was selected
-     *
+     * Simulates all movements and attacks.
      */
     public class selectedPawn implements ActionListener {
         Board m_board;

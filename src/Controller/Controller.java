@@ -1,11 +1,9 @@
 package Controller;
 
 import Model.Board.Board;
-import Model.Exceptions.BoardNotInitializedException;
 import Model.Player.Player;
 import View.*;
 
-import java.math.RoundingMode;
 
 /**
  * @author Michalis Ierodiakonou
@@ -16,7 +14,6 @@ public class Controller {
     private Player playerBlue;
     private Player playerRed;
     private int mode;
-//    private JPanel playAgainPanel;
     private View view;
     private Board board;
     private LoadingScreen loading;
@@ -89,17 +86,14 @@ public class Controller {
         this.redWins = new winningFrame(playerRed);
         this.board = new Board(playerBlue,playerRed,mode);
         turnRed=true;
-        try {
-            board.initializeBoard();
-            board.placePlayer(playerBlue);
-            board.placePlayer(playerRed);
-        } catch (BoardNotInitializedException e) {
-            throw new RuntimeException(e);
-        }
+        board.initializeBoard();
+        board.placePlayer(playerBlue);
+        board.placePlayer(playerRed);
+
     }
 
     /**
-     *
+     * Method to visualize the transition between the selection screen and the game
      */
     public void afterMenu(){
         view = new View(playerBlue,playerRed,board,mode);
@@ -124,7 +118,7 @@ public class Controller {
     }
 
     /**
-     * Game Loop checking for defeated players or revives initiated
+     * Game Loop checking for defeated players or rescues initiated
      */
     public void GameLoop(){
         while(!board.playerDefeated()){
@@ -169,7 +163,7 @@ public class Controller {
     }
 
     /**
-     *
+     * Method for ending the game and showing the winning player screen
      */
     public void endGame(){
         if(playerBlue.isDefeated()){
