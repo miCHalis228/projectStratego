@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Diagram>
+  <ID>JAVA</ID>
+  <OriginalElement>Model.Board.Board</OriginalElement>
+  <nodes>
+    <node x="-134.0" y="323.0">Model.Board.Board.selectedPawn</node>
+    <node x="-132.5" y="-273.0">Model.Board.Board</node>
+  </nodes>
+  <notes />
+  <edges>
+    <edge source="Model.Board.Board.selectedPawn" target="Model.Board.Board" relationship="INNER_CLASS">
+      <point x="0.0" y="-44.0" />
+      <point x="0.0" y="273.0" />
+    </edge>
+  </edges>
+  <settings layout="Hierarchic" zoom="0.9289772727272727" showDependencies="false" x="0.0" y="69.5382262996942" />
+  <SelectedNodes>
+    <node>Model.Board.Board</node>
+  </SelectedNodes>
+  <Categories>
+    <Category>Constructors</Category>
+    <Category>Fields</Category>
+    <Category>Inner Classes</Category>
+    <Category>Methods</Category>
+    <Category>Properties</Category>
+  </Categories>
+  <SCOPE>All</SCOPE>
+  <VISIBILITY>private</VISIBILITY>
+</Diagram>
+

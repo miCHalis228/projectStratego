@@ -87,9 +87,9 @@ public class Board {
     }
 
     /**
-     *
+     * <b>Transformer:</b> Initializes all the buttons by adding the action listener to both spots' buttons
      */
-    public void initButtonSpots() {
+    private void initButtonSpots() {
         for (int row = 0; row < 8; row++)
             for (int col = 0; col < 10; col++) {
                 spots[row][col].setButton();
@@ -135,7 +135,7 @@ public class Board {
     }
 
     /**
-     * simulates movement and/or calls attack method
+     * <b>Transformer</b>simulates movement and calls attack method when needed
      * @param temp selected piece's desired coordinates
      * @throws InvalidCoordinatesException if coordinates are off the board
      */
@@ -167,7 +167,7 @@ public class Board {
     }
 
     /**
-     * swap the piece of the last pressed spot with the target spot
+     * <b>Transformer</b>swap the piece of the last pressed spot with the target spot
      */
     private void swapSpots() {
         targetSpot.setPiece(lastPressedPiece.getPiece());
@@ -177,7 +177,7 @@ public class Board {
     }
 
     /**
-     * set all private temporary fields to their default values
+     * <b>Transformer</b>set all private temporary fields to their default values
      */
     private void initFields() {
         possibleButtons.clear();
@@ -189,7 +189,7 @@ public class Board {
     }
 
     /**
-     * checks if the player has a piece that can make a rescue happen
+     * <b>Accessor</b>checks if the player has a piece that can make a rescue happen
      * @return true if a player can revive or not
      */
     private boolean possibleRevive() {
@@ -244,7 +244,7 @@ public class Board {
     }
 
     /**
-     * Simulates the attack and moves the pieces accordingly
+     * <b>Transformer</b>Simulates the attack and moves the pieces accordingly
      *
      * @param temp selected piece's desired coordinates
      * @throws InvalidCoordinatesException if coordinates are off the board
@@ -382,6 +382,55 @@ public class Board {
     public void setReviveMade(boolean reviveMade) {
         this.reviveMade = reviveMade;
         if (!reviveMade) setRevivePending(false);
+    }
+
+    /**
+     * <b>Accessor</b> Calculates if either of the players are defeated or not
+     *
+     * @return if a player is defeated
+     */
+    public boolean playerDefeated(){
+        int deadMovables = 0;
+
+        Iterator<Piece> iterator;
+        Piece p;
+
+        /*BLUE PLAYER*/
+        deadMovables=0;
+        iterator = playerBlue.getPieces().iterator();
+        while (iterator.hasNext()) {
+            p = iterator.next();
+            if(p instanceof MovablePiece && !p.isDead()){
+                if(p.getPossibleMoves(this,m_mode)==null){
+                    playerBlue.setDefeated();
+                    return true;
+                }
+            } else if(p instanceof MovablePiece && p.isDead()){
+                deadMovables++;
+            }
+        }
+        if(playerBlue.flagCaptured() || deadMovables==movables) {
+            playerBlue.setDefeated();
+            return true;
+        }
+
+        /*RED PLAYER*/
+        deadMovables=0;
+        iterator = playerRed.getPieces().iterator();
+        while (iterator.hasNext()) {
+            p = iterator.next();
+            if(p instanceof MovablePiece && !p.isDead()){
+                if(p.getPossibleMoves(this,m_mode)==null){
+                    playerRed.setDefeated();
+                    return true;
+                }
+            }
+        }
+        if(playerRed.flagCaptured() || deadMovables==movables) {
+            playerRed.setDefeated();
+            return true;
+        }
+        return false;
     }
 
     /**
@@ -526,54 +575,5 @@ public class Board {
 
         }
 
-    }
-
-    /**
-     * <b>Accessor</b> Calculates if either of the players are defeated or not
-     *
-     * @return if a player is defeated
-     */
-    public boolean playerDefeated(){
-        int deadMovables = 0;
-
-        Iterator<Piece> iterator;
-        Piece p;
-
-        /*BLUE PLAYER*/
-        deadMovables=0;
-        iterator = playerBlue.getPieces().iterator();
-        while (iterator.hasNext()) {
-            p = iterator.next();
-            if(p instanceof MovablePiece && !p.isDead()){
-                if(p.getPossibleMoves(this,m_mode)==null){
-                    playerBlue.setDefeated();
-                    return true;
-                }
-            } else if(p instanceof MovablePiece && p.isDead()){
-                deadMovables++;
-            }
-        }
-        if(playerBlue.flagCaptured() || deadMovables==movables) {
-            playerBlue.setDefeated();
-            return true;
-        }
-
-        /*RED PLAYER*/
-        deadMovables=0;
-        iterator = playerRed.getPieces().iterator();
-        while (iterator.hasNext()) {
-            p = iterator.next();
-            if(p instanceof MovablePiece && !p.isDead()){
-                if(p.getPossibleMoves(this,m_mode)==null){
-                    playerRed.setDefeated();
-                    return true;
-                }
-            }
-        }
-        if(playerRed.flagCaptured() || deadMovables==movables) {
-            playerRed.setDefeated();
-            return true;
-        }
-        return false;
     }
 }

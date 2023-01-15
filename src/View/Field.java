@@ -23,7 +23,7 @@ public class Field{
         this.f_board=board;
         hiddenBlue = new JPanel();
         hiddenRed = new JPanel();
-        initField();//TODO THINK MF
+        initField();
 
     }
 
@@ -37,7 +37,7 @@ public class Field{
     }
 
     /**
-     * <b>Transformer:</b> Sets blue panel, panel blue player is seeing
+     * <b>Transformer:</b> Sets blue panel, panel red player is seeing
      * with the (blue)buttons (from the spot) in a grid layout
      */
     private void setHiddenBlue() {
@@ -52,7 +52,7 @@ public class Field{
         hiddenBlue.setOpaque(false);
     }
     /**
-     * <b>Transformer:</b> Sets red panel, panel red player is seeing
+     * <b>Transformer:</b> Sets red panel, panel blue player is seeing
      * with the (red)buttons (from the spot) in a grid layout
      */
     private void setHiddenRed() {
@@ -81,7 +81,7 @@ public class Field{
     }
 
     /**
-     * <b>Accessor:</b> Returns the panel blue player is seeing
+     * <b>Accessor:</b> Returns the panel red player is seeing
      * @return blue player's panel
      */
     public JPanel getHiddenBlue(){
@@ -89,7 +89,7 @@ public class Field{
     }
 
     /**
-     * <b>Accessor:</b> Returns the panel red player is seeing
+     * <b>Accessor:</b> Returns the panel blue player is seeing
      * @return red player's panel
      */
     public JPanel getHiddenRed(){

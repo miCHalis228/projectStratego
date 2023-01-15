@@ -43,7 +43,7 @@ public class ModSelectionWindow {
     /**
      * <b>Transformer:</b> Initializes the field teliko (JFrame) and adding on it the required UI
      */
-    public void initTeliko() {
+    private void initTeliko() {
         teliko.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         teliko.setMaximumSize(Toolkit.getDefaultToolkit().getScreenSize());
         setBackground();
@@ -114,7 +114,7 @@ public class ModSelectionWindow {
      * @return A JPanel for the selection buttons for each mod
      */
 
-    public JPanel setRadioButtons() {
+    private JPanel setRadioButtons() {
         final String reducedArmyCommand = "Reduced Army",
                 onlyForwardCommand = "Only Forward";
         radioButtons.setOpaque(false);
@@ -172,7 +172,7 @@ public class ModSelectionWindow {
      * <b>Transformer:</b> Creates the confirm/cancel buttons for the selection of the mods
      * @return A JPanel
      */
-    public JPanel setConfirmButton() {
+    private JPanel setConfirmButton() {
         final String reducedArmyCommand = "Reduced Army",
                 onlyForwardCommand = "Only Forward";
 
@@ -234,7 +234,7 @@ public class ModSelectionWindow {
      * <b>Transformer:</b> Creates the title panel
      * @return A JPanel for the Title
      */
-    public JPanel setTitle() {
+    private JPanel setTitle() {
         JPanel panel = new JPanel();
         ImageIcon imageIcon = new ImageIcon("src\\images\\stratego_logo256.png");
         JLabel title = new JLabel(imageIcon);
@@ -247,7 +247,7 @@ public class ModSelectionWindow {
     /**
      * <b>Transformer:</b> Sets the Background for the Menu Screen
      */
-    public void setBackground() {
+    private void setBackground() {
         ImageIcon imageIcon = new ImageIcon("src\\images\\blue_red_wallpaper.jpg"); // load the image to a imageIcon
         JLabel background = new JLabel(imageIcon, JLabel.CENTER);
         teliko.setContentPane(background);

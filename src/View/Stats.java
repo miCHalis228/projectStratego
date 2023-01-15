@@ -50,6 +50,10 @@ public class Stats extends JPanel {
         revive.setOpaque(false);
     }
 
+    /**
+     * <b>Accessor:</b> Adds all components of the Stat object to the given frame
+     * @param frame this is the game frame (View)
+     */
     public void addComponents(JFrame frame){
         frame.add(labelMods);
         frame.add(modPanel);
@@ -110,7 +114,7 @@ public class Stats extends JPanel {
      * <b>Transformer:</b> Generates the Statistics JPanel to go into the final JFrame
      * @return the JPanel generated for the Stats of the m_player
      */
-    private  void Statistics(){
+    private void Statistics(){
         JLabel label = new JLabel("STATS");
         label.setFont(new Font("Didot", Font.BOLD, 25));
         labelStats.setLayout(new FlowLayout());
@@ -245,7 +249,7 @@ public class Stats extends JPanel {
 
 
     /**
-     * <b>Accessor</b> Updates and returns the Stat JFrame
+     * <b>Transformer</b> Updates the Stats panel
      */
     public void update(){
         for(int i=1;i<24;i+=2){
@@ -266,10 +270,18 @@ public class Stats extends JPanel {
         totalCapturesPanel.add(label,0);
     }
 
+    /**
+     * <b>Transformer:</b> Increments the round counter
+     * @param turn current turn of the player
+     */
     public void nextTurn(int turn){
         statsPanel.remove(2);
         statsPanel.add(new JLabel("Rescues: " + m_player.getRevival_counter() + "    Round: " + turn),2).setFont(new Font("Didot", Font.BOLD, 18));
     }
+
+    /**
+     * <b>Transformer:</b> Sets all Panels that correspond to a certain player NOT VISIBLE
+     */
     public void hideAll(){
         labelMods.setVisible(false);
         labelStats.setVisible(false);
@@ -281,6 +293,10 @@ public class Stats extends JPanel {
         totalCapturesPanel.setVisible(false);
         revive.setVisible(false);
     }
+
+    /**
+     * <b>Transformer:</b> Sets all Panels that correspond to a certain player VISIBLE
+     */
     public void showAll(){
         labelMods.setVisible(true);
         labelStats.setVisible(true);

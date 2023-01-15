@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Diagram>
+  <ID>JAVA</ID>
+  <OriginalElement>View</OriginalElement>
+  <nodes>
+    <node x="154.0" y="394.0">View.winningFrame</node>
+    <node x="392.0" y="394.0">View.LoadingScreen</node>
+    <node x="135.0" y="-129.0">View.Field</node>
+    <node x="-124.0" y="394.0">View.reviveSelectionFrame</node>
+    <node x="-9.875" y="189.0">View.View</node>
+    <node x="390.0" y="-129.0">View.ModSelectionWindow</node>
+    <node x="-124.0" y="-128.0">View.Stats</node>
+  </nodes>
+  <notes />
+  <edges>
+    <edge source="View.View" target="View.Field" relationship="TO_ONE">
+      <point x="116.5" y="-80.0" />
+      <point x="-9.375" y="129.0" />
+    </edge>
+    <edge source="View.View" target="View.Field" relationship="CREATE">
+      <point x="101.5" y="-80.0" />
+      <point x="-24.375" y="129.0" />
+    </edge>
+    <edge source="View.View" target="View.Stats" relationship="CREATE">
+      <point x="-6.625" y="-80.0" />
+      <point x="112.0" y="128.0" />
+    </edge>
+    <edge source="View.View" target="View.Stats" relationship="TO_ONE">
+      <point x="-116.5" y="-80.0" />
+      <point x="2.125" y="128.0" />
+    </edge>
+  </edges>
+  <settings layout="Hierarchic" zoom="0.8989501312335958" showDependencies="true" x="218.0" y="242.0" />
+  <SelectedNodes />
+  <Categories>
+    <Category>Constructors</Category>
+    <Category>Fields</Category>
+    <Category>Inner Classes</Category>
+    <Category>Methods</Category>
+    <Category>Properties</Category>
+  </Categories>
+  <SCOPE>All</SCOPE>
+  <VISIBILITY>private</VISIBILITY>
+</Diagram>
+

@@ -60,34 +60,6 @@ public class Player {
     }
 
     /**
-     * IF MODE IS NOT KNOWN DON'T INIT CARDS
-     * @param name of the player
-     * @throws IllegalArgumentException when a name other than the given two
-     */
-    public Player(String name) throws IllegalArgumentException {
-        switch (name) {
-            case "Red":
-                isBlue = false;
-                imagePath = "src\\images\\RedPieces";
-                break;
-            case "Blue":
-                isBlue = true;
-                imagePath = "src\\images\\BluePieces";
-                break;
-            default:
-                throw new IllegalArgumentException("Incorrect Name for Player");
-
-        }
-        this.m_name = name;
-        Pieces = new ArrayList<Piece>();
-        DeadPieces = new ArrayList<Piece>();
-        captures = new int[12];
-
-        Image img = new ImageIcon(imagePath + "\\Hidden.png").getImage();
-        img = img.getScaledInstance(105, 95, Image.SCALE_SMOOTH);
-    }
-
-    /**
      * <b>Transformer</b> Initializes the Piece List of the player depending on the mod chosen by the player at the start of the Game
      * <b>pre-condition</b> Cards are not initialized
      * <b>post-condition</b> Cards are initialized all with coordinates (0,0) to later be randomized
@@ -149,7 +121,6 @@ public class Player {
                 default:
                     break;
             }
-
                 for (Piece piece : Pieces) {
                     piece.setHiddenImage(imagePath + "\\Hidden.png");
                 }
@@ -202,7 +173,7 @@ public class Player {
 
 
     /**
-     * <b>Transformer</b> Used to call the attack method from its pieces
+     * <b>Transformer</b> Updates the attacking stats
      * <b>pre-condition</b> Both the attacking and defending piece are not dead
      * <b>post-condition</b> One or Both of these Pieces is Defeated
      * @param index d

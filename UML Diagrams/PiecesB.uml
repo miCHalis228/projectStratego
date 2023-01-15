@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Diagram>
+  <ID>JAVA</ID>
+  <OriginalElement>Model.Pieces</OriginalElement>
+  <nodes>
+    <node x="108.0" y="684.0">Model.Pieces.Scout</node>
+    <node x="108.0" y="384.0">Model.Pieces.MovablePiece</node>
+    <node x="105.0" y="571.0">Model.Pieces.SpecialMovablePiece</node>
+    <node x="484.0" y="684.0">Model.Pieces.Dwarf</node>
+    <node x="-183.0" y="684.0">Model.Pieces.Slayer</node>
+    <node x="298.5" y="-333.0">Model.Pieces.Piece</node>
+    <node x="484.0" y="383.0">Model.Pieces.ImmovablePiece</node>
+  </nodes>
+  <notes />
+  <edges>
+    <edge source="Model.Pieces.SpecialMovablePiece" target="Model.Pieces.MovablePiece" relationship="GENERALIZATION">
+      <point x="0.0" y="-31.5" />
+      <point x="0.0" y="68.0" />
+    </edge>
+    <edge source="Model.Pieces.Dwarf" target="Model.Pieces.SpecialMovablePiece" relationship="GENERALIZATION">
+      <point x="0.0" y="-44.0" />
+      <point x="619.0" y="659.0" />
+      <point x="286.0" y="659.0" />
+      <point x="0.0" y="31.5" />
+    </edge>
+    <edge source="Model.Pieces.MovablePiece" target="Model.Pieces.Piece" relationship="GENERALIZATION">
+      <point x="0.0" y="-68.0" />
+      <point x="286.0" y="358.0" />
+      <point x="476.5" y="358.0" />
+      <point x="0.0" y="333.0" />
+    </edge>
+    <edge source="Model.Pieces.Scout" target="Model.Pieces.SpecialMovablePiece" relationship="GENERALIZATION">
+      <point x="0.0" y="-44.0" />
+      <point x="0.0" y="31.5" />
+    </edge>
+    <edge source="Model.Pieces.Slayer" target="Model.Pieces.SpecialMovablePiece" relationship="GENERALIZATION">
+      <point x="0.0" y="-44.0" />
+      <point x="-47.5" y="659.0" />
+      <point x="286.0" y="659.0" />
+      <point x="0.0" y="31.5" />
+    </edge>
+    <edge source="Model.Pieces.ImmovablePiece" target="Model.Pieces.Piece" relationship="GENERALIZATION">
+      <point x="0.0" y="-69.0" />
+      <point x="667.0" y="358.0" />
+      <point x="476.5" y="358.0" />
+      <point x="0.0" y="333.0" />
+    </edge>
+  </edges>
+  <settings layout="Hierarchic" zoom="0.608" showDependencies="true" x="355.0" y="220.3223684210526" />
+  <SelectedNodes />
+  <Categories>
+    <Category>Constructors</Category>
+    <Category>Fields</Category>
+    <Category>Inner Classes</Category>
+    <Category>Methods</Category>
+    <Category>Properties</Category>
+  </Categories>
+  <SCOPE>All</SCOPE>
+  <VISIBILITY>private</VISIBILITY>
+</Diagram>
+

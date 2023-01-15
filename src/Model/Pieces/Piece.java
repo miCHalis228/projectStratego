@@ -171,7 +171,6 @@ public abstract class Piece {
     /**
      * <b>Transformer</b> Generates and stores an ImageIcon of the piece when the piece is flipped
      * @throws PathNotFoundException when the image path does not exist
-     * @param path path of hidden image from source
      */
     public void setHiddenImage(String path)   throws PathNotFoundException {
         if (!Files.exists(Paths.get(imagePath))){
@@ -229,7 +228,7 @@ public abstract class Piece {
     /**
      * <b>Accessor:</b>
      *
-     * @return
+     * @return Piece's Rank
      */
     public String toString(){
         return "Rank: "+this.rank;
@@ -239,7 +238,7 @@ public abstract class Piece {
      * <b>Transformers:</b> Sets isDead to false because piece has been revived
      */
     public void isRevived(){
-        isDead = true;
+        isDead = false;
     }
 
     /**

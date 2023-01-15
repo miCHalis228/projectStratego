@@ -20,7 +20,7 @@ public class winningFrame extends JFrame {
     /**
      * <b>Transformer:</b> Initializes the winning fame and sets the background
      */
-    public void init() {
+    private void init() {
         this.setLayout(new CardLayout());
         ImageIcon imageIcon = new ImageIcon("src\\images\\dragon_background_cropped169.jpg"); // load the image to a imageIcon
         Image image = imageIcon.getImage().getScaledInstance(Toolkit.getDefaultToolkit().getScreenSize().width, Toolkit.getDefaultToolkit().getScreenSize().height, Image.SCALE_SMOOTH);
@@ -42,7 +42,7 @@ public class winningFrame extends JFrame {
      * <b>Transformer:</b> Sets up the UI for the winning player label
      * @return a JPanel with the winning player
      */
-    public JPanel WinningPlayer() {
+    private JPanel WinningPlayer() {
         JLabel label;
         JPanel panel = new JPanel();
         panel.setOpaque(false);
@@ -58,7 +58,7 @@ public class winningFrame extends JFrame {
      * <b>Transformer:</b> Sets up the UI for exit button
      * @return the panel with the exit button
      */
-    public JPanel exitButton() {
+    private JPanel exitButton() {
         JButton exit;
         exit = new JButton("EXIT");
         JPanel panel = new JPanel();

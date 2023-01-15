@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Diagram>
+  <ID>JAVA</ID>
+  <OriginalElement>Model.Player</OriginalElement>
+  <nodes>
+    <node x="-103.0" y="443.0">Model.Player.Player.UniqueRng</node>
+    <node x="-107.0" y="-393.0">Model.Player.Player</node>
+  </nodes>
+  <notes />
+  <edges>
+    <edge source="Model.Player.Player.UniqueRng" target="Model.Player.Player" relationship="INNER_CLASS">
+      <point x="0.0" y="-56.0" />
+      <point x="0.0" y="393.0" />
+    </edge>
+  </edges>
+  <settings layout="Hierarchic" zoom="0.7076446280991735" showDependencies="false" x="-0.5" y="81.00000000000006" />
+  <SelectedNodes />
+  <Categories>
+    <Category>Constructors</Category>
+    <Category>Fields</Category>
+    <Category>Inner Classes</Category>
+    <Category>Methods</Category>
+    <Category>Properties</Category>
+  </Categories>
+  <SCOPE>All</SCOPE>
+  <VISIBILITY>private</VISIBILITY>
+</Diagram>
+

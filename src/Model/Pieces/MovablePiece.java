@@ -11,7 +11,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MovablePiece extends Piece {
-    private boolean wasRevived = false;
 
     /**
      * Constructor of piece, initializing it alive (isDead=false)

@@ -72,8 +72,8 @@ public class View extends JFrame {
      * <b>pre-condition</b> View is already drawn
      * <b>post-condition</b> View is updated
      *
-     * @param turnRed A reference to the updated board is sent from the controller
-     * @param round A reference to the updated board is sent from the controller
+     * @param turnRed A reference to which players' turn it is, is sent from the controller
+     * @param round A reference to the current round is sent from the controller
      */
     public void updateView(boolean turnRed,int round) {
         field.swapFields(turnRed);
@@ -117,7 +117,7 @@ public class View extends JFrame {
     }
 
     /**
-     * <b>Accessor:</b> Updates the statsBlue/Red panels for each player
+     * <b>Transformer:</b> Updates the statsBlue/Red panels for each player
      */
     public void updateStats(){
         statsBlue.update();

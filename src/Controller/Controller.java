@@ -27,14 +27,14 @@ public class Controller {
      * <b>post-condition</b> A Blue and a Red Player are created
      */
     public Controller() {
-        this.startGame();
+        this.init();
     }
 
     /**
+     * <b>Transformer:</b> Starts the game
      * Method which simulates game
      */
     public void startGame(){
-        this.init();
         this.menu();
         mode = msw.getMode();
         this.createBoard();
@@ -44,20 +44,20 @@ public class Controller {
     }
 
     /**
-     * Method creating the menu and loading screen
+     * <b>Transformer:</b>Method creating the menu and loading screen
      * <b>pre-condition</b> objects are null
      * <b>post-condition</b> objects are created
      */
-    public void init(){
+    private void init(){
         msw = new ModSelectionWindow();
         loading = new LoadingScreen();
     }
 
     /**
-     * Method creating a menu GUI and wating for mod selection to return game mode
+     * <b>Transformer:</b>Method creating a menu GUI and wating for mod selection to return game mode
      * <b>post-condition</b> Game mode is set
      */
-    public void menu(){
+    private void menu(){
         Thread T = new Controller.Thread_extended_class(msw);
         T.start();
         try {
@@ -69,10 +69,10 @@ public class Controller {
     }
 
     /**
-     * Method to create players and randomize piece positions
+     * <b>Transformer:</b>Method to create players and randomize piece positions
      * Also creates game board object and places each player's piece on it
      */
-    public void createBoard(){
+    private void createBoard(){
         try {
             this.playerBlue = new Player("Blue",mode);
             this.playerBlue.randomizePositions();
@@ -93,9 +93,9 @@ public class Controller {
     }
 
     /**
-     * Method to visualize the transition between the selection screen and the game
+     * <b>Transformer:</b>Method to visualize the transition between the selection screen and the game
      */
-    public void afterMenu(){
+    private void afterMenu(){
         view = new View(playerBlue,playerRed,board,mode);
         for(int i=0;i<6;i++){
             try {
@@ -120,7 +120,7 @@ public class Controller {
     /**
      * Game Loop checking for defeated players or rescues initiated
      */
-    public void GameLoop(){
+    private void GameLoop(){
         while(!board.playerDefeated()){
             try {
                 Thread.sleep(90);
@@ -165,7 +165,7 @@ public class Controller {
     /**
      * Method for ending the game and showing the winning player screen
      */
-    public void endGame(){
+    private void endGame(){
         if(playerBlue.isDefeated()){
             redWins.setVisible(true);
         } else {
@@ -178,6 +178,10 @@ public class Controller {
         }
         view.setVisible(false);
     }
+
+    /**
+     * <b>Transformer:</b> Used to update the dead pieces of each player after the attacks or moves
+     */
     private void updateLists() {
             playerBlue.setDeadPieces();
             playerRed.setDeadPieces();
@@ -187,24 +191,15 @@ public class Controller {
      * <b>Transformer</b>: Change whose player turn it is to play
      * <b>post-condition</b> From Blue to Red to Blue...
      */
-    public void nextTurn() {
+    private void nextTurn() {
         turnRed = !turnRed;
     }
 
     /**
      * <b>Transformer</b>: Go to the next round
      */
-    public void nextRound() {
+    private void nextRound() {
         round++;
-    }
-
-    /**
-     * <b>Accessor</b> Returns the current game board
-     *
-     * @return the game board
-     */
-    public Board getBoard() {
-        return board;
     }
 
     /**
@@ -213,7 +208,7 @@ public class Controller {
      *
      * <b>post-condition: </b> Mode is given by the user and returned to controller
      */
-    class Thread_extended_class extends Thread {
+    private class Thread_extended_class extends Thread {
         ModSelectionWindow mon;
 
         Thread_extended_class(ModSelectionWindow mon) {
